@@ -7,7 +7,7 @@ CREATE TABLE LIBRO (
     id_libro INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     autor VARCHAR(100),
-    anio_edicion YEAR,
+    anio_edicion INT,
     titulo VARCHAR(150),
     descripcion TEXT,
     editorial VARCHAR(100)
