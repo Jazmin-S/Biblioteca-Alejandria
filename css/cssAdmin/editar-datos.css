@@ -1,0 +1,87 @@
+/* General */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url("https://static.nationalgeographicla.com/files/styles/image_3200/public/006-library-biblioteca-angelica-a-roma_0002.jpg?w=1600") no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Botón EXIT */
+.exit-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ffeb3b;
+  border: 1px solid #000;
+  font-weight: bold;
+  padding: 5px 10px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Encabezado rojo */
+.header {
+  background: #a00;
+  height: 80px;
+  width: 100%;
+}
+
+/* Caja formulario */
+.form-container {
+  background: #600; /* burdeo oscuro */
+  color: white;
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 20px 40px;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
+}
+
+/* Título */
+.form-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.icon-user {
+  margin-right: 10px;
+}
+
+/* Campos del formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+input {
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+}
+
+/* Nota */
+.nota {
+  font-size: 0.8rem;
+  margin-top: 5px;
+  color: #ddd;
+}
+
+/* Icono de libros */
+.icon-books {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 100px;
+}
+
+.icon-books img {
+  width: 100%;
+}

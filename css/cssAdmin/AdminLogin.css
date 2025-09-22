@@ -1,0 +1,125 @@
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url("https://static.nationalgeographicla.com/files/styles/image_3200/public/006-library-biblioteca-angelica-a-roma_0002.jpg?w=1600") no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Botón de salida */
+.exit-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ffeb3b;
+  border: 1px solid #000;
+  font-weight: bold;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* Encabezado */
+.header {
+  text-align: center;
+  padding: 30px;
+  background-color: #a00;
+  color: white;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.header p {
+  margin: 5px 0 0;
+  font-size: 1.2rem;
+}
+
+/* Caja de login */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -40px;
+}
+
+.login-box {
+  background: #800000;
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 320px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  text-align: center;
+}
+
+.login-header {
+  margin-bottom: 20px;
+}
+
+.user-icon {
+  width: 50px;
+}
+
+h2 {
+  margin: 10px 0 0;
+  font-size: 1.5rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+/* Inputs */
+form label {
+  display: block;
+  text-align: left;
+  margin: 10px 0 5px;
+}
+
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background: #222;
+}
+
+.forgot {
+  display: block;
+  text-align: right;
+  font-size: 0.8rem;
+  color: #ccc;
+  margin-bottom: 15px;
+  text-decoration: none;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+}
+
+/* Crear cuenta */
+.create-account {
+  margin-top: 15px;
+}
+
+.create-account button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: none;
+}

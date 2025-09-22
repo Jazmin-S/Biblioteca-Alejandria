@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio Admin - Biblioteca de Alejandría</title>
+  <link rel="stylesheet" href="/css/cssAdmin/InicioAdmin.css">
+</head>
+<body>
+  <!-- Botón EXIT -->
+  <button class="exit-btn">EXIT</button>
+
+  <!-- Encabezado -->
+  <header class="header">
+    <h1>Inicio</h1>
+
+    <!-- Iconos + Menú -->
+    <div class="icons">
+      <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" alt="editar" class="icon">
+      <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="usuario" class="icon">
+      <!-- Botón menú -->
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="menu" class="icon menu-btn">
+    </div>
+  </header>
+
+  <!-- Popup Menú -->
+  <div class="popup-menu" id="popupMenu">
+    <div class="popup-content">
+      <span class="close-popup">&times;</span>
+      <ul>
+        <li><img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png"> Agregar Libros</li>
+        <li><img src="https://cdn-icons-png.flaticon.com/512/1828/1828925.png"> Editar Usuarios</li>
+        <li><img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png"> Préstamos</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Sección Categorías -->
+  <section class="categorias">
+    <h2>Categorías</h2>
+    <div class="scroll-container">
+      <div class="card">
+        <img src="https://m.media-amazon.com/images/I/710C5x4MzwL._UF894,1000_QL80_.jpg" alt="Cosmos">
+        <p>Cosmos</p>
+      </div>
+      <div class="card">
+        <img src="https://images.cdn3.buscalibre.com/fit-in/360x360/8a/3d/8a3d75882051af54c9a65c03b7b1d969.jpg" alt="Psicología">
+        <p>Psicología</p>
+      </div>
+      <div class="card">
+        <img src="https://m.media-amazon.com/images/I/A1vM9D2kZDL._UF894,1000_QL80_.jpg" alt="Álgebra">
+        <p>Matemáticas</p>
+      </div>
+      <div class="card">
+        <img src="https://m.media-amazon.com/images/I/81e8udsEY-L._UF894,1000_QL80_.jpg" alt="Medicina">
+        <p>Medicina</p>
+      </div>
+      <div class="card">
+        <img src="https://m.media-amazon.com/images/I/711Eb3fYw7L.jpg" alt="Economía">
+        <p>Economía</p>
+      </div>
+      <div class="card">
+        <img src="https://m.media-amazon.com/images/I/81KPi2zVm1L._UF894,1000_QL80_.jpg" alt="Pedagogía">
+        <p>Pedagogía</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Libros más leídos -->
+  <section class="mas-leidos">
+    <h2>Libros más leídos</h2>
+    <div class="actions">
+      <button class="btn buscar">🔍 Buscar</button>
+      <button class="btn filtrar">⚙️ Filtrar</button>
+    </div>
+    <div class="grid-libros">
+      <img src="https://covers.openlibrary.org/b/id/10686963-L.jpg" alt="Libro 1">
+      <img src="https://covers.openlibrary.org/b/id/9870721-L.jpg" alt="Libro 2">
+      <img src="https://covers.openlibrary.org/b/id/8226196-L.jpg" alt="Libro 3">
+      <img src="https://covers.openlibrary.org/b/id/12838837-L.jpg" alt="Libro 4">
+      <img src="https://covers.openlibrary.org/b/id/11637914-L.jpg" alt="Libro 5">
+      <img src="https://covers.openlibrary.org/b/id/12213382-L.jpg" alt="Libro 6">
+    </div>
+  </section>
+
+  <script src="/jsAdmin/InicioAdmin.js"></script>
+</body>
+</html>

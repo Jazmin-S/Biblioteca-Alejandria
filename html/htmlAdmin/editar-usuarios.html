@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Usuarios</title>
+  <link rel="stylesheet" href="/css/cssAdmin/editar-usuarios.css">
+</head>
+<body>
+
+  <!-- Botón Exit -->
+  <button class="exit-btn">EXIT</button>
+
+  <!-- Encabezado -->
+  <header class="header">
+    Editar Usuarios
+  </header>
+
+  <!-- Controles superiores -->
+  <div class="top-controls">
+    <button class="btn-control agregar">
+      <img src="icon-agregar.png" alt="Agregar"> Agregar
+    </button>
+
+    <div class="buscar-container">
+      <label for="buscar">Buscar</label>
+      <input type="text" id="buscar" placeholder="Escribe un usuario...">
+      <button class="buscar-btn">🔍</button>
+    </div>
+
+    <button class="btn-control editar">
+      <img src="icon-editar.png" alt="Editar"> Editar
+    </button>
+  </div>
+
+  <!-- Tabla de usuarios -->
+  <div class="tabla-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Correo Institucional</th>
+          <th>Teléfono</th>
+          <th>Préstamos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botón eliminar -->
+  <div class="eliminar-container">
+    <button class="btn-eliminar">
+      🗑️ Eliminar
+    </button>
+  </div>
+
+  <!-- POPUP -->
+  <div id="popup-overlay" class="popup-overlay">
+    <div class="popup">
+      <h2>Eliminación de usuario</h2>
+      <p>¿Deseas eliminar al usuario seleccionado?</p>
+      <div class="popup-buttons">
+        <button class="btn-rechazar"><span class="icon">❌</span> Rechazar</button>
+        <button class="btn-aceptar"><span class="icon">✔️</span> Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conectar el JS -->
+  <script src="/eliminar-usuarios.js"></script>
+</body>
+</html>

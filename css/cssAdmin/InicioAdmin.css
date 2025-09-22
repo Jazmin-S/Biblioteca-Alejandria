@@ -1,0 +1,232 @@
+/* General */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+/* Botón EXIT */
+.exit-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ffeb3b;
+  border: 1px solid #000;
+  font-weight: bold;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* Encabezado */
+.header {
+  background: #a00;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.8rem;
+  position: relative;
+}
+
+.header .icons {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.header .icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+/* Checkbox oculto */
+#menu-toggle {
+  display: none;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu ul li {
+  margin: 10px 0;
+}
+
+.menu ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  display: block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.menu ul li a:hover {
+  background: #c00;
+}
+
+/* Mostrar menú cuando el checkbox está marcado */
+#menu-toggle:checked ~ .menu {
+  opacity: 1;
+  max-height: 200px;
+}
+
+/* Sección Categorías */
+.categorias {
+  padding: 20px;
+}
+
+.categorias h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: rgb(170, 0, 0);
+  border-radius: 5px;
+}
+
+.card {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.card img {
+  width: 120px;
+  height: 180px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  object-fit: cover;
+}
+
+.card p {
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+/* Sección Libros más leídos */
+.mas-leidos {
+  padding: 20px;
+}
+
+.mas-leidos h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.buscar {
+  background: #a00;
+  color: white;
+}
+
+.filtrar {
+  background: #c00;
+  color: white;
+}
+
+.grid-libros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+.grid-libros img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* === Popup === */
+.popup-menu {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  max-width: 80%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+.popup-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.popup-content li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  font-size: 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.popup-content li:hover {
+  background: #f5f5f5;
+}
+
+.popup-content li img {
+  width: 24px;   /* tamaño de los íconos */
+  height: 24px;
+  object-fit: contain;
+}
+
+.close-popup {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #a00;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: scale(0.9);}
+  to {opacity: 1; transform: scale(1);}
+}
