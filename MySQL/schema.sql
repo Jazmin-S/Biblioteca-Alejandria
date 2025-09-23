@@ -17,7 +17,7 @@ CREATE TABLE USUARIO (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     correo VARCHAR(100) UNIQUE NOT NULL,
-    rol ENUM('alumno','administrador','bibliotecario') DEFAULT 'alumno',
+    rol ENUM('alumno','profesor','bibliotecario') DEFAULT 'alumno',
     contrasena VARCHAR(255) NOT NULL,
     num_prestamos INT DEFAULT 0
 );

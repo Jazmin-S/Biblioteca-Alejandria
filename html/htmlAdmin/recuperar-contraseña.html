@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recupera tu Contraseña</title>
+  <link rel="stylesheet" href="C:\Users\Noel Antonio\Biblioteca-Alejandria\css\cssAdmin\recuperar-constraseña.css" />
+  <script defer src="../jsAdmin/recuperar-contraseña.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Recupera tu Contraseña</h1>
+    <h2>Biblioteca de Alejandría</h2>
+  </header>
+  <main>
+    <section class="recuperacion">
+      <h3>Recuperación</h3>
+      <form id="formRecuperar">
+        <label for="email">Correo de Recuperación:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="usuario@dominio.com"
+          required
+        />
+        <p class="info">
+          Recibirás un código en tu correo el cual ingresarás para poder recuperar tu contraseña
+        </p>
+        <button type="submit" id="sendEmailBtn">
+          <span class="icon">✉️</span>
+          <span class="icon-check">✅</span>
+          Enviar Correo
+        </button>
+      </form>
+    </section>
+  </main>
+  <div id="modalCodigo" class="modal hidden">
+    <div class="modal-content">
+      <span id="cerrarModal" class="close">&times;</span>
+      <h3>Ingresa tu Código</h3>
+      <input
+        type="text"
+        id="codigoInput"
+        placeholder="XXXXXX"
+        maxlength="6"
+      />
+      <button id="validarCodigoBtn">Validar Código</button>
+    </div>
+  </div>
+</body>
+</html>
