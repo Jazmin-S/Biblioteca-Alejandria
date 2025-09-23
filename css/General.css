@@ -1,0 +1,185 @@
+/* General.css - Estilos optimizados */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    /* Fondo dividido: gradiente a la izquierda, imagen que cubre toda la pantalla */
+    background: 
+        linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d),
+        url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1590&q=80');
+    background-blend-mode: overlay;
+    background-size: 50% 100%, cover;
+    background-position: left top, center;
+    background-repeat: no-repeat;
+    animation: gradient 15s ease infinite;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    overflow: hidden;
+    position: relative;
+}
+
+
+@keyframes gradient {
+    0% { 
+        background-position: 0% 50%, center;
+    }
+    50% { 
+        background-position: 100% 50%, center;
+    }
+    100% { 
+        background-position: 0% 50%, center;
+    }
+}
+
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+.login-card {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 40px 30px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.95); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    color: #1a2a6c;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.library-name {
+    font-size: 1.8rem;
+    color: #b21f1f;
+    margin-bottom: 30px;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.instruction {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login-btn {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: width 0.3s, height 0.3s, top 0.3s, left 0.3s;
+}
+
+.login-btn:active::after {
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    left: -50px;
+}
+
+.user-btn {
+    background: linear-gradient(to right, #1a2a6c, #3a56c4);
+    color: white;
+}
+
+.admin-btn {
+    background: linear-gradient(to right, #b21f1f, #e74c3c);
+    color: white;
+}
+
+.login-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
+}
+
+.login-btn:active {
+    transform: translateY(1px);
+}
+
+.btn-icon {
+    font-size: 1.5rem;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .login-card {
+        padding: 30px 20px;
+    }
+    
+    .welcome-title {
+        font-size: 2rem;
+    }
+    
+    .library-name {
+        font-size: 1.5rem;
+    }
+    
+    .login-btn {
+        font-size: 1.1rem;
+        padding: 12px 20px;
+    }
+}
+
+/* Estilos para mejorar la accesibilidad */
+.login-btn:focus {
+    outline: 3px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}

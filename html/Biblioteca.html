@@ -1,11 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Biblioteca de Alejandría</title>
+    <link rel="stylesheet" href="/css/General.css"> <!-- ✅ Con / desde raíz -->
 </head>
 <body>
-    <H1></H1>
+    <div class="container">
+        <div class="login-card">
+            <h1 class="welcome-title">BIENVENIDOS</h1>
+            <h2 class="library-name">Biblioteca de Alejandría</h2>
+            <p class="instruction">Selecciona una opción para ingresar:</p>
+            
+            <div class="button-group">
+                <button class="login-btn user-btn" id="userBtn">
+                    <span class="btn-icon">👤</span>
+                    Usuario
+                </button>
+                <button class="login-btn admin-btn" id="adminBtn">
+                    <span class="btn-icon">🔧</span>
+                    Bibliotecario  
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="/javaScript/Login.js"></script>
 </body>
 </html>
