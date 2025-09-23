@@ -1,0 +1,23 @@
+{
+  "name": "biblioteca-alejandria",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jazmin-S/Biblioteca-Alejandria.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jazmin-S/Biblioteca-Alejandria/issues"
+  },
+  "homepage": "https://github.com/Jazmin-S/Biblioteca-Alejandria#readme",
+  "dependencies": {
+    "mysql2": "^3.15.0"
+  }
+}
