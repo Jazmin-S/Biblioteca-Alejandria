@@ -9,14 +9,14 @@ INSERT INTO LIBRO (nombre, autor, anio_edicion, titulo, descripcion, editorial) 
 
 -- Insertar datos de usuarios
 INSERT INTO USUARIO (nombre, correo, rol, contrasena, num_prestamos) VALUES
-('Ana Rodríguez', 'ana.rodriguez@bibliotecario.uv.com', 'bibliotecario', 'bib123pass', 0),
-('Jazmin Sarmiento', 'jazmin.sarmiento@administrador.uv.com', 'administrador', 'adminpass', 0),
+('Ana Rodríguez', 'ana.rodriguez@profesor.uv.com', 'profesor', 'bib123pass', 0),
+('Jazmin Sarmiento', 'jazmin.sarmiento@administrador.uv.com', 'bibliotecario', 'adminpass', 0),
 ('Pedro Sánchez', 'pedro.sanchez@estudiantes.uv.com', 'alumno', 'pedro789', 0);
 
 -- Insertar datos en la tabla PRESTAMO
 INSERT INTO PRESTAMO (id_usuario, fecha, total_prestamos) VALUES
-(3, '2024-02-10', 1),  -- Pedro Sánchez (id_usuario 3) con 1 préstamo
-(3, '2024-01-20', 2);  -- Pedro Sánchez con 2 préstamos más
+(6, '2024-02-10', 1),  -- Pedro Sánchez (id_usuario 3) con 1 préstamo
+(6, '2024-01-20', 2);  -- Pedro Sánchez con 2 préstamos más
 
 -- Insertar datos en la tabla DETALLE_PRESTAMO
 -- Asumiendo que los IDs de libros son: 1=Cien años, 2=Crimen, 3=Física, 4=Cálculo
