@@ -41,7 +41,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: -40px;
+  margin-top: 40px;
 }
 
 .login-box {
@@ -50,8 +50,10 @@ body {
   padding: 30px;
   border-radius: 10px;
   width: 320px;
+  max-height: 400;
   box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-  text-align: center;
+
+  text-align:center;
 }
 
 .login-header {
