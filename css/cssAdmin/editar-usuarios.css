@@ -15,6 +15,11 @@ body {
   font-weight: bold;
   padding: 5px 10px;
   cursor: pointer;
+  z-index: 1000;
+}
+
+.exit-btn:hover {
+  background: #fdd835;
 }
 
 /* Encabezado */
@@ -34,6 +39,7 @@ body {
   justify-content: space-between;
   background: #eee;
   padding: 10px;
+  border-bottom: 2px solid #ccc;
 }
 
 .btn-control {
@@ -42,9 +48,14 @@ body {
   gap: 5px;
   background: #ddd;
   padding: 8px 12px;
-  border: none;
+  border: 1px solid #999;
   cursor: pointer;
   font-weight: bold;
+  border-radius: 4px;
+}
+
+.btn-control:hover {
+  background: #ccc;
 }
 
 .buscar-container {
@@ -57,21 +68,29 @@ body {
   padding: 5px;
   border: 1px solid #999;
   border-radius: 3px;
+  width: 200px;
 }
 
 .buscar-btn {
-  background: none;
-  border: none;
+  background: #ddd;
+  border: 1px solid #999;
   cursor: pointer;
   font-size: 1.2rem;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+.buscar-btn:hover {
+  background: #ccc;
 }
 
 /* Tabla */
 .tabla-container {
   overflow-y: auto;
   margin: 20px;
-  max-height: 300px;
+  max-height: 400px;
   border: 1px solid #000;
+  background: white;
 }
 
 table {
@@ -82,20 +101,45 @@ table {
 thead {
   background: #ddd;
   font-weight: bold;
+  position: sticky;
+  top: 0;
 }
 
 th, td {
   border: 1px solid #000;
-  padding: 8px;
+  padding: 10px;
   text-align: center;
 }
 
 tbody tr:nth-child(even) {
-  background: #f0f0f0;
+  background: #f9f9f9;
 }
 
 tbody tr:hover {
-  background: #f7c6c6; /* efecto de resaltar */
+  background: #f7c6c6;
+}
+
+/* Checkbox para selección */
+.usuario-seleccionado {
+  background: #ffeb3b !important;
+}
+
+/* Botones de acción en tabla */
+.btn-accion {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+  margin: 0 2px;
+}
+
+.btn-editar:hover {
+  color: #007bff;
+}
+
+.btn-eliminar:hover {
+  color: #dc3545;
 }
 
 /* Botón eliminar */
@@ -109,16 +153,22 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   gap: 5px;
-  background: #ddd;
+  background: #ff4444;
+  color: white;
   padding: 10px 15px;
   border: none;
   cursor: pointer;
   font-weight: bold;
+  border-radius: 4px;
 }
 
-/* ======== POPUP de Eliminación ======== */
+.btn-eliminar:hover {
+  background: #cc0000;
+}
+
+/* ======== POPUP ======== */
 .popup-overlay {
-  display: none; /* Oculto por defecto */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -127,16 +177,17 @@ tbody tr:hover {
   background: rgba(0, 0, 0, 0.6);
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 1000;
 }
 
 .popup {
-  background: #8b0000; /* Rojo oscuro */
+  background: #8b0000;
   color: white;
   padding: 30px;
   border-radius: 10px;
   text-align: center;
-  width: 350px;
+  width: 400px;
+  max-width: 90%;
   box-shadow: 0 5px 15px rgba(0,0,0,0.4);
 }
 
@@ -153,6 +204,7 @@ tbody tr:hover {
 .popup-buttons {
   display: flex;
   justify-content: space-around;
+  gap: 10px;
 }
 
 .btn-rechazar, .btn-aceptar {
@@ -165,6 +217,8 @@ tbody tr:hover {
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
+  min-width: 120px;
+  justify-content: center;
 }
 
 .btn-rechazar {
@@ -172,11 +226,75 @@ tbody tr:hover {
   color: #a00;
 }
 
+.btn-rechazar:hover {
+  background: #f0f0f0;
+}
+
 .btn-aceptar {
   background: #0f0;
   color: #000;
 }
 
-.btn-rechazar .icon, .btn-aceptar .icon {
-  font-size: 1.2rem;
+.btn-aceptar:hover {
+  background: #0c0;
+}
+
+/* Formulario estilos */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#popup-formulario .popup {
+  background: #fff;
+  color: #000;
+  width: 450px;
+}
+
+#popup-formulario .popup h2 {
+  color: #a00;
+}
+
+/* Mensajes de estado */
+.mensaje {
+  padding: 10px;
+  margin: 10px 20px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.mensaje-exito {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.mensaje-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+  color: #666;
 }

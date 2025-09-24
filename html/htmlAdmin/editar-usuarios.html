@@ -9,7 +9,7 @@
 <body>
 
   <!-- Botón Exit -->
-  <button class="exit-btn">EXIT</button>
+  <button class="exit-btn" onclick="window.location.href='/admin-dashboard.html'">EXIT</button>
 
   <!-- Encabezado -->
   <header class="header">
@@ -18,18 +18,18 @@
 
   <!-- Controles superiores -->
   <div class="top-controls">
-    <button class="btn-control agregar">
-      <img src="Images/plus_4604818.png" alt="Agregar"> Agregar
+    <button class="btn-control agregar" id="btn-agregar">
+      <span class="icon">➕</span> Agregar
     </button>
 
     <div class="buscar-container">
       <label for="buscar">Buscar</label>
       <input type="text" id="buscar" placeholder="Escribe un usuario...">
-      <button class="buscar-btn">🔍</button>
+      <button class="buscar-btn" id="btn-buscar">🔍</button>
     </div>
 
-    <button class="btn-control editar">
-      <img src="icon-editar.png" alt="Editar"> Editar
+    <button class="btn-control editar" id="btn-editar" style="display: none;">
+      <span class="icon">✏️</span> Editar Seleccionado
     </button>
   </div>
 
@@ -40,41 +40,70 @@
         <tr>
           <th>Usuario</th>
           <th>Correo Institucional</th>
-          <th>Teléfono</th>
+          <th>Rol</th>
           <th>Préstamos</th>
+          <th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
+      <tbody id="tbody-usuarios">
+        <!-- Los usuarios se cargarán aquí dinámicamente -->
       </tbody>
     </table>
   </div>
 
   <!-- Botón eliminar -->
   <div class="eliminar-container">
-    <button class="btn-eliminar">
-      🗑️ Eliminar
+    <button class="btn-eliminar" id="btn-eliminar-multiple" style="display: none;">
+      <span class="icon">🗑️</span> Eliminar Seleccionados
     </button>
   </div>
 
-  <!-- POPUP -->
-  <div id="popup-overlay" class="popup-overlay">
+  <!-- POPUP de Eliminación -->
+  <div id="popup-eliminar" class="popup-overlay">
     <div class="popup">
       <h2>Eliminación de usuario</h2>
-      <p>¿Deseas eliminar al usuario seleccionado?</p>
+      <p id="popup-message">¿Deseas eliminar al usuario seleccionado?</p>
       <div class="popup-buttons">
-        <button class="btn-rechazar"><span class="icon">❌</span> Rechazar</button>
-        <button class="btn-aceptar"><span class="icon">✔️</span> Aceptar</button>
+        <button class="btn-rechazar" id="btn-cancelar-eliminar"><span class="icon">❌</span> Cancelar</button>
+        <button class="btn-aceptar" id="btn-confirmar-eliminar"><span class="icon">✔</span> Confirmar</button>
       </div>
     </div>
   </div>
 
+  <!-- Formulario Agregar/Editar Usuario -->
+  <div id="popup-formulario" class="popup-overlay">
+    <div class="popup">
+      <h2 id="titulo-formulario">Agregar Usuario</h2>
+      <form id="form-usuario">
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="correo">Correo Institucional:</label>
+          <input type="email" id="correo" name="correo" required>
+        </div>
+        <div class="form-group">
+          <label for="contrasena">Contraseña:</label>
+          <input type="password" id="contrasena" name="contrasena" required>
+        </div>
+        <div class="form-group">
+          <label for="rol">Rol:</label>
+          <select id="rol" name="rol" required>
+            <option value="">Seleccionar rol</option>
+            <option value="usuario">Usuario</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+        <div class="popup-buttons">
+          <button type="button" class="btn-rechazar" id="btn-cancelar-form"><span class="icon">❌</span> Cancelar</button>
+          <button type="submit" class="btn-aceptar"><span class="icon">💾</span> Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Conectar el JS -->
-  <script src="/eliminar-usuarios.js"></script>
+  <script src="mostrar-usuarios.js"></script>
 </body>
 </html>
