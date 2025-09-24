@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recupera tu Contraseña</title>
-  <link rel="stylesheet" href="/css/cssAdmin/recuperar-constraseña.css" />
-  <script defer src="/jsAdmin/recuperar-contraseña.js"></script>
+  <link rel="stylesheet" href="/css/recuperar-constraseña.css" />
 </head>
 <body>
   <header>
@@ -21,20 +20,20 @@
           type="email"
           id="email"
           name="email"
-          placeholder="usuario@dominio.com"
+          placeholder="usuario@uv.mx"
           required
         />
         <p class="info">
           Recibirás un código en tu correo el cual ingresarás para poder recuperar tu contraseña
         </p>
         <button type="submit" id="sendEmailBtn">
-          <span class="icon"></span>
-          <span class="icon-check"></span>
           Enviar Correo
         </button>
       </form>
     </section>
   </main>
+  
+  <!-- Modal - Asegúrate de que NO tenga la clase hidden inicialmente para testing -->
   <div id="modalCodigo" class="modal hidden">
     <div class="modal-content">
       <span id="cerrarModal" class="close">&times;</span>
@@ -48,5 +47,7 @@
       <button id="validarCodigoBtn">Validar Código</button>
     </div>
   </div>
+
+  <script src="/javaScript/recuperar-contraseña.js"></script>
 </body>
 </html>

@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordInput = document.getElementById("password");
     const exitBtn = document.querySelector(".exit-btn");
     const createAccountBtn = document.getElementById("create-account-btn");
+    const forgotPasswordBtn = document.getElementById("forgot-password-btn");
 
     // Botón EXIT → volver a la página principal
     if (exitBtn) {
@@ -65,6 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (createAccountBtn) {
         createAccountBtn.addEventListener("click", () => {
             window.location.href = "/html/htmlAdmin/RegistroAdmin.html"; 
+        });
+    }
+
+    // Botón RECUPERAR CONTRASEÑA → redirigir a recuperar-contraseña.html
+    if (forgotPasswordBtn) {
+        forgotPasswordBtn.addEventListener("click", () => {
+            window.location.href = "/html/recuperar-contraseña.html"; 
         });
     }
 

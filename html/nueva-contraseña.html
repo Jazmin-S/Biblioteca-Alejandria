@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nueva Contraseña - Biblioteca de Alejandría</title>
+  <link rel="stylesheet" href="/css/recuperar-constraseña.css" />
+</head>
+<body>
+  <header>
+    <h1>Crear Nueva Contraseña</h1>
+    <h2>Biblioteca de Alejandría</h2>
+  </header>
+  <main>
+    <section class="recuperacion">
+      <h3>Nueva Contraseña</h3>
+      <form id="formNuevaContrasena">
+        <label for="nuevaContrasena">Nueva Contraseña:</label>
+        <input
+          type="password"
+          id="nuevaContrasena"
+          placeholder="Mínimo 6 caracteres"
+          required
+          minlength="6"
+        />
+        
+        <label for="confirmarContrasena">Confirmar Contraseña:</label>
+        <input
+          type="password"
+          id="confirmarContrasena"
+          placeholder="Repite tu contraseña"
+          required
+          minlength="6"
+        />
+        
+        <button type="submit" id="cambiarContrasenaBtn">
+          <span class="icon"></span>
+          <span class="icon-check"></span>
+          Actualizar Contraseña
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Obtener email de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+
+    if (!email) {
+        alert('Error: No se encontró el correo electrónico.');
+        window.location.href = '/recuperar-contraseña.html';
+    }
+
+    document.getElementById('formNuevaContrasena').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const nuevaContrasena = document.getElementById('nuevaContrasena').value;
+        const confirmarContrasena = document.getElementById('confirmarContrasena').value;
+        
+        if (nuevaContrasena.length < 6) {
+            alert('La contraseña debe tener al menos 6 caracteres.');
+            return;
+        }
+        
+        if (nuevaContrasena !== confirmarContrasena) {
+            alert('Las contraseñas no coinciden.');
+            return;
+        }
+        
+        // Enviar nueva contraseña al servidor
+        fetch('/api/actualizar-contrasena', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                nuevaContrasena: nuevaContrasena
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('¡Contraseña actualizada correctamente! Ahora puedes iniciar sesión.');
+                window.location.href = '/login.html';
+            } else {
+                alert('Error al actualizar la contraseña: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al actualizar la contraseña. Intenta nuevamente.');
+        });
+    });
+  </script>
+</body>
+</html>

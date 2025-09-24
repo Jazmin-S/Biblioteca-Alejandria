@@ -124,7 +124,15 @@ form input {
   margin-top: 10px;
   border-radius: 5px;
   border: none;
+  cursor: pointer;
 }
+
+/* Agregar efecto hover al botón de crear cuenta */
+.create-account button:hover {
+  background: #222;
+  color: white;
+}
+
 /* Estilos para campos válidos/inválidos */
 input:valid {
     border: 2px solid green;
@@ -142,4 +150,111 @@ input:invalid {
     margin-bottom: 10px;
     text-align: left;
     display: none;
+}
+
+/* Botón de recuperación de contraseña - Integrado con tu diseño actual */
+#forgot-password-btn {
+    background: none;
+    border: none;
+    color: #cfcfcf;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 8px 0;
+    margin: 5px 0 15px 0;
+    transition: all 0.3s ease;
+    display: inline-block;
+    width: auto;
+    text-align: right;
+    float: right;
+}
+
+#forgot-password-btn:hover {
+    color: #ffeb3b;
+    text-decoration: underline;
+}
+
+/* Versión alternativa más integrada con el tema de la UV */
+#forgot-password-btn.alternative {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #cfcfcf;
+    color: #cfcfcf;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: center;
+    float: none;
+    display: block;
+    margin: 10px auto;
+    width: fit-content;
+}
+
+#forgot-password-btn.alternative:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffeb3b;
+    color: #ffeb3b;
+    text-decoration: none;
+}
+
+/* Estilo minimalista que combina con tu diseño */
+#forgot-password-btn.minimalist {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    text-decoration: underline;
+    padding: 5px 0;
+    margin: 0 0 15px 0;
+    font-size: 0.8rem;
+    float: right;
+}
+#forgot-password-btn.minimalist:hover {
+    color: #ffeb3b;
+    text-decoration: none;
+}
+/* Estilo que coincide con tu botón .forgot */
+#forgot-password-btn.forgot-style {
+    display: block;
+    text-align: right;
+    font-size: 0.8rem;
+    color: #ccc;
+    margin-bottom: 15px;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: auto;
+    float: right;
+}
+
+#forgot-password-btn.forgot-style:hover {
+    text-decoration: underline;
+    color: #ffeb3b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #forgot-password-btn {
+        float: none;
+        text-align: center;
+        display: block;
+        margin: 10px auto;
+    }
+    
+    #forgot-password-btn.forgot-style,
+    #forgot-password-btn.minimalist {
+        float: none;
+        text-align: center;
+    }
+}
+
+/* Estados del botón */
+#forgot-password-btn:focus {
+    outline: 2px solid #ffeb3b;
+    outline-offset: 2px;
+}
+
+#forgot-password-btn:active {
+    transform: scale(0.98);
 }
