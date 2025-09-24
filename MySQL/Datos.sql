@@ -9,9 +9,9 @@ INSERT INTO LIBRO (nombre, autor, anio_edicion, titulo, descripcion, editorial) 
 
 -- Insertar datos de usuarios
 INSERT INTO USUARIO (nombre, correo, rol, contrasena, num_prestamos) VALUES
-('Ana Rodríguez', 'ana.rodriguez@profesor.uv.com', 'profesor', 'bib123pass', 0),
-('Jazmin Sarmiento', 'jazmin.sarmiento@administrador.uv.com', 'bibliotecario', 'adminpass', 0),
-('Pedro Sánchez', 'pedro.sanchez@estudiantes.uv.com', 'alumno', 'pedro789', 0);
+('Ana Rodríguez', 'ana.rodriguez@uv.com', 'profesor', 'bib123pass', 0),
+('Jazmin Sarmiento', 'jazmin.sarmiento@uv.com', 'bibliotecario', 'adminpass', 0),
+('Pedro Sánchez', 'pedro.sanchez@estudiantes.uv.mx', 'alumno', 'pedro789', 0);
 
 -- Insertar datos en la tabla PRESTAMO
 INSERT INTO PRESTAMO (id_usuario, fecha, total_prestamos) VALUES
