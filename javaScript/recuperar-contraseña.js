@@ -48,19 +48,15 @@ formRecuperar.addEventListener('submit', async function(e) {
 
     try {
         console.log('🔄 Enviando solicitud a /api/verificar-correo...');
-        
-        // Cambiar esta línea en el fetch:
-const response = await fetch('http://localhost:3000/api/verificar-correo', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ correo: email })
-});
+
+        const response = await fetch('http://localhost:3000/api/verificar-correo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo: email })
+        });
 
         console.log('📥 Respuesta recibida. Status:', response.status);
-        console.log('📊 Response OK:', response.ok);
-
+        
         if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
         }
@@ -97,22 +93,7 @@ const response = await fetch('http://localhost:3000/api/verificar-correo', {
 
     } catch (error) {
         console.error('❌ Error completo:', error);
-        
-        // Mostrar información detallada del error
-        let mensajeError = 'Error al verificar el correo. ';
-        
-        if (error.message.includes('Failed to fetch')) {
-            mensajeError += 'No se pudo conectar con el servidor. ';
-            mensajeError += 'Verifica que el servidor esté corriendo en http://localhost:3000';
-        } else if (error.message.includes('404')) {
-            mensajeError += 'La ruta /api/verificar-correo no existe. ';
-        } else if (error.message.includes('500')) {
-            mensajeError += 'Error interno del servidor. ';
-        } else {
-            mensajeError += error.message;
-        }
-        
-        alert(mensajeError);
+        alert('⚠️ No se pudo verificar el correo. Revisa la consola para más detalles.');
     }
 });
 
@@ -147,7 +128,7 @@ validarCodigoBtn.addEventListener('click', () => {
     codigoGenerado = '';
     
     // Redirigir a página de nueva contraseña
-    window.location.href = '/nueva-contraseña.html?email=' + encodeURIComponent(emailUsuario);
+    window.location.href = './nueva-contraseña.html?email=' + encodeURIComponent(emailUsuario);
 });
 
 // Permitir validar con Enter

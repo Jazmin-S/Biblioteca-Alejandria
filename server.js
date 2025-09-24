@@ -1,94 +1,92 @@
 const express = require('express');
-const mysql = require('mysql2');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs'); // aunque tu contraseña es en texto plano, lo dejamos por si quieres usarlo
 const nodemailer = require('nodemailer');
 const path = require('path');
 const cors = require('cors');
 
+// Importar la conexión desde db.js
+const db = require('./MySQL/db');
+
 const app = express();
 const PORT = 3000;
 
-// Middleware IMPORTANTE
-app.use(cors()); // Permite peticiones desde el navegador
-app.use(express.json()); // Para parsear JSON
+// Middleware
+app.use(cors());
+app.use(express.json());
 app.use(express.static(__dirname)); // Servir archivos estáticos
 
-// Configuración de la base de datos (ajusta según tu configuración)
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '', // Tu password de MySQL
-    database: 'biblioteca_alejandria' // Asegúrate de que esta BD existe
-});
-
-// Conectar a la base de datos
-db.connect((err) => {
-    if (err) {
-        console.error('Error conectando a la base de datos:', err);
-        return;
-    }
-    console.log('✅ Conectado a la base de datos MySQL');
-});
-
-// Configuración de Nodemailer (modo prueba para evitar configuración de email)
+// Configuración de Nodemailer (modo prueba)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'test@example.com', // No necesario en modo prueba
         pass: 'password'
     },
-    // Modo desarrollo: muestra el email en la consola en lugar de enviarlo
     logger: true,
     debug: true
 });
 
-// **RUTA CRÍTICA: Verificar correo** 
+// === RUTA: Verificar correo en BD ===
 app.post('/api/verificar-correo', (req, res) => {
-    console.log('📥 Petición recibida en /api/verificar-correo');
-    console.log('📋 Body recibido:', req.body);
-    
     const { correo } = req.body;
-    
-    if (!correo) {
-        console.log('❌ Error: Correo no proporcionado');
-        return res.status(400).json({ error: 'Correo requerido' });
-    }
+    if (!correo) return res.status(400).json({ error: 'Correo requerido' });
 
-    // SIMULACIÓN - siempre retorna true para testing
-    // En producción, reemplaza con la consulta real a la BD
-    console.log('🔍 Simulando verificación para:', correo);
-    
-    // Simular delay de base de datos
-    setTimeout(() => {
-        res.json({ 
-            existe: true, 
-            mensaje: 'Correo verificado (modo simulación)',
-            correo: correo
-        });
-    }, 1000);
-    
-    /* 
-    // CÓDIGO REAL PARA PRODUCCIÓN:
-    const query = 'SELECT id FROM usuarios WHERE correo = ?';
-    
+    const query = 'SELECT id_usuario FROM USUARIO WHERE correo = ?';
     db.execute(query, [correo], (err, results) => {
-        if (err) {
-            console.error('❌ Error en la consulta:', err);
-            return res.status(500).json({ error: 'Error del servidor' });
-        }
-        
-        console.log('📊 Resultados de BD:', results);
-        
-        if (results.length > 0) {
-            res.json({ existe: true, mensaje: 'Correo encontrado' });
-        } else {
-            res.json({ existe: false, mensaje: 'Correo no registrado' });
-        }
+        if (err) return res.status(500).json({ error: 'Error del servidor' });
+        if (results.length > 0) res.json({ existe: true, mensaje: 'Correo encontrado' });
+        else res.json({ existe: false, mensaje: 'Correo no registrado' });
     });
-    */
 });
 
-// Ruta para la página principal de recuperación
+// === RUTA: Actualizar contraseña ===
+app.post('/api/actualizar-contrasena', (req, res) => {
+    const { correo, nuevaContrasena } = req.body;
+
+    if (!correo || !nuevaContrasena) {
+        return res.status(400).json({ success: false, message: 'Datos incompletos' });
+    }
+
+    const query = 'UPDATE USUARIO SET contrasena = ? WHERE correo = ?';
+    db.execute(query, [nuevaContrasena, correo], (err, result) => {
+        if (err) return res.status(500).json({ success: false, message: 'Error del servidor' });
+
+        if (result.affectedRows === 0) return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+
+        console.log(`✅ Contraseña actualizada para: ${correo}`);
+        res.json({ success: true });
+    });
+});
+
+// === RUTA: Login ===
+app.post('/api/login', (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ success: false, message: 'Faltan campos' });
+
+    const query = 'SELECT id_usuario, correo, contrasena, nombre FROM USUARIO WHERE correo = ?';
+    db.execute(query, [email], (err, results) => {
+        if (err) return res.status(500).json({ success: false, message: 'Error del servidor' });
+        if (results.length === 0) return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+
+        const usuario = results[0];
+
+        // Comparación de texto plano
+        if (password !== usuario.contrasena) {
+            return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
+        }
+
+        res.json({
+            success: true,
+            usuario: {
+                id: usuario.id_usuario,
+                correo: usuario.correo,
+                nombre: usuario.nombre
+            }
+        });
+    });
+});
+
+// Ruta para la página de recuperación
 app.get('/recuperar-contraseña.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'recuperar-contraseña.html'));
 });
@@ -98,21 +96,19 @@ app.get('/', (req, res) => {
     res.send('Servidor de Biblioteca de Alejandría funcionando ✅');
 });
 
-// Ruta de prueba para verificar que el servidor funciona
+// Ruta de prueba
 app.get('/api/test', (req, res) => {
     res.json({ mensaje: '✅ Servidor funcionando correctamente', timestamp: new Date() });
 });
 
-// Manejo de errores para rutas no encontradas
+// Manejo de errores 404
 app.use((req, res) => {
-    console.log(`❌ Ruta no encontrada: ${req.originalUrl}`);
     res.status(404).json({ error: 'Ruta no encontrada' });
 });
-
 
 // Iniciar servidor
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     console.log(`📧 Ruta de verificación: http://localhost:${PORT}/api/verificar-correo`);
-    console.log(`🔧 Ruta de prueba: http://localhost:${PORT}/api/test`);
+    console.log(`🔧 Ruta de actualización de contraseña: http://localhost:${PORT}/api/actualizar-contrasena`);
 });

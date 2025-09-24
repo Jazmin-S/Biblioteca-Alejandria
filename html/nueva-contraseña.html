@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nueva Contraseña - Biblioteca de Alejandría</title>
-  <link rel="stylesheet" href="/css/recuperar-constraseña.css" />
+  <!-- Ruta relativa al CSS -->
+  <link rel="stylesheet" href="/css/nueva-contraseña.css" />
 </head>
 <body>
   <header>
@@ -14,15 +15,45 @@
   <main>
     <section class="recuperacion">
       <h3>Nueva Contraseña</h3>
+      
+      <div id="message" class="message"></div>
+      
       <form id="formNuevaContrasena">
         <label for="nuevaContrasena">Nueva Contraseña:</label>
         <input
           type="password"
           id="nuevaContrasena"
-          placeholder="Mínimo 6 caracteres"
+          placeholder="Mínimo 8 caracteres"
           required
-          minlength="6"
+          minlength="8"
         />
+        
+        <div class="password-strength">
+          <div id="strengthMeter" class="strength-meter"></div>
+        </div>
+        
+        <div class="password-requirements">
+          <div id="lengthReq" class="requirement">
+            <span class="icon"></span>
+            Al menos 8 caracteres
+          </div>
+          <div id="upperReq" class="requirement">
+            <span class="icon"></span>
+            Al menos una letra mayúscula
+          </div>
+          <div id="lowerReq" class="requirement">
+            <span class="icon"></span>
+            Al menos una letra minúscula
+          </div>
+          <div id="numberReq" class="requirement">
+            <span class="icon"></span>
+            Al menos un número
+          </div>
+          <div id="specialReq" class="requirement">
+            <span class="icon"></span>
+            Al menos un carácter especial
+          </div>
+        </div>
         
         <label for="confirmarContrasena">Confirmar Contraseña:</label>
         <input
@@ -30,69 +61,17 @@
           id="confirmarContrasena"
           placeholder="Repite tu contraseña"
           required
-          minlength="6"
+          minlength="8"
         />
         
         <button type="submit" id="cambiarContrasenaBtn">
-          <span class="icon"></span>
-          <span class="icon-check"></span>
+          <span class="icon">🔒</span>
           Actualizar Contraseña
         </button>
       </form>
     </section>
   </main>
-
-  <script>
-    // Obtener email de la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const email = urlParams.get('email');
-
-    if (!email) {
-        alert('Error: No se encontró el correo electrónico.');
-        window.location.href = '/recuperar-contraseña.html';
-    }
-
-    document.getElementById('formNuevaContrasena').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const nuevaContrasena = document.getElementById('nuevaContrasena').value;
-        const confirmarContrasena = document.getElementById('confirmarContrasena').value;
-        
-        if (nuevaContrasena.length < 6) {
-            alert('La contraseña debe tener al menos 6 caracteres.');
-            return;
-        }
-        
-        if (nuevaContrasena !== confirmarContrasena) {
-            alert('Las contraseñas no coinciden.');
-            return;
-        }
-        
-        // Enviar nueva contraseña al servidor
-        fetch('/api/actualizar-contrasena', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                nuevaContrasena: nuevaContrasena
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('¡Contraseña actualizada correctamente! Ahora puedes iniciar sesión.');
-                window.location.href = '/login.html';
-            } else {
-                alert('Error al actualizar la contraseña: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error al actualizar la contraseña. Intenta nuevamente.');
-        });
-    });
-  </script>
+  <!-- Ruta relativa al JS -->
+  <script src="/javaScript/nueva-contraseña.js"></script>
 </body>
 </html>
