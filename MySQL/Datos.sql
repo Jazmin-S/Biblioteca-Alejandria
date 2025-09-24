@@ -55,3 +55,5 @@ LEFT JOIN PRESTAMO p ON u.id_usuario = p.id_usuario
 GROUP BY u.id_usuario
 ORDER BY total_prestamos_realizados DESC;
 
+INSERT INTO USUARIO (nombre, correo, rol, contrasena, num_prestamos) VALUES
+('Jazmin Sarmiento', 'jazminsarmiento@uv.mx', 'bibliotecario', '12345678', 0);
