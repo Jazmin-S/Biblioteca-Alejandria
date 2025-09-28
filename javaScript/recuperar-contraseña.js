@@ -27,6 +27,30 @@ function toggleModal(mostrar) {
     }
 }
 
+// Función para enviar código por email
+async function enviarCodigoPorEmail(email, codigo) {
+    try {
+        console.log('🔄 Enviando código por email...');
+        
+        const response = await fetch('http://localhost:3000/api/enviar-codigo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo: email, codigo: codigo })
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Error al enviar el código');
+        }
+
+        return data;
+    } catch (error) {
+        console.error('❌ Error enviando email:', error);
+        throw error;
+    }
+}
+
 // Event listener para el formulario
 formRecuperar.addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -40,14 +64,19 @@ formRecuperar.addEventListener('submit', async function(e) {
         return;
     }
     
-    // Validar que sea correo institucional UV
-    if (!email.endsWith('@uv.mx') && !email.endsWith('@estudiantes.uv.mx')) {
-        alert('❌ Solo se permiten correos institucionales UV (@uv.mx o @estudiantes.uv.mx)');
+    // Validar que sea correo Gmail
+    if (!email.endsWith('@gmail.com')) {
+        alert('❌ Solo se permiten correos de Gmail (@gmail.com)');
         return;
     }
 
+    // Mostrar loading en el botón
+    const originalText = sendEmailBtn.textContent;
+    sendEmailBtn.textContent = 'Enviando...';
+    sendEmailBtn.disabled = true;
+
     try {
-        console.log('🔄 Enviando solicitud a /api/verificar-correo...');
+        console.log('🔄 Verificando correo en la base de datos...');
 
         const response = await fetch('http://localhost:3000/api/verificar-correo', {
             method: 'POST',
@@ -74,9 +103,11 @@ formRecuperar.addEventListener('submit', async function(e) {
         emailUsuario = email;
         console.log('🔑 Código generado:', codigoGenerado);
 
-        // Mostrar el código en un alert para pruebas
-        alert(`🔐 CÓDIGO DE PRUEBA: ${codigoGenerado}\n\nPara: ${email}\n\nEn producción, esto se enviaría por correo automáticamente.`);
-
+        // Enviar código por email
+        await enviarCodigoPorEmail(email, codigoGenerado);
+        
+        alert('✅ Código de verificación enviado a tu correo electrónico. Revisa tu bandeja de entrada.');
+        
         // Mostrar modal para ingresar código
         toggleModal(true);
         codigoInput.focus();
@@ -93,7 +124,11 @@ formRecuperar.addEventListener('submit', async function(e) {
 
     } catch (error) {
         console.error('❌ Error completo:', error);
-        alert('⚠️ No se pudo verificar el correo. Revisa la consola para más detalles.');
+        alert('⚠️ Error: ' + error.message);
+    } finally {
+        // Restaurar botón
+        sendEmailBtn.textContent = originalText;
+        sendEmailBtn.disabled = false;
     }
 });
 

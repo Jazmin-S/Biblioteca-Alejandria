@@ -1,4 +1,4 @@
-// InicioAdmin.js depurado
+// InicioAdmin.js corregido: mensajes claros de error y éxito
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ Script cargado");
 
@@ -41,9 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // Validar formato de correo UV
-            if (!email.endsWith('@uv.mx') && !email.endsWith('@estudiantes.uv.mx')) {
-                mostrarError("Debe usar un correo institucional de la UV (@uv.mx o @estudiantes.uv.mx)");
+            // ✅ Validar formato de correo genérico
+            const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regexCorreo.test(email)) {
+                mostrarError("Debe ingresar un correo válido (ejemplo: usuario@gmail.com)");
                 return;
             }
 
@@ -56,31 +57,54 @@ document.addEventListener("DOMContentLoaded", () => {
                     body: JSON.stringify({ email, password })
                 });
 
-                if (!response.ok) {
-                    mostrarError(`Error HTTP: ${response.status}`);
-                    console.error("Error HTTP:", response);
+                let data;
+                try {
+                    data = await response.json();
+                } catch {
+                    mostrarError("❌ Error inesperado en el servidor.");
                     return;
                 }
 
-                const data = await response.json();
-                console.log("Respuesta del servidor:", data);
+                // ✅ Mostrar mensaje del backend aunque venga 404 o 401
+                if (!response.ok) {
+                    mostrarError(data.message || `❌ Error HTTP: ${response.status}`);
+                    return;
+                }
 
                 if (data.success) {
                     sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
                     sessionStorage.setItem('isLoggedIn', 'true');
-                    alert("Login exitoso → redirigiendo a InicioAdmin.html");
-                    window.location.href = "/html/htmlAdmin/InicioAdmin.html";
+
+                    // Mensaje bonito de éxito
+                    mostrarExito("✅ Login exitoso, redirigiendo a tu panel de administrador...");
+
+                    // Desaparece con fade-out y luego redirige
+                    setTimeout(() => {
+                        const successDiv = document.querySelector('.success-message');
+                        if (successDiv) {
+                            successDiv.classList.add("fade-out");
+                        }
+                        setTimeout(() => {
+                            window.location.href = "/html/htmlAdmin/InicioAdmin.html";
+                        }, 1000);
+                    }, 2000);
                 } else {
-                    mostrarError(data.message || "Usuario o contraseña incorrectos");
+                    if (data.message === "Usuario no encontrado") {
+                        mostrarError("❌ El correo ingresado no está registrado en el sistema.");
+                    } else if (data.message === "Contraseña incorrecta") {
+                        mostrarError("❌ La contraseña es incorrecta.");
+                    } else {
+                        mostrarError(data.message || "❌ Usuario o contraseña incorrectos");
+                    }
                 }
             } catch (error) {
                 console.error('Error de conexión:', error);
-                mostrarError("Error de conexión con el servidor");
+                mostrarError("❌ Error de conexión con el servidor.");
             }
         });
     }
 
-    // Botón CREAR CUENTA → redirigir a registro
+    // Botón CREAR CUENTA
     if (createAccountBtn) {
         createAccountBtn.addEventListener("click", () => {
             console.log("Redirigiendo a RegistroAdmin.html");
@@ -88,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Botón RECUPERAR CONTRASEÑA → redirigir a recuperar-contraseña.html
+    // Botón RECUPERAR CONTRASEÑA
     if (forgotPasswordBtn) {
         forgotPasswordBtn.addEventListener("click", () => {
             console.log("Redirigiendo a recuperar-contraseña.html");
@@ -96,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Función para mostrar errores
     function mostrarError(mensaje) {
         console.warn("Mensaje de error:", mensaje);
 
@@ -107,23 +132,42 @@ document.addEventListener("DOMContentLoaded", () => {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
         errorDiv.textContent = mensaje;
-        errorDiv.style.display = 'block';
-        errorDiv.style.color = '#ffeb3b';
-        errorDiv.style.marginTop = '10px';
-        errorDiv.style.textAlign = 'center';
 
         loginForm.appendChild(errorDiv);
-
-        setTimeout(() => {
-            if (errorDiv.parentNode) errorDiv.remove();
-        }, 5000);
     }
+
+    // Función para mostrar éxito
+    function mostrarExito(mensaje) {
+        console.log("Mensaje de éxito:", mensaje);
+
+        const anterior = document.querySelector('.success-message');
+        if (anterior) anterior.remove();
+
+        if (!loginForm) return;
+
+        const successDiv = document.createElement('div');
+        successDiv.className = 'success-message';
+        successDiv.textContent = mensaje;
+
+        loginForm.appendChild(successDiv);
+    }
+
+    // 🔥 Cuando el usuario interactúa de nuevo → borrar mensajes de error
+    [emailInput, passwordInput].forEach(input => {
+        if (input) {
+            input.addEventListener("input", () => {
+                const error = document.querySelector('.error-message');
+                if (error) error.remove();
+            });
+        }
+    });
 
     // Validación en tiempo real del correo
     if (emailInput) {
         emailInput.addEventListener('blur', () => {
             const email = emailInput.value.trim();
-            if (email && !email.endsWith('@uv.mx') && !email.endsWith('@estudiantes.uv.mx')) {
+            const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email && !regexCorreo.test(email)) {
                 emailInput.style.borderColor = 'red';
             } else {
                 emailInput.style.borderColor = '';

@@ -1,0 +1,151 @@
+/* RegistroAdmin.css - Formulario de creación de administradores */
+
+/* Fondo general */
+body {
+    margin: 0;
+    padding: 20px; /* espacio arriba y abajo */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #b21f1f, #e63946);
+    display: flex;
+    justify-content: center;   /* centrado horizontal */
+    /* ✅ se quitó align-items y height:100vh para que permita scroll */
+}
+
+/* Contenedor del formulario */
+.form-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 40px 30px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 420px;
+    animation: fadeIn 1s ease-out;
+    box-sizing: border-box; /* ✅ evita que el padding desborde */
+}
+
+/* Animación */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Título */
+.form-container h2 {
+    font-size: 1.8rem;
+    color: #b21f1f;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Labels */
+label {
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    margin: 15px 0 5px;
+    color: #333;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[readonly] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1rem;
+    transition: border 0.2s;
+    background-color: #f9f9f9;
+    box-sizing: border-box; /* ✅ padding dentro del ancho */
+}
+
+input:focus {
+    border-color: #e63946;
+}
+
+/* Campo de rol (readonly) */
+input[readonly] {
+    background-color: #f1f1f1;
+    font-weight: bold;
+    color: #b21f1f;
+    cursor: not-allowed;
+}
+
+/* Nota */
+.nota {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* Botón */
+button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(to right, #b21f1f, #e63946);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+/* Mensajes de error y éxito */
+.error {
+    color: #fff;
+    background: #e63946;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    text-align: left;
+    display: none;
+}
+
+.success {
+    color: #155724;
+    background: #d4edda;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    text-align: left;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    body {
+        padding: 15px; /* ✅ espacio lateral en móviles */
+    }
+
+    .form-container {
+        padding: 20px 15px; /* ✅ menos padding en móvil */
+        max-width: 100%;    /* ✅ ocupa todo el ancho */
+    }
+
+    .form-container h2 {
+        font-size: 1.4rem;
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 12px;
+    }
+}

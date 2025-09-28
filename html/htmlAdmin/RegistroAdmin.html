@@ -1,54 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editar Usuario</title>
-  <link rel="stylesheet" href="/css/cssAdmin/editar-datos.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro de Administrador</title>
+  <link rel="stylesheet" href="/css/cssAdmin/RegistroAdmin.css">
 </head>
 <body>
 
-  <!-- Botón EXIT -->
-  <button class="exit-btn">EXIT</button>
+  <div class="form-container">
+    <h2>👤 Crear Cuenta de Administrador</h2>
+    <hr>
 
-  <!-- Encabezado rojo -->
-  <header class="header"></header>
-
-  <!-- Fondo biblioteca -->
-  <div class="background">
-    <div class="form-container">
-      <h2>
-        <span class="icon-user">👤</span> Creacion de Cuentas
-      </h2>
-      <hr>
-
-      <form>
+    <form id="registroForm" novalidate>
+      <div class="field">
         <label for="usuario">Usuario:</label>
-        <input type="text" id="usuario" name="usuario">
-
-        <label for="correo">Correo Institucional:</label>
-        <input type="email" id="correo" name="correo">
-
-        <label for="telefono">Teléfono:</label>
-        <input type="text" id="telefono" name="telefono">
-
-        <label for="domicilio">Domicilio:</label>
-        <input type="text" id="domicilio" name="domicilio">
-
-        <label for="contrasena">Contraseña:</label>
-        <input type="password" id="contrasena" name="contrasena">
-
-        <p class="nota">
-          La contraseña debe contener al menos 8 caracteres y un caracter especial (.,#,-, etc).
-        </p>
-      </form>
-
-      <!-- Imagen libros decorativos -->
-      <div class="icon-books">
-        <img src="icon-libros.png" alt="Libros decorativos">
+        <input type="text" id="usuario" name="usuario" required>
+        <div id="usuarioError" class="error" style="display:none"></div>
       </div>
-    </div>
+
+      <div class="field">
+        <label for="correo">Correo Institucional:</label>
+        <input type="email" id="correo" name="correo" required>
+        <div id="correoError" class="error" style="display:none"></div>
+      </div>
+
+      <div class="field">
+        <label for="contrasena">Contraseña (exactamente 8 dígitos numéricos):</label>
+        <input type="password" id="contrasena" name="contrasena"
+               inputmode="numeric" pattern="\d{8}" maxlength="8" required>
+        <div class="nota">Debe ser exactamente 8 dígitos (0-9). Ejemplo: <code>01234567</code></div>
+        <div id="contrasenaError" class="error" style="display:none"></div>
+      </div>
+
+      <div class="field">
+        <label for="contrasena2">Repite la contraseña:</label>
+        <input type="password" id="contrasena2" name="contrasena2"
+               inputmode="numeric" pattern="\d{8}" maxlength="8" required>
+        <div id="contrasena2Error" class="error" style="display:none"></div>
+      </div>
+
+      <input type="hidden" id="rol" name="rol" value="bibliotecario">
+
+      <div class="field">
+        <label for="rolDisplay">Rol:</label>
+        <input type="text" id="rolDisplay" name="rolDisplay" value="Bibliotecario" readonly>
+      </div>
+
+      <div id="formMessage" style="margin-bottom:12px;"></div>
+
+      <button type="submit" id="submitBtn">Registrar</button>
+    </form>
   </div>
 
+  <script src="/jsAdmin/RegistroAdmin.js"></script>
 </body>
 </html>

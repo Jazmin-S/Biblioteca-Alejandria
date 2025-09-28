@@ -7,9 +7,17 @@ const authController = {
 
         const query = 'SELECT id_usuario FROM USUARIO WHERE correo = ?';
         db.execute(query, [correo], (err, results) => {
-            if (err) return res.status(500).json({ error: 'Error del servidor' });
-            if (results.length > 0) res.json({ existe: true, mensaje: 'Correo encontrado' });
-            else res.json({ existe: false, mensaje: 'Correo no registrado' });
+            if (err) {
+                console.error('❌ Error en verificarCorreo:', err);
+                return res.status(500).json({ error: 'Error del servidor' });
+            }
+            if (results.length > 0) {
+                console.log(`✅ Correo encontrado: ${correo}`);
+                res.json({ existe: true, mensaje: 'Correo encontrado' });
+            } else {
+                console.log(`❌ Correo no registrado: ${correo}`);
+                res.json({ existe: false, mensaje: 'Correo no registrado' });
+            }
         });
     },
 
@@ -22,12 +30,18 @@ const authController = {
 
         const query = 'UPDATE USUARIO SET contrasena = ? WHERE correo = ?';
         db.execute(query, [nuevaContrasena, correo], (err, result) => {
-            if (err) return res.status(500).json({ success: false, message: 'Error del servidor' });
+            if (err) {
+                console.error('❌ Error en actualizarContrasena:', err);
+                return res.status(500).json({ success: false, message: 'Error del servidor' });
+            }
 
-            if (result.affectedRows === 0) return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+            if (result.affectedRows === 0) {
+                console.log(`❌ Usuario no encontrado: ${correo}`);
+                return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+            }
 
             console.log(`✅ Contraseña actualizada para: ${correo}`);
-            res.json({ success: true });
+            res.json({ success: true, message: 'Contraseña actualizada correctamente' });
         });
     },
 
@@ -37,14 +51,23 @@ const authController = {
 
         const query = 'SELECT id_usuario, correo, contrasena, nombre, rol FROM USUARIO WHERE correo = ?';
         db.execute(query, [email], (err, results) => {
-            if (err) return res.status(500).json({ success: false, message: 'Error del servidor' });
-            if (results.length === 0) return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+            if (err) {
+                console.error('❌ Error en login:', err);
+                return res.status(500).json({ success: false, message: 'Error del servidor' });
+            }
+            
+            if (results.length === 0) {
+                console.log(`❌ Login fallido - Usuario no encontrado: ${email}`);
+                return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+            }
             
             const usuario = results[0];
             if (password !== usuario.contrasena) {
+                console.log(`❌ Login fallido - Contraseña incorrecta para: ${email}`);
                 return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
             }
 
+            console.log(`✅ Login exitoso para: ${email}`);
             res.json({
                 success: true,
                 usuario: {
