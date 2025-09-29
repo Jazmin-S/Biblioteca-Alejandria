@@ -6,12 +6,14 @@ const usuarioRoutes = require('./usuarios');
 const authRoutes = require('./auth');
 const emailRoutes = require('./email');
 const registroAdminRoutes = require('./registroadmin');
+const librosRoutes = require('./libros');
 
 // Combinar rutas
 router.use(usuarioRoutes);
 router.use(authRoutes);
 router.use(emailRoutes);
 router.use('/registroadmin', registroAdminRoutes);
+router.use(librosRoutes);
 
 // Ruta de prueba API (quitar la duplicada del server.js)
 router.get('/test', (req, res) => {

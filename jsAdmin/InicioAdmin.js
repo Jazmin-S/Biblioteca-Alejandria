@@ -1,177 +1,108 @@
-// InicioAdmin.js corregido: mensajes claros de error y éxito
+// InicioAdmin.js
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("✅ Script cargado");
+    console.log("✅ Script de InicioAdmin cargado");
 
-    const loginForm = document.getElementById("login-form");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
     const exitBtn = document.querySelector(".exit-btn");
-    const createAccountBtn = document.getElementById("create-account-btn");
-    const forgotPasswordBtn = document.getElementById("forgot-password-btn");
 
-    if (!loginForm) console.warn("⚠️ Formulario de login no encontrado (id='login-form')");
-    if (!emailInput) console.warn("⚠️ Input de email no encontrado (id='email')");
-    if (!passwordInput) console.warn("⚠️ Input de password no encontrado (id='password')");
-
-    // Botón EXIT → volver a la página principal
+    // Botón EXIT → regresar al login de administrador
     if (exitBtn) {
         exitBtn.addEventListener("click", () => {
-            console.log("EXIT presionado → redirigiendo a Biblioteca.html");
-            window.location.href = "/html/Biblioteca.html";
+            window.location.href = "/html/htmlAdmin/AdminLogin.html";
         });
     }
 
-    // Botón LOGIN → validar con la base de datos
-    if (loginForm) {
-        loginForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            console.log("🔹 Submit de login disparado");
 
-            if (!emailInput || !passwordInput) {
-                mostrarError("Elementos de formulario no encontrados.");
-                return;
-            }
-
-            const email = emailInput.value.trim();
-            const password = passwordInput.value.trim();
-            console.log("Email:", email, "Password:", password);
-
-            if (!email || !password) {
-                mostrarError("Por favor, complete todos los campos.");
-                return;
-            }
-
-            // ✅ Validar formato de correo genérico
-            const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!regexCorreo.test(email)) {
-                mostrarError("Debe ingresar un correo válido (ejemplo: usuario@gmail.com)");
-                return;
-            }
-
-            try {
-                const response = await fetch('http://localhost:3000/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                let data;
-                try {
-                    data = await response.json();
-                } catch {
-                    mostrarError("❌ Error inesperado en el servidor.");
-                    return;
-                }
-
-                // ✅ Mostrar mensaje del backend aunque venga 404 o 401
-                if (!response.ok) {
-                    mostrarError(data.message || `❌ Error HTTP: ${response.status}`);
-                    return;
-                }
-
-                if (data.success) {
-                    sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
-                    sessionStorage.setItem('isLoggedIn', 'true');
-
-                    // Mensaje bonito de éxito
-                    mostrarExito("✅ Login exitoso, redirigiendo a tu panel de administrador...");
-
-                    // Desaparece con fade-out y luego redirige
-                    setTimeout(() => {
-                        const successDiv = document.querySelector('.success-message');
-                        if (successDiv) {
-                            successDiv.classList.add("fade-out");
-                        }
-                        setTimeout(() => {
-                            window.location.href = "/html/htmlAdmin/InicioAdmin.html";
-                        }, 1000);
-                    }, 2000);
-                } else {
-                    if (data.message === "Usuario no encontrado") {
-                        mostrarError("❌ El correo ingresado no está registrado en el sistema.");
-                    } else if (data.message === "Contraseña incorrecta") {
-                        mostrarError("❌ La contraseña es incorrecta.");
-                    } else {
-                        mostrarError(data.message || "❌ Usuario o contraseña incorrectos");
-                    }
-                }
-            } catch (error) {
-                console.error('Error de conexión:', error);
-                mostrarError("❌ Error de conexión con el servidor.");
-            }
+    // Botones del menú lateral
+    const btnAgregar = document.getElementById("btn-agregar");
+    if (btnAgregar) {
+        btnAgregar.addEventListener("click", () => {
+            window.location.href = "/html/htmlLibros/AgregarLibro.html";
         });
     }
 
-    // Botón CREAR CUENTA
-    if (createAccountBtn) {
-        createAccountBtn.addEventListener("click", () => {
-            console.log("Redirigiendo a RegistroAdmin.html");
-            window.location.href = "/html/htmlAdmin/RegistroAdmin.html"; 
+    const btnUsuarios = document.getElementById("btn-usuarios");
+    if (btnUsuarios) {
+        btnUsuarios.addEventListener("click", () => {
+            window.location.href = "/html/htmlAdmin/editar-usuarios.html";
         });
     }
 
-    // Botón RECUPERAR CONTRASEÑA
-    if (forgotPasswordBtn) {
-        forgotPasswordBtn.addEventListener("click", () => {
-            console.log("Redirigiendo a recuperar-contraseña.html");
-            window.location.href = "/html/recuperar-contraseña.html"; 
+    const btnPrestamos = document.getElementById("btn-prestamos");
+    if (btnPrestamos) {
+        btnPrestamos.addEventListener("click", () => {
+            window.location.href = "/html/htmlAdmin/Prestamos.html";
         });
     }
 
-    // Función para mostrar errores
-    function mostrarError(mensaje) {
-        console.warn("Mensaje de error:", mensaje);
+    // Menú emergente
+    const menuBtn = document.querySelector(".menu-btn");
+    const popupMenu = document.getElementById("popupMenu");
+    const closePopup = document.querySelector(".close-popup");
 
-        const errorAnterior = document.querySelector('.error-message');
-        if (errorAnterior) errorAnterior.remove();
-
-        if (!loginForm) return;
-
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.textContent = mensaje;
-
-        loginForm.appendChild(errorDiv);
+    if (menuBtn && popupMenu) {
+        menuBtn.addEventListener("click", () => {
+            popupMenu.style.display = "flex";
+        });
     }
 
-    // Función para mostrar éxito
-    function mostrarExito(mensaje) {
-        console.log("Mensaje de éxito:", mensaje);
-
-        const anterior = document.querySelector('.success-message');
-        if (anterior) anterior.remove();
-
-        if (!loginForm) return;
-
-        const successDiv = document.createElement('div');
-        successDiv.className = 'success-message';
-        successDiv.textContent = mensaje;
-
-        loginForm.appendChild(successDiv);
+    if (closePopup && popupMenu) {
+        closePopup.addEventListener("click", () => {
+            popupMenu.style.display = "none";
+        });
     }
 
-    // 🔥 Cuando el usuario interactúa de nuevo → borrar mensajes de error
-    [emailInput, passwordInput].forEach(input => {
-        if (input) {
-            input.addEventListener("input", () => {
-                const error = document.querySelector('.error-message');
-                if (error) error.remove();
-            });
+    if (popupMenu) {
+        window.addEventListener("click", (event) => {
+            if (event.target === popupMenu) {
+                popupMenu.style.display = "none";
+            }
+        });
+    }
+    // === Mostrar libros ya agregados ===
+async function cargarLibros() {
+    try {
+        const res = await fetch("http://localhost:3000/api/libros");
+        const data = await res.json();
+
+        if (!res.ok) {
+            console.error("⚠️ Error al obtener libros:", data);
+            return;
         }
-    });
 
-    // Validación en tiempo real del correo
-    if (emailInput) {
-        emailInput.addEventListener('blur', () => {
-            const email = emailInput.value.trim();
-            const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (email && !regexCorreo.test(email)) {
-                emailInput.style.borderColor = 'red';
-            } else {
-                emailInput.style.borderColor = '';
-            }
+        const contenedor = document.getElementById("contenedor-libros");
+        contenedor.innerHTML = "";
+
+        if (data.length === 0) {
+            contenedor.innerHTML = "<p>No hay libros agregados aún.</p>";
+            return;
+        }
+
+        data.forEach(libro => {
+            const card = document.createElement("div");
+            card.className = "card-libro";
+
+            // Imagen de portada
+            const img = document.createElement("img");
+            img.src = libro.portada ? libro.portada : "https://via.placeholder.com/120x180?text=Sin+Portada";
+            img.alt = libro.titulo;
+
+            // Título
+            const titulo = document.createElement("p");
+            titulo.textContent = libro.titulo;
+
+            card.appendChild(img);
+            card.appendChild(titulo);
+
+            contenedor.appendChild(card);
         });
+    } catch (err) {
+        console.error("❌ Error cargando libros:", err);
     }
+}
+
+// Ejecutar cuando cargue la página
+cargarLibros();
+
+    
 });
+

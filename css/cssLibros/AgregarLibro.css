@@ -1,0 +1,172 @@
+/* ===== AgregarLibro.css ===== */
+:root{
+  --bg:#0f172a;
+  --panel:#111827;
+  --card:#1a0b0b;
+  --text:#f5f5f5;
+  --muted:#d1d5db;
+  --primary:#dc2626;   /* rojo */
+  --primary-2:#b91c1c; /* rojo oscuro */
+  --danger:#ef4444;
+  --ok:#22c55e;
+  --ring:0 0 0 3px rgba(220,38,38,.55);
+  --black:#000;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  margin: 0;
+}
+
+/* ===== HEADER ===== */
+.header {
+  position: sticky; 
+  top: 0;
+  background: var(--primary);   /* rojo fijo */
+  border-bottom: 2px solid var(--primary-2);
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.4);
+
+  display: flex;
+  justify-content: center;   /* centrar el título */
+  align-items: center;
+  position: relative;        /* para colocar el botón en esquina */
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: 1px;
+  color: #fff;              /* letras en blanco */
+  font-weight: 900;
+  text-shadow: 2px 2px 4px rgba(0,0,0,.9); /* sombra negra */
+}
+
+/* ===== BOTÓN VOLVER ===== */
+.btn-back {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: var(--black);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background .2s ease, transform .1s ease;
+}
+.btn-back:hover { 
+  background: #333; 
+}
+.btn-back:active { 
+  transform: translateY(-48%); /* efecto clic */
+}
+
+/* ===== FORM ===== */
+.form-section{
+  max-width: 880px;
+  margin: 28px auto 48px;
+  padding: 0 16px;
+}
+
+form{
+  background: linear-gradient(180deg, rgba(31,31,31,.8), rgba(20,0,0,.7));
+  border: 2px solid rgba(220,38,38,.6);
+  border-radius: 16px;
+  padding: 26px;
+  box-shadow: 0 10px 35px rgba(0,0,0,.55);
+}
+
+.form-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 20px;
+}
+@media (max-width: 720px){
+  .form-grid{ grid-template-columns: 1fr; }
+}
+
+label{
+  font-size: 14px;
+  color: var(--muted);
+  display: block;
+  margin: 6px 0 6px;
+}
+
+/* ===== INPUTS ===== */
+input[type="text"],
+input[type="number"],
+textarea,
+input[type="file"]{
+  width: 100%;
+  background: rgba(20,0,0,.7);
+  color: var(--text);
+  border: 1px solid rgba(220,38,38,.4);
+  border-radius: 10px;
+  padding: 12px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, transform .02s;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus{
+  border-color: var(--primary);
+  box-shadow: var(--ring);
+  transform: scale(1.02);
+}
+textarea{
+  min-height: 120px;
+  resize: vertical;
+}
+
+.actions{
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.btn{
+  appearance: none;
+  border: 2px solid transparent;
+  background: var(--primary);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  transition: transform .1s ease, box-shadow .15s ease, background .2s;
+}
+.btn:hover{ 
+  background: var(--primary-2); 
+  box-shadow: 0 0 12px rgba(220,38,38,.6);
+}
+.btn:active{ transform: translateY(1px); }
+
+.preview{
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px; border: 1px dashed rgba(220,38,38,.5);
+  border-radius: 12px; margin-top: 8px;
+  background: rgba(0,0,0,.3);
+}
+.preview img{
+  width: 90px; height: 120px; object-fit: cover; border-radius: 8px;
+  border: 2px solid var(--primary);
+}
+.status{
+  font-size: 13px; color: var(--muted);
+}
+
+.error{ color: var(--danger); font-size: 13px; margin-top: 6px; }
+.success{ color: var(--ok); font-size: 13px; margin-top: 6px; }

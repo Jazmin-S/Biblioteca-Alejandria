@@ -4,14 +4,18 @@ CREATE DATABASE IF NOT EXISTS biblioteca CHARACTER SET utf8mb4 COLLATE utf8mb4_u
 USE biblioteca;
 
 CREATE TABLE LIBRO (
-    id_libro INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    autor VARCHAR(100),
-    anio_edicion INT,
-    titulo VARCHAR(150),
-    descripcion TEXT,
-    editorial VARCHAR(100)
+  id_libro INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  titulo VARCHAR(255) NOT NULL,
+  autor VARCHAR(255) NOT NULL,
+  anio_edicion INT NOT NULL,
+  descripcion TEXT,
+  editorial VARCHAR(255),
+  categoria VARCHAR(100),
+  portada VARCHAR(255)
 );
+
+
 
 DROP TABLE USUARIO;
 CREATE TABLE USUARIO (

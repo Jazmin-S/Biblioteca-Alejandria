@@ -28,9 +28,9 @@
     <div class="popup-content">
       <span class="close-popup">&times;</span>
       <ul>
-        <li><img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png"> Agregar Libros</li>
-        <li><img src="https://cdn-icons-png.flaticon.com/512/1828/1828925.png"> Editar Usuarios</li>
-        <li><img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png"> Préstamos</li>
+        <li id="btn-agregar"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png"> Agregar Libros</li>
+        <li id="btn-usuarios"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828925.png"> Editar Usuarios</li>
+        <li id="btn-prestamos"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png"> Préstamos</li>
       </ul>
     </div>
   </div>
@@ -73,14 +73,8 @@
       <button class="btn buscar">🔍 Buscar</button>
       <button class="btn filtrar">⚙️ Filtrar</button>
     </div>
-    <div class="grid-libros">
-      <img src="https://covers.openlibrary.org/b/id/10686963-L.jpg" alt="Libro 1">
-      <img src="https://covers.openlibrary.org/b/id/9870721-L.jpg" alt="Libro 2">
-      <img src="https://covers.openlibrary.org/b/id/8226196-L.jpg" alt="Libro 3">
-      <img src="https://covers.openlibrary.org/b/id/12838837-L.jpg" alt="Libro 4">
-      <img src="https://covers.openlibrary.org/b/id/11637914-L.jpg" alt="Libro 5">
-      <img src="https://covers.openlibrary.org/b/id/12213382-L.jpg" alt="Libro 6">
-    </div>
+    <!-- 🔥 Contenedor dinámico -->
+    <div class="grid-libros" id="contenedor-libros"></div>
   </section>
 
   <script src="/jsAdmin/InicioAdmin.js"></script>
