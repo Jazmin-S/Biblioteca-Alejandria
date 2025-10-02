@@ -1,145 +1,118 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
-  color: #ffffff;
-  background: url("https://static.nationalgeographicla.com/files/styles/image_3200/public/006-library-biblioteca-angelica-a-roma_0002.jpg?w=1600") no-repeat center center fixed;
-  background-size: cover;
+  background: url("https://preview.redd.it/i-made-a-pile-of-books-using-blockbuster-what-do-you-think-v0-fcou8t61o5v81.png?width=640&crop=smart&auto=webp&s=00fd1ffb00ce2a5b84888f61855591dc4926f07b") center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
 }
-header {
-    text-align: center;
-    padding: 30px;
-    background-color: #a00;
-  color: white;
-}
-header h1 {
-  font-size: 2rem;
-  color: #ecf0f1;
-}
-header h2 {
-  font-size: 1.2rem;
-  color: #f5f6fa;
-}
-main {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px 20px;
-}
-.recuperacion {
-  background: #800000;
+
+.recuperar-container {
+  background: rgba(10, 4, 4, 0.6);
   padding: 30px;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 380px;
+  border-radius: 14px;
+  color: #fff;
+  width: min(90%, 400px);
 }
-.recuperacion h3 {
-  margin-bottom: 16px;
-  font-size: 1.3rem;
-  color: #f5f6fa;
+
+.form-card h2 {
+  margin-top: 0;
+  color: #fff;
 }
-.recuperacion form label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 0.95rem;
-}
-.recuperacion form input[type="email"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-.recuperacion .info {
-  font-size: 0.85rem;
-  color: #dcdde1;
-  margin-bottom: 20px;
-  line-height: 1.4;
-}
-.recuperacion button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+
+input[type="email"] {
   width: 100%;
   padding: 12px;
-  background: #333;
-  border: none;
-  border-radius: 4px;
-  color: #ffffff;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
+  margin: 14px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(226, 214, 214, 0.3);
+  background: rgba(214, 211, 211, 0.15);
+  color: #fff;
 }
-.recuperacion button:hover {
-  background: #1e8449;
-}
-.recuperacion .icon {
-  font-size: 1.2rem;
-}
-.recuperacion .icon-check {
-  color: #2ecc71;
-}
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
+
+button {
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 12px;
+  background: #bd1313;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
-.modal.hidden {
-  display: none;
+button:hover {
+  background: #6d6262;
 }
-.modal-content {
-  background: #dcc8c8;
-  padding: 20px 30px;
-  border-radius: 6px;
-  text-align: center;
-  width: 90%;
-  max-width: 320px;
-  color: #ecf0f1;
+
+/* MODAL */
+.modal {
+  position: fixed; inset: 0;
+  display: grid; place-items: center;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+}
+.modal.hidden { display: none; }
+
+.otp-card {
+  width: min(92vw, 420px);
+  padding: 28px 26px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  box-shadow: 0 10px 40px rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.15);
+  backdrop-filter: blur(10px);
+  animation: pop-in .18s ease-out;
   position: relative;
 }
-.modal-content h3 {
-  margin-bottom: 16px;
-  color: #120807;
+
+.otp-header { text-align: center; margin-bottom: 18px; }
+.otp-badge{
+  display:inline-block; padding: 6px 10px; margin-bottom: 10px;
+  font-size:.8rem;
+  background:#6b0f1a;
+  color:#fff; border-radius: 999px;
 }
-.modal-content input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 14px;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
+.otp-header h3{ font-size:1.35rem; margin-bottom:6px; font-weight:800;}
+.otp-subtitle{ color:#e9e9e9; opacity:.9; font-size:.95rem; }
+
+.otp-inputs{
+  display:flex; justify-content:center; gap:10px; margin: 16px 0 18px;
 }
-.modal-content button {
-  width: 100%;
-  padding: 12px;
-  background: #020202;
-  border: none;
-  border-radius: 4px;
-  color: #ffffff;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
+.otp{
+  width:48px; height:56px; text-align:center; font-size:1.4rem; font-weight:700;
+  border-radius:12px; outline: none;
+  border:1px solid rgba(255,255,255,.28);
+  background: rgba(0,0,0,.25); color:#fff;
 }
-.modal-content button:hover {
-  background: #9e2020;
+.otp:focus{
+  border-color:#2ecc71;
+  box-shadow:0 0 0 4px rgba(46,204,113,.20);
 }
-.close {
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #000000;
+.otp.filled{ background: rgba(255,255,255,.10); }
+
+.otp-btn{
+  width:100%; padding:12px; border:none; border-radius:14px;
+  background:#000; color:#fff; font-weight:700; cursor:pointer;
+}
+.otp-btn:hover{ background:#111; }
+
+.close-btn{
+  position:absolute; top:10px; right:12px; width:36px; height:36px;
+  border-radius:10px; background:transparent; color:#fff; font-size:22px;
+  border:1px solid rgba(255,255,255,.25); cursor:pointer;
+}
+.close-btn:hover{ background: rgba(255,255,255,.08); }
+
+.otp-help{ text-align:center; margin-top:12px; opacity:.9; font-size:.92rem; }
+.link-like{
+  background:none; border:none; color:#2ecc71; font-weight:700; cursor:pointer;
+  text-decoration: underline;
+}
+
+@keyframes pop-in{
+  from{ transform: translateY(8px) scale(.98); opacity: 0; }
+  to{ transform: translateY(0) scale(1); opacity: 1; }
 }

@@ -3,49 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Recupera tu Contraseña</title>
+  <title>Recuperar Contraseña</title>
   <link rel="stylesheet" href="/css/recuperar-constraseña.css" />
 </head>
 <body>
-  <header>
-    <h1>Recupera tu Contraseña</h1>
-    <h2>Biblioteca de Alejandría</h2>
-  </header>
-  <main>
-    <section class="recuperacion">
-      <h3>Recuperación</h3>
-      <form id="formRecuperar">
-        <label for="email">Correo de Recuperación:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="usuario@gmail.com"
-          required
-        />
-        <p class="info">
-          Recibirás un código en tu correo el cual ingresarás para poder recuperar tu contraseña
+  <div class="recuperar-container">
+    <form id="formRecuperar" class="form-card">
+      <h2>Recuperar Contraseña</h2>
+      <p>Ingresa tu correo Gmail para enviarte un código de verificación.</p>
+
+      <input id="email" type="email" placeholder="usuario@gmail.com" required />
+
+      <button id="sendEmailBtn" type="submit">Enviar código</button>
+    </form>
+  </div>
+
+  <!-- Modal Código -->
+  <div id="modalCodigo" class="modal hidden" aria-hidden="true">
+    <div class="modal-content otp-card" role="dialog" aria-modal="true" aria-labelledby="otp-title">
+      <button id="cerrarModal" class="close-btn" aria-label="Cerrar">×</button>
+
+      <div class="otp-header">
+        <div class="otp-badge">Verificación</div>
+        <h3 id="otp-title">Ingresa tu Código</h3>
+        <p class="otp-subtitle">
+          Revisa tu correo e introduce el código de 6 dígitos que te enviamos.
         </p>
-        <button type="submit" id="sendEmailBtn">
-          Enviar Correo
-        </button>
-      </form>
-    </section>
-  </main>
-  
-  <!-- Modal para ingresar código -->
-  <div id="modalCodigo" class="modal hidden">
-    <div class="modal-content">
-      <span id="cerrarModal" class="close">&times;</span>
-      <h3>Ingresa tu Código</h3>
-      <p>Revisa tu correo electrónico e ingresa el código de 6 dígitos que te enviamos.</p>
-      <input
-        type="text"
-        id="codigoInput"
-        placeholder="XXXXXX"
-        maxlength="6"
-      />
-      <button id="validarCodigoBtn">Validar Código</button>
+      </div>
+
+      <div class="otp-inputs" aria-label="Código de verificación">
+        <input class="otp" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Dígito 1" />
+        <input class="otp" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Dígito 2" />
+        <input class="otp" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Dígito 3" />
+        <input class="otp" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Dígito 4" />
+        <input class="otp" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Dígito 5" />
+        <input class="otp" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Dígito 6" />
+      </div>
+
+      <!-- input oculto para el script -->
+      <input id="codigoInput" type="hidden" />
+
+      <button id="validarCodigoBtn" class="otp-btn">Validar Código</button>
     </div>
   </div>
 

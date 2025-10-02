@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Libros</title>
+  <link rel="stylesheet" href="/css/cssLibros/EditarLibros.css">
+</head>
+<body>
+
+  <!-- Botón Exit -->
+  <button class="exit-btn" onclick="window.location.href='../htmlAdmin/InicioAdmin.html'">EXIT</button>
+
+  <!-- Encabezado -->
+  <header class="header">
+    Editar Libros
+  </header>
+
+  <!-- Barra de búsqueda -->
+  <div class="search-container">
+    <input type="text" id="input-busqueda" placeholder="🔍 Buscar por nombre, autor, año o categoría...">
+  </div>
+
+  <!-- Tabla -->
+  <div class="tabla-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Autor</th>
+          <th>Año</th>
+          <th>Categoría</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-libros">
+        <!-- Dinámico -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- POPUP de Eliminación -->
+  <div id="popup-eliminar" class="popup-overlay">
+    <div class="popup">
+      <h2>Eliminación de libro</h2>
+      <p id="popup-message">¿Deseas eliminar el libro seleccionado?</p>
+      <div class="popup-buttons">
+        <button class="btn-rechazar" id="btn-cancelar-eliminar"><span class="icon">❌</span> Cancelar</button>
+        <button class="btn-aceptar" id="btn-confirmar-eliminar"><span class="icon">✔</span> Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP de Edición -->
+  <div id="popup-formulario" class="popup-overlay">
+    <div class="popup">
+      <h2 id="titulo-formulario">Editar Libro</h2>
+      <form id="form-libro" enctype="multipart/form-data">
+        <input type="hidden" id="id_libro" name="id_libro">
+
+        <div class="form-container">
+          <!-- Columna izquierda -->
+          <div class="form-left">
+            <div class="form-group">
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+              <label for="titulo">Título:</label>
+              <input type="text" id="titulo" name="titulo" required>
+            </div>
+
+            <div class="form-group">
+              <label for="autor">Autor:</label>
+              <input type="text" id="autor" name="autor" required>
+            </div>
+
+            <div class="form-group">
+              <label for="anio_edicion">Año:</label>
+              <input type="number" id="anio_edicion" name="anio_edicion" required>
+            </div>
+
+            <div class="form-group">
+              <label for="descripcion">Descripción:</label>
+              <textarea id="descripcion" name="descripcion" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="editorial">Editorial:</label>
+              <input type="text" id="editorial" name="editorial">
+            </div>
+
+            <div class="form-group">
+              <label for="categoria">Categoría:</label>
+              <select id="categoria" name="categoria" required>
+                <option value="">-- Selecciona una categoría --</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Columna derecha -->
+          <div class="form-right">
+            <div class="form-group">
+              <label for="portada">Portada:</label>
+              <input type="file" id="portada" name="portada" accept="image/*">
+              <img id="preview-portada" src="" alt="Portada actual">
+            </div>
+          </div>
+        </div>
+
+        <div class="popup-buttons">
+          <button type="button" class="btn-rechazar" id="btn-cancelar-form">
+            <span class="icon">❌</span> Cancelar
+          </button>
+          <button type="submit" class="btn-aceptar">
+            <span class="icon">💾</span> Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="/javaScript/LibrosScript/EditarLibros.js"></script>
+</body>
+</html>

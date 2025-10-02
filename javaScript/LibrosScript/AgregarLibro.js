@@ -1,16 +1,26 @@
 // ===== AgregarLibro.js =====
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("form-libro");
-  const nombre = document.getElementById("nombre");
-  const autor = document.getElementById("autor");
-  const anio = document.getElementById("anio_edicion");
-  const titulo = document.getElementById("titulo");
-  const descripcion = document.getElementById("descripcion");
-  const editorial = document.getElementById("editorial");
-  const categoria = document.getElementById("categoria");
+  const categoriaSelect = document.getElementById("categoria");
   const portada = document.getElementById("portada");
 
-  // --- Vista previa (igual que antes) ---
+  // --- Cargar categorías ---
+  fetch("http://localhost:3000/api/categorias")
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat.id_categoria;
+        option.textContent = cat.nombre;
+        categoriaSelect.appendChild(option);
+      });
+    })
+    .catch(err => {
+      console.error("❌ Error cargando categorías:", err);
+      alert("Error al cargar categorías");
+    });
+
+  // --- Vista previa portada ---
   const previewWrap = document.createElement("div");
   const img = new Image();
   img.alt = "Vista previa de la portada";
@@ -27,12 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
       status.textContent = "Sin archivo seleccionado";
       return;
     }
-    const validTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-    if (!validTypes.includes(file.type)) {
-      status.textContent = "Formato no soportado.";
-      portada.value = "";
-      return;
-    }
     if (file.size > 3 * 1024 * 1024) {
       status.textContent = "La imagen supera 3 MB.";
       portada.value = "";
@@ -43,18 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 
-  // --- Envío al backend con FormData ---
+  // --- Enviar formulario ---
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("nombre", nombre.value);
-    formData.append("titulo", titulo.value);
-    formData.append("autor", autor.value);
-    formData.append("anio_edicion", anio.value);
-    formData.append("descripcion", descripcion.value);
-    formData.append("editorial", editorial.value);
-    formData.append("categoria", categoria.value);
+    const formData = new FormData(form);
     if (portada.files.length > 0) {
       formData.append("portada", portada.files[0]);
     }
@@ -64,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         body: formData
       });
-
       const data = await res.json();
       if (res.ok) {
         alert("📚 Libro agregado correctamente");

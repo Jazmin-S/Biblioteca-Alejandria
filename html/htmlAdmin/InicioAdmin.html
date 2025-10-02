@@ -13,12 +13,9 @@
   <!-- Encabezado -->
   <header class="header">
     <h1>Inicio</h1>
-
-    <!-- Iconos + Menú -->
     <div class="icons">
       <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" alt="editar" class="icon">
       <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="usuario" class="icon">
-      <!-- Botón menú -->
       <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="menu" class="icon menu-btn">
     </div>
   </header>
@@ -28,54 +25,103 @@
     <div class="popup-content">
       <span class="close-popup">&times;</span>
       <ul>
-        <li id="btn-agregar"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png"> Agregar Libros</li>
-        <li id="btn-usuarios"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828925.png"> Editar Usuarios</li>
-        <li id="btn-prestamos"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png"> Préstamos</li>
+        <li id="btn-agregar"> ➕  Agregar Libros</li>
+        <li id="btn-usuarios">✒️ Editar Usuarios</li>
+        <li id="btn-prestamos">📝 Préstamos</li>
       </ul>
     </div>
   </div>
 
   <!-- Sección Categorías -->
   <section class="categorias">
-    <h2>Categorías</h2>
-    <div class="scroll-container">
-      <div class="card">
-        <img src="https://m.media-amazon.com/images/I/710C5x4MzwL._UF894,1000_QL80_.jpg" alt="Cosmos">
-        <p>Cosmos</p>
-      </div>
-      <div class="card">
-        <img src="https://images.cdn3.buscalibre.com/fit-in/360x360/8a/3d/8a3d75882051af54c9a65c03b7b1d969.jpg" alt="Psicología">
-        <p>Psicología</p>
-      </div>
-      <div class="card">
-        <img src="https://m.media-amazon.com/images/I/A1vM9D2kZDL._UF894,1000_QL80_.jpg" alt="Álgebra">
-        <p>Matemáticas</p>
-      </div>
-      <div class="card">
-        <img src="https://m.media-amazon.com/images/I/81e8udsEY-L._UF894,1000_QL80_.jpg" alt="Medicina">
-        <p>Medicina</p>
-      </div>
-      <div class="card">
-        <img src="https://m.media-amazon.com/images/I/711Eb3fYw7L.jpg" alt="Economía">
-        <p>Economía</p>
-      </div>
-      <div class="card">
-        <img src="https://m.media-amazon.com/images/I/81KPi2zVm1L._UF894,1000_QL80_.jpg" alt="Pedagogía">
-        <p>Pedagogía</p>
-      </div>
+    <h2>
+      Categorías 
+      <button id="btn-gestionar-categorias" style="margin-left:10px; padding:4px 8px;">⚙️</button>
+    </h2>
+    <div class="scroll-container" id="contenedor-categorias">
+      <!-- Dinámico -->
     </div>
   </section>
 
-  <!-- Sección Libros más leídos -->
+  <!-- Sección Libros -->
   <section class="mas-leidos">
     <h2>Libros más leídos</h2>
-    <div class="actions">
+    <div class="actions" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+      <input type="text" id="inputBuscar" placeholder="Buscar libro por nombre..." style="padding:6px; border-radius:6px; border:none; width:220px;">
       <button class="btn buscar">🔍 Buscar</button>
-      <button class="btn filtrar">⚙️ Filtrar</button>
+      <select id="selectFiltro" style="padding:6px; border-radius:6px; border:none;">
+        <option value="">-- Todos los libros --</option>
+      </select>
     </div>
-    <!-- 🔥 Contenedor dinámico -->
     <div class="grid-libros" id="contenedor-libros"></div>
   </section>
+
+  <!-- Popup Detalle -->
+  <div class="popup-detalle" id="popupDetalle">
+    <div class="contenido">
+      <span class="close-detalle">&times;</span>
+      <h3 id="detalleTitulo"></h3>
+      <p><strong>Editorial:</strong> <span id="detalleEditorial"></span></p>
+      <p><strong>Autor:</strong> <span id="detalleAutor"></span></p>
+      <p><strong>Categoría:</strong> <span id="detalleCategoria"></span></p>
+      <p><strong>Año de edición:</strong> <span id="detalleAnio"></span></p>
+      <p><strong>Descripción:</strong></p>
+      <p id="detalleDescripcion"></p>
+    </div>
+  </div>
+
+  <!-- 🔥 Modal de Categorías -->
+  <div class="popup-menu" id="popupCategorias">
+    <div class="popup-content modal-categorias">
+      <span class="close-popup" id="cerrarCategorias">&times;</span>
+      <h3>Gestionar Categorías</h3>
+
+      <!-- Formulario agregar -->
+      <form id="formCategoria" enctype="multipart/form-data" class="form-categoria">
+        <div class="form-group">
+          <label for="nombreCategoria">Nombre de categoría:</label>
+          <input type="text" id="nombreCategoria" name="nombre" required>
+        </div>
+
+        <div class="form-group">
+          <label for="portadaCategoria">Portada:</label>
+          <input type="file" id="portadaCategoria" name="portada" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn">➕ Agregar</button>
+      </form>
+
+      <hr>
+      <h4>Categorías existentes:</h4>
+      <div id="listaCategorias"></div>
+    </div>
+  </div>
+
+  <!-- 🔥 Modal editar categoría -->
+  <div class="popup-menu" id="popupEditarCategoria">
+    <div class="popup-content modal-categorias">
+      <span class="close-popup" id="cerrarEditarCategoria">&times;</span>
+      <h3>Editar Categoría</h3>
+
+      <form id="formEditarCategoria" enctype="multipart/form-data" class="form-categoria">
+        <input type="hidden" id="editIdCategoria" name="id_categoria">
+
+        <div class="form-group">
+          <label for="editNombreCategoria">Nombre:</label>
+          <input type="text" id="editNombreCategoria" name="nombre" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editPortadaCategoria">Nueva portada (opcional):</label>
+          <input type="file" id="editPortadaCategoria" name="portada" accept="image/*">
+        </div>
+
+        <img id="previewEditPortada" src="" alt="Portada actual" class="preview-portada">
+
+        <button type="submit" class="btn">💾 Guardar cambios</button>
+      </form>
+    </div>
+  </div>
 
   <script src="/jsAdmin/InicioAdmin.js"></script>
 </body>

@@ -13,7 +13,6 @@
   </div>
 
   <section class="form-section">
-    <!-- 🔥 El action ya no apunta a PHP -->
     <form id="form-libro">
       <label for="nombre">📖 Nombre del libro:</label>
       <input type="text" id="nombre" name="nombre" required><br><br>
@@ -34,8 +33,9 @@
       <input type="text" id="editorial" name="editorial"><br><br>
 
       <label for="categoria">📂 Categoría:</label>
-      <input type="text" id="categoria" name="categoria" required><br><br>
-
+      <select id="categoria" name="categoria" required>
+        <option value="">-- Selecciona una categoría --</option>
+      </select><br><br>
 
       <label for="portada">🖼️ Portada:</label>
       <input type="file" id="portada" name="portada" accept="image/*"><br><br>
@@ -45,6 +45,5 @@
     </form>
   </section>
 </body>
-
 <script src="/javaScript/LibrosScript/AgregarLibro.js"></script>
 </html>

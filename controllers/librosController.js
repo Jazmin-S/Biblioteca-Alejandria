@@ -14,51 +14,136 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const librosController = {
-    // Middleware para subida de imagen
-    uploadPortada: upload.single('portada'),
+  // Middleware para subida de imagen
+  uploadPortada: upload.single('portada'),
 
-    agregarLibro: (req, res) => {
-        const { nombre, titulo, autor, anio_edicion, descripcion, editorial, categoria } = req.body;
-        const portada = req.file ? '/images/portadas/' + req.file.filename : null;
+  // ==================== AGREGAR ====================
+  agregarLibro: (req, res) => {
+    const { nombre, titulo, autor, anio_edicion, descripcion, editorial, categoria } = req.body;
+    const portada = req.file ? '/images/portadas/' + req.file.filename : null;
 
-        if (!nombre || !titulo || !autor || !anio_edicion || !categoria) {
-            return res.status(400).json({ error: 'Faltan campos obligatorios' });
+    if (!nombre || !titulo || !autor || !anio_edicion || !categoria) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios' });
+    }
+
+    const query = `
+      INSERT INTO LIBRO (nombre, titulo, autor, anio_edicion, descripcion, editorial, id_categoria, portada) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+      query,
+      [nombre, titulo, autor, anio_edicion, descripcion || null, editorial || null, categoria, portada],
+      (err, result) => {
+        if (err) {
+          console.error('❌ Error al agregar libro:', err);
+          return res.status(500).json({ error: 'Error en la base de datos' });
         }
 
-        const query = `
-            INSERT INTO LIBRO (nombre, titulo, autor, anio_edicion, descripcion, editorial, categoria, portada) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-
-        db.query(
-            query,
-            [nombre, titulo, autor, anio_edicion, descripcion || null, editorial || null, categoria, portada],
-            (err, result) => {
-                if (err) {
-                    console.error('❌ Error al agregar libro:', err);
-                    return res.status(500).json({ error: 'Error en la base de datos' });
-                }
-
-                console.log(`✅ Libro agregado: ${nombre} - ${titulo} (${autor})`);
-                res.status(201).json({
-                    success: true,
-                    mensaje: '📚 Libro agregado correctamente',
-                    libroId: result.insertId
-                });
-            }
-        );
-    },
-
-    listarLibros: (req, res) => {
-        const query = 'SELECT * FROM LIBRO ORDER BY id_libro DESC';
-        db.query(query, (err, results) => {
-            if (err) {
-                console.error('❌ Error al listar libros:', err);
-                return res.status(500).json({ error: 'Error en la base de datos' });
-            }
-            res.json(results);
+        console.log(`✅ Libro agregado: ${nombre} - ${titulo} (${autor})`);
+        res.status(201).json({
+          success: true,
+          mensaje: '📚 Libro agregado correctamente',
+          libroId: result.insertId
         });
+      }
+    );
+  },
+
+  // ==================== LISTAR TODOS ====================
+  listarLibros: (req, res) => {
+    const query = `
+      SELECT l.*, c.nombre AS categoria_nombre
+      FROM LIBRO l
+      LEFT JOIN CATEGORIA c ON l.id_categoria = c.id_categoria
+      ORDER BY l.id_libro DESC
+    `;
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('❌ Error al listar libros:', err);
+        return res.status(500).json({ error: 'Error en la base de datos' });
+      }
+      res.json(results);
+    });
+  },
+
+  // ==================== OBTENER UNO ====================
+  obtenerLibroPorId: (req, res) => {
+    const { id } = req.params;
+    const idNum = parseInt(id, 10);
+    if (Number.isNaN(idNum)) {
+      return res.status(400).json({ error: 'ID inválido' });
     }
+
+    const query = `
+      SELECT l.*, c.nombre AS categoria_nombre
+      FROM LIBRO l
+      LEFT JOIN CATEGORIA c ON l.id_categoria = c.id_categoria
+      WHERE l.id_libro = ?
+    `;
+    db.query(query, [idNum], (err, results) => {
+      if (err) {
+        console.error('❌ Error al obtener libro:', err);
+        return res.status(500).json({ error: 'Error en la base de datos' });
+      }
+      if (results.length === 0) {
+        return res.status(404).json({ error: 'Libro no encontrado' });
+      }
+      res.json(results[0]);
+    });
+  },
+
+  // ==================== EDITAR ====================
+  editarLibro: (req, res) => {
+    const { id } = req.params;
+    const idNum = parseInt(id, 10);
+    if (Number.isNaN(idNum)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    const { nombre, titulo, autor, anio_edicion, descripcion, editorial, categoria } = req.body;
+    const portada = req.file ? '/images/portadas/' + req.file.filename : null;
+
+    const query = `
+      UPDATE LIBRO
+      SET nombre = ?, titulo = ?, autor = ?, anio_edicion = ?, descripcion = ?, editorial = ?, id_categoria = ?
+      ${portada ? ', portada = ?' : ''}
+      WHERE id_libro = ?
+    `;
+
+    const params = portada
+      ? [nombre, titulo, autor, anio_edicion, descripcion, editorial, categoria, portada, idNum]
+      : [nombre, titulo, autor, anio_edicion, descripcion, editorial, categoria, idNum];
+
+    db.query(query, params, (err) => {
+      if (err) {
+        console.error('❌ Error al editar libro:', err);
+        return res.status(500).json({ error: 'Error en la base de datos' });
+      }
+      res.json({ success: true, mensaje: '✏️ Libro actualizado correctamente' });
+    });
+  },
+
+  // ==================== ELIMINAR ====================
+  eliminarLibro: (req, res) => {
+    const { id } = req.params;
+    const idNum = parseInt(id, 10);
+    if (Number.isNaN(idNum)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    const query = 'DELETE FROM LIBRO WHERE id_libro = ?';
+    db.query(query, [idNum], (err, result) => {
+      if (err) {
+        console.error('❌ Error al eliminar libro:', err);
+        return res.status(500).json({ error: 'Error en la base de datos' });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Libro no encontrado' });
+      }
+      res.json({ success: true, mensaje: '🗑️ Libro eliminado correctamente' });
+    });
+  },
 };
 
 module.exports = librosController;

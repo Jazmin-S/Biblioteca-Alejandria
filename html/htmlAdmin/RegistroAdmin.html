@@ -15,29 +15,48 @@
     <form id="registroForm" novalidate>
       <div class="field">
         <label for="usuario">Usuario:</label>
-        <input type="text" id="usuario" name="usuario" required>
-        <div id="usuarioError" class="error" style="display:none"></div>
+        <input type="text" id="usuario" name="usuario" autocomplete="username" required>
+        <div id="usuarioError" class="error" aria-live="polite"></div>
       </div>
 
       <div class="field">
         <label for="correo">Correo Institucional:</label>
-        <input type="email" id="correo" name="correo" required>
-        <div id="correoError" class="error" style="display:none"></div>
+        <input type="email" id="correo" name="correo" autocomplete="email" required>
+        <div id="correoError" class="error" aria-live="polite"></div>
       </div>
 
       <div class="field">
-        <label for="contrasena">Contraseña (exactamente 8 dígitos numéricos):</label>
-        <input type="password" id="contrasena" name="contrasena"
-               inputmode="numeric" pattern="\d{8}" maxlength="8" required>
-        <div class="nota">Debe ser exactamente 8 dígitos (0-9). Ejemplo: <code>01234567</code></div>
-        <div id="contrasenaError" class="error" style="display:none"></div>
+        <label for="contrasena">Contraseña:</label>
+        <input
+          type="password"
+          id="contrasena"
+          name="contrasena"
+          autocomplete="new-password"
+          required
+          pattern="^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$"
+          title="Mínimo 8 caracteres, al menos una mayúscula y un carácter especial"
+        />
+
+        <!-- Indicador de requisitos -->
+        <ul class="requirements" id="passReqs" aria-live="polite">
+          <li data-req="len" class="bad">Tener 8 caracteres</li>
+          <li data-req="upper" class="bad">Al menos 1 mayúscula (A-Z)</li>
+          <li data-req="special" class="bad">Al menos 1 carácter especial (!@#$...)</li>
+        </ul>
+
+        <div id="contrasenaError" class="error" aria-live="polite"></div>
       </div>
 
       <div class="field">
         <label for="contrasena2">Repite la contraseña:</label>
-        <input type="password" id="contrasena2" name="contrasena2"
-               inputmode="numeric" pattern="\d{8}" maxlength="8" required>
-        <div id="contrasena2Error" class="error" style="display:none"></div>
+        <input
+          type="password"
+          id="contrasena2"
+          name="contrasena2"
+          autocomplete="new-password"
+          required
+        />
+        <div id="contrasena2Error" class="error" aria-live="polite"></div>
       </div>
 
       <input type="hidden" id="rol" name="rol" value="bibliotecario">
@@ -47,7 +66,7 @@
         <input type="text" id="rolDisplay" name="rolDisplay" value="Bibliotecario" readonly>
       </div>
 
-      <div id="formMessage" style="margin-bottom:12px;"></div>
+      <div id="formMessage" class="form-message" aria-live="polite"></div>
 
       <button type="submit" id="submitBtn">Registrar</button>
     </form>

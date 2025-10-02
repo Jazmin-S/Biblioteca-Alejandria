@@ -1,151 +1,95 @@
-/* RegistroAdmin.css - Formulario de creación de administradores */
-
-/* Fondo general */
-body {
-    margin: 0;
-    padding: 20px; /* espacio arriba y abajo */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #b21f1f, #e63946);
-    display: flex;
-    justify-content: center;   /* centrado horizontal */
-    /* ✅ se quitó align-items y height:100vh para que permita scroll */
+:root{
+  --vino: #f9f9f9;
+  --ok: #00c853;   /* verde validación */
+  --bad: #ba2c2a;
+  --bg: #bf2a2a;
+  --text: #fff;
+  --muted:#ddd;
 }
 
-/* Contenedor del formulario */
-.form-container {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    padding: 40px 30px;
-    text-align: center;
-    backdrop-filter: blur(10px);
-    width: 100%;
-    max-width: 420px;
-    animation: fadeIn 1s ease-out;
-    box-sizing: border-box; /* ✅ evita que el padding desborde */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui,Segoe UI,Roboto,Ubuntu;
+  background:url("https://c4.wallpaperflare.com/wallpaper/446/712/946/minecraft-bookshelves-hd-wallpaper-preview.jpg") no-repeat center center fixed;
+  background-size:cover;
+  min-height:100dvh;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  color:var(--text);
 }
 
-/* Animación */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+.form-container{
+  width:min(680px, 92vw);
+  background:rgba(11, 8, 8, 0.8);
+  border:2px solid var(--vino);
+  border-radius:16px;
+  padding:24px 20px;
+  box-shadow:0 20px 60px rgba(245, 227, 227, 0.5);
 }
 
-/* Título */
-.form-container h2 {
-    font-size: 1.8rem;
-    color: #b21f1f;
-    margin-bottom: 15px;
-    font-weight: 700;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-}
+h2{margin:0 0 8px;font-weight:700;color:var(--vino);}
+hr{border:none;height:2px;background:var(--vino);margin:12px 0 20px;}
 
-/* Labels */
-label {
-    display: block;
-    text-align: left;
-    font-weight: 600;
-    margin: 15px 0 5px;
-    color: #333;
-}
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+label{font-weight:600;}
 
-/* Inputs */
 input[type="text"],
 input[type="email"],
-input[type="password"],
-input[readonly] {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    outline: none;
-    font-size: 1rem;
-    transition: border 0.2s;
-    background-color: #f9f9f9;
-    box-sizing: border-box; /* ✅ padding dentro del ancho */
+input[type="password"]{
+  padding:12px;
+  border-radius:10px;
+  border:2px solid #333;
+  background:#111;
+  color:var(--text);
+  outline:0;
+  transition:border-color .18s, box-shadow .18s;
+}
+input:focus{border-color:var(--vino);}
+
+.is-valid{
+  border-color: var(--ok) !important;
+  box-shadow:0 0 0 3px rgba(0,200,83,.4);
+}
+.is-invalid{
+  border-color: var(--bad) !important;
+  box-shadow:0 0 0 3px rgba(229,57,53,.3);
 }
 
-input:focus {
-    border-color: #e63946;
+/* Requisitos de contraseña */
+.requirements{
+  list-style:none;
+  margin:0;
+  padding-left:0;
+  display:grid;
+  gap:6px;
+  font-size:.95rem;
 }
+.requirements li{
+  padding:6px 10px;
+  border-radius:8px;
+  background:#222;
+  border:1px dashed #444;
+}
+.requirements li.good{color:var(--ok);border-color:var(--ok);}
+.requirements li.bad{color:var(--bad);border-color:var(--bad);}
 
-/* Campo de rol (readonly) */
-input[readonly] {
-    background-color: #f1f1f1;
-    font-weight: bold;
-    color: #b21f1f;
-    cursor: not-allowed;
-}
-
-/* Nota */
-.nota {
-    font-size: 0.85rem;
-    color: #666;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    text-align: left;
-}
+.error{min-height:18px;color:var(--bad);font-size:.9rem;}
+.form-message{min-height:20px;font-size:.95rem;color:var(--ok);}
 
 /* Botón */
-button {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(to right, #b21f1f, #e63946);
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+button#submitBtn{
+  margin-top:6px;
+  width:100%;
+  padding:12px 14px;
+  border:none;
+  border-radius:12px;
+  background:#840303;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  transition:filter .15s ease;
 }
-
-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-}
-
-/* Mensajes de error y éxito */
-.error {
-    color: #fff;
-    background: #e63946;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    margin-top: 8px;
-    text-align: left;
-    display: none;
-}
-
-.success {
-    color: #155724;
-    background: #d4edda;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    margin-top: 8px;
-    text-align: left;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    body {
-        padding: 15px; /* ✅ espacio lateral en móviles */
-    }
-
-    .form-container {
-        padding: 20px 15px; /* ✅ menos padding en móvil */
-        max-width: 100%;    /* ✅ ocupa todo el ancho */
-    }
-
-    .form-container h2 {
-        font-size: 1.4rem;
-    }
-
-    button {
-        font-size: 1rem;
-        padding: 12px;
-    }
-}
+button#submitBtn:hover{filter:brightness(1.2);}
+button#submitBtn:active{transform:scale(.98);}

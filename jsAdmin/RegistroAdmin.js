@@ -1,165 +1,158 @@
-// RegistroAdmin.js - validación cliente y manejo de errores del servidor
+// Validación de registro de administrador
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("registroForm");
+  const usuario = document.getElementById("usuario");
+  const correo = document.getElementById("correo");
+  const pass = document.getElementById("contrasena");
+  const pass2 = document.getElementById("contrasena2");
 
-const form = document.getElementById('registroForm');
-const usuarioInput = document.getElementById('usuario');
-const correoInput = document.getElementById('correo');
-const contrasenaInput = document.getElementById('contrasena');
-const contrasena2Input = document.getElementById('contrasena2');
-const submitBtn = document.getElementById('submitBtn');
+  const usuarioError = document.getElementById("usuarioError");
+  const correoError = document.getElementById("correoError");
+  const passError = document.getElementById("contrasenaError");
+  const pass2Error = document.getElementById("contrasena2Error");
+  const formMessage = document.getElementById("formMessage");
 
-const usuarioError = document.getElementById('usuarioError');
-const correoError = document.getElementById('correoError');
-const contrasenaError = document.getElementById('contrasenaError');
-const contrasena2Error = document.getElementById('contrasena2Error');
-const formMessage = document.getElementById('formMessage');
+  const reqList = document.getElementById("passReqs");
+  const reqItems = {
+    len: reqList.querySelector('[data-req="len"]'),
+    upper: reqList.querySelector('[data-req="upper"]'),
+    special: reqList.querySelector('[data-req="special"]'),
+  };
 
-function showError(el, msg) {
-  el.textContent = msg;
-  el.style.display = 'block';
-}
+  // Regex: mínimo 8, al menos 1 mayúscula y 1 especial
+  const passRegex = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/;
 
-function hideError(el) {
-  el.textContent = '';
-  el.style.display = 'none';
-}
-
-function showSuccessMessage(msg) {
-  formMessage.innerHTML = `<div class="success">${msg}</div>`;
-}
-function showFormError(msg) {
-  formMessage.innerHTML = `<div class="error">${msg}</div>`;
-}
-function clearFormMessage() {
-  formMessage.innerHTML = '';
-}
-
-// Validar que la contraseña sea exactamente 8 dígitos numéricos
-function isValidPassword(pw) {
-  return /^\d{8}$/.test(pw);
-}
-
-// Validación en tiempo real
-contrasenaInput.addEventListener('input', () => {
-  clearFormMessage();
-  const v = contrasenaInput.value.trim();
-  if (v.length === 0) {
-    showError(contrasenaError, 'La contraseña es obligatoria.');
-  } else if (!/^\d*$/.test(v)) {
-    showError(contrasenaError, 'Solo se permiten dígitos (0-9).');
-  } else if (v.length !== 8) {
-    showError(contrasenaError, 'La contraseña debe tener exactamente 8 dígitos.');
-  } else if (!isValidPassword(v)) {
-    showError(contrasenaError, 'Contraseña inválida. Debe ser exactamente 8 dígitos.');
-  } else {
-    hideError(contrasenaError);
-  }
-});
-
-contrasena2Input.addEventListener('input', () => {
-  clearFormMessage();
-  if (contrasena2Input.value !== contrasenaInput.value) {
-    showError(contrasena2Error, 'Las contraseñas no coinciden.');
-  } else {
-    hideError(contrasena2Error);
-  }
-});
-
-correoInput.addEventListener('input', () => {
-  clearFormMessage();
-  hideError(correoError);
-});
-
-usuarioInput.addEventListener('input', () => {
-  clearFormMessage();
-  hideError(usuarioError);
-});
-
-// Submit handler
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearFormMessage();
-
-  // limpiar errores previos
-  hideError(usuarioError);
-  hideError(correoError);
-  hideError(contrasenaError);
-  hideError(contrasena2Error);
-
-  const usuario = usuarioInput.value.trim();
-  const correo = correoInput.value.trim();
-  const contrasena = contrasenaInput.value.trim();
-  const contrasena2 = contrasena2Input.value.trim();
-  const rol = document.getElementById('rol').value || 'bibliotecario';
-
-  // Validaciones cliente
-  let hasError = false;
-  if (!usuario) {
-    showError(usuarioError, 'El usuario es obligatorio.');
-    hasError = true;
-  }
-  if (!correo) {
-    showError(correoError, 'El correo es obligatorio.');
-    hasError = true;
-  } else {
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRe.test(correo)) {
-      showError(correoError, 'Formato de correo inválido.');
-      hasError = true;
-    }
-  }
-
-  if (!contrasena) {
-    showError(contrasenaError, 'La contraseña es obligatoria.');
-    hasError = true;
-  } else if (!isValidPassword(contrasena)) {
-    showError(contrasenaError, 'La contraseña debe ser exactamente 8 dígitos numéricos (0-9).');
-    hasError = true;
-  }
-
-  if (contrasena !== contrasena2) {
-    showError(contrasena2Error, 'Las contraseñas no coinciden.');
-    hasError = true;
-  }
-
-  if (hasError) {
-    showFormError('Corrige los errores marcados antes de continuar.');
-    return;
-  }
-
-  // desactivar botón para evitar envíos múltiples
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Registrando...';
-
-  try {
-    const response = await fetch('http://localhost:3000/api/registroadmin/registro', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usuario, correo, contrasena, rol })
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (response.ok) {
-      showSuccessMessage(data.message || 'Registro realizado con éxito.');
-      form.reset();
+  const setValid = (el, ok, msgEl, msg = "") => {
+    el.classList.remove("is-valid", "is-invalid");
+    if (ok) {
+      el.classList.add("is-valid");
+      if (msgEl) msgEl.textContent = "";
     } else {
-      const text = (data.message || data.error || '').toString();
-
-      if (/duplicate|correo|ya existe/i.test(text)) {
-        showError(correoError, text || 'El correo ya está registrado.');
-        showFormError('Hay errores en el formulario.');
-      } else if (/password|contraseñ|contrasena/i.test(text)) {
-        showError(contrasenaError, text || 'Error con la contraseña.');
-        showFormError('Hay errores en el formulario.');
-      } else {
-        showFormError(text || 'Ocurrió un error en el servidor.');
-      }
+      el.classList.add("is-invalid");
+      if (msgEl) msgEl.textContent = msg;
     }
-  } catch (err) {
-    console.error(err);
-    showFormError('❌ Error en el servidor. Comprueba que la API esté corriendo.');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Registrar';
-  }
+  };
+
+  const updateRequirements = (value) => {
+    const checks = {
+      len: value.length >= 8,
+      upper: /[A-Z]/.test(value),
+      special: /[^A-Za-z0-9]/.test(value),
+    };
+
+    for (const key in checks) {
+      reqItems[key].classList.toggle("good", checks[key]);
+      reqItems[key].classList.toggle("bad", !checks[key]);
+    }
+    return checks.len && checks.upper && checks.special;
+  };
+
+  // Live validation
+  usuario.addEventListener("input", () => {
+    const ok = usuario.value.trim().length >= 3;
+    setValid(usuario, ok, usuarioError, ok ? "" : "Mínimo 3 caracteres.");
+  });
+
+  correo.addEventListener("input", () => {
+    const ok = correo.validity.valid;
+    setValid(correo, ok, correoError, ok ? "" : "Correo inválido.");
+  });
+
+  pass.addEventListener("input", () => {
+    const ok = updateRequirements(pass.value);
+    setValid(
+      pass,
+      ok,
+      passError,
+      ok ? "" : "La contraseña no cumple los requisitos."
+    );
+
+    // Mientras escribe la primera, verifica coincidencia con la segunda
+    if (pass2.value.length > 0) {
+      const same = pass.value === pass2.value;
+      setValid(
+        pass2,
+        same,
+        pass2Error,
+        same ? "" : "Las contraseñas no coinciden."
+      );
+    }
+  });
+
+  pass2.addEventListener("input", () => {
+    const same = pass.value === pass2.value;
+    setValid(
+      pass2,
+      same,
+      pass2Error,
+      same ? "" : "Las contraseñas no coinciden."
+    );
+  });
+
+  // Envío
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    formMessage.textContent = "";
+
+    // Disparar validaciones finales
+    const uOK = usuario.value.trim().length >= 3;
+    setValid(usuario, uOK, usuarioError, uOK ? "" : "Mínimo 3 caracteres.");
+
+    const cOK = correo.validity.valid;
+    setValid(correo, cOK, correoError, cOK ? "" : "Correo inválido.");
+
+    const pOK = passRegex.test(pass.value);
+    setValid(
+      pass,
+      pOK,
+      passError,
+      pOK ? "" : "La contraseña no cumple los requisitos."
+    );
+    updateRequirements(pass.value);
+
+    const p2OK = pass.value === pass2.value;
+    setValid(
+      pass2,
+      p2OK,
+      pass2Error,
+      p2OK ? "" : "Las contraseñas no coinciden."
+    );
+
+    if (!(uOK && cOK && pOK && p2OK)) {
+      formMessage.textContent = "⚠️ Revisa los campos marcados en rojo.";
+      return;
+    }
+
+    // Si tu backend ya recibe este payload, ajusta la URL si es necesario:
+    const payload = {
+      usuario: usuario.value.trim(),
+      correo: correo.value.trim(),
+      contrasena: pass.value, // En el backend hashea antes de guardar
+      rol: document.getElementById("rol").value || "bibliotecario",
+    };
+
+    try {
+      const res = await fetch("http://localhost:3000/api/admin/registro", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(data?.message || "Error al registrar.");
+      }
+
+      formMessage.textContent = "✅ Registro exitoso.";
+      form.reset();
+      // Limpia estilos
+      [usuario, correo, pass, pass2].forEach((el) =>
+        el.classList.remove("is-valid", "is-invalid")
+      );
+      updateRequirements("");
+    } catch (err) {
+      formMessage.textContent = "❌ " + err.message;
+    }
+  });
 });

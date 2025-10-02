@@ -1,8 +1,18 @@
---- CREACION DE TABLAS 
+-- 🔥 Borrar base de datos existente
+DROP DATABASE IF EXISTS biblioteca;
 
-CREATE DATABASE IF NOT EXISTS biblioteca CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- 📌 Crear base de datos
+CREATE DATABASE biblioteca CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE biblioteca;
 
+-- 📌 Crear tabla de Categorías
+CREATE TABLE CATEGORIA (
+  id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL UNIQUE,
+  portada VARCHAR(255) DEFAULT NULL
+);
+
+-- 📌 Crear tabla de Libros
 CREATE TABLE LIBRO (
   id_libro INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL,
@@ -11,13 +21,12 @@ CREATE TABLE LIBRO (
   anio_edicion INT NOT NULL,
   descripcion TEXT,
   editorial VARCHAR(255),
-  categoria VARCHAR(100),
-  portada VARCHAR(255)
+  id_categoria INT,
+  portada VARCHAR(255),
+  FOREIGN KEY (id_categoria) REFERENCES CATEGORIA(id_categoria)
 );
 
-
-
-DROP TABLE USUARIO;
+-- 📌 Crear tabla de Usuarios
 CREATE TABLE USUARIO (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -27,6 +36,7 @@ CREATE TABLE USUARIO (
     num_prestamos INT DEFAULT 0
 );
 
+-- 📌 Crear tabla de Préstamos
 CREATE TABLE PRESTAMO (
     id_prestamo INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT,
@@ -35,6 +45,7 @@ CREATE TABLE PRESTAMO (
     FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario)
 );
 
+-- 📌 Crear tabla de Detalle de Préstamos
 CREATE TABLE DETALLE_PRESTAMO (
     id_detalle INT AUTO_INCREMENT PRIMARY KEY,
     id_prestamo INT,
@@ -42,8 +53,3 @@ CREATE TABLE DETALLE_PRESTAMO (
     FOREIGN KEY (id_prestamo) REFERENCES PRESTAMO(id_prestamo),
     FOREIGN KEY (id_libro) REFERENCES LIBRO(id_libro)
 );
-
-SHOW CREATE TABLE prestamo;
-ALTER TABLE prestamo DROP FOREIGN KEY prestamo_ibfk_1;
-DROP TABLE DETALLE_PRESTAMO;
-
