@@ -303,6 +303,45 @@ function escapeHTML(text) {
     return div.innerHTML;
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("formUsuario");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById("usuario").value.trim();
+    const correo = document.getElementById("correo").value.trim();
+    const domicilio = document.getElementById("domicilio").value.trim();
+    const contrasena = document.getElementById("contrasena").value.trim();
+    const rol = document.getElementById("rol").value;
+
+    if (!nombre || !correo || !contrasena || !rol) {
+      alert("Por favor completa todos los campos obligatorios.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/api/usuarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, correo, contrasena, rol, domicilio }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("✅ Usuario creado exitosamente");
+        form.reset();
+      } else {
+        alert("⚠️ " + data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("❌ Error al registrar usuario");
+    }
+  });
+});
+
+
 // Hacer funciones disponibles globalmente
 window.editarUsuario = editarUsuario;
 window.mostrarPopupEliminar = mostrarPopupEliminar;
