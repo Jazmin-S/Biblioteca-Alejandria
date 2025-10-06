@@ -11,10 +11,11 @@
   <!-- Boton EXIT -->
   <button id="btnExit" class="exit-btn">EXIT</button>
   <script>
-      document.getElementById('btnExit').addEventListener('click',function(){
-        window.open('editar-usuarios.html', '_blank');
-      });
-    </script>
+  document.getElementById('btnExit').addEventListener('click', function() {
+    window.location.href = '/html/htmlAdmin/editar-usuarios.html';
+  });
+  </script>
+
 
   <!-- Encabezado rojo -->
   <header class="header"></header>
@@ -33,12 +34,12 @@
 
         <label for="correo">Correo Institucional:</label>
         <input type="email" id="correo" name="correo">
+        
 
-        <label for="domicilio">Domicilio:</label>
-        <input type="text" id="domicilio" name="domicilio">
+ <!--<label for="domicilio">Domicilio:</label>
+        <input type="text" id="domicilio" name="domicilio">-->
 
-        <label for="contrasena">Contraseña:</label>
-        <input type="password" id="contrasena" name="contrasena">
+        
 
         <label for="Rol">Rol:</label>
         <select id="rol" name="rol" required>
@@ -56,6 +57,6 @@
       </form>
     </div>
   </div>
-    <script src="/crear-usuarios.js"></script>
+    <script src="/jsAdmin/editar-datos.js"></script>
 </body>
 </html>

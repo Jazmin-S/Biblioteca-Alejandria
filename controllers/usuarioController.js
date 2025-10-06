@@ -30,6 +30,7 @@ const usuarioController = {
                 total: results.length 
             });
         });
+        
     },
 
     // Crear nuevo usuario
@@ -178,7 +179,114 @@ const usuarioController = {
                 });
             });
         });
-    }
+    },
+        
+    // Obtener detalle de un usuario con sus préstamos (pal modal)
+    obtenerDetalleUsuario: (req, res) => {
+        const { id } = req.params;
+
+        if (!id || isNaN(id)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "ID de usuario válido requerido" 
+            });
+        }
+
+        //Consulta para datos del usuario
+        const sqlUsuario = `
+            SELECT id_usuario, nombre, correo, rol, num_prestamos
+            FROM USUARIO
+            WHERE id_usuario = ?;
+        `;
+
+        // Consulta para libros prestados por el usuario
+        const sqlPrestamos = `
+            SELECT 
+                p.id_prestamo,
+                p.fecha AS fecha_prestamo,
+                l.titulo,
+                l.autor,
+                c.nombre AS categoria
+            FROM PRESTAMO p
+            JOIN DETALLE_PRESTAMO dp ON p.id_prestamo = dp.id_prestamo
+            JOIN LIBRO l ON dp.id_libro = l.id_libro
+            LEFT JOIN CATEGORIA c ON l.id_categoria = c.id_categoria
+            WHERE p.id_usuario = ?
+            ORDER BY p.fecha DESC;
+        `;
+
+        // Ejecutar las dos consultas en orden
+        db.query(sqlUsuario, [id], (err, usuarioResults) => {
+            if (err) {
+                console.error("Error al obtener usuario:", err);
+                return res.status(500).json({ 
+                    success: false, 
+                    message: "Error al obtener los datos del usuario" 
+                });
+            }
+
+            if (usuarioResults.length === 0) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: "Usuario no encontrado" 
+                });
+            }
+
+            db.query(sqlPrestamos, [id], (err, prestamosResults) => {
+                if (err) {
+                    console.error("Error al obtener préstamos:", err);
+                    return res.status(500).json({ 
+                        success: false, 
+                        message: "Error al obtener los préstamos del usuario" 
+                    });
+                }
+
+                res.json({ 
+                    success: true,
+                    usuario: usuarioResults[0],
+                    prestamos: prestamosResults 
+                });
+            });
+        });
+    },
+
+    // Obtener un usuario por ID (para llenar el formulario de edición)
+    obtenerUsuarioPorId: (req, res) => {
+        const { id } = req.params;
+
+        if (!id || isNaN(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "ID de usuario válido requerido"
+            });
+        }
+
+        const sql = "SELECT * FROM USUARIO WHERE id_usuario = ?";
+
+        db.query(sql, [id], (err, results) => {
+            if (err) {
+                console.error("Error al obtener usuario:", err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Error al obtener usuario"
+                });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Usuario no encontrado"
+                });
+            }
+
+            res.json({
+                success: true,
+                usuario: results[0]
+            });
+        });
+    },
+
+
 };
 
 module.exports = usuarioController;

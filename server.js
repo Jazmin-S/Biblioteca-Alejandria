@@ -9,30 +9,41 @@ const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// =======================
+// 🧩 Middleware
+// =======================
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static(__dirname)); // sirve raíz del proyecto
 
-// Logger middleware
+// ✅ Servir carpetas HTML correctamente
+app.use('/html', express.static(path.join(__dirname, 'html')));
+app.use('/htmlAdmin', express.static(path.join(__dirname, 'html/htmlAdmin')));
+app.use('/htmlLibros', express.static(path.join(__dirname, 'html/htmlLibros')));
+
+// =======================
+// 🧾 Logger
+// =======================
 app.use((req, res, next) => {
     console.log(`${new Date().toLocaleTimeString()} - ${req.method} ${req.path}`);
     next();
 });
 
-// Usar rutas modularizadas
+// =======================
+// 🔗 Rutas API
+// =======================
 app.use('/api', routes);
 
-// Rutas de archivos estáticos
+// =======================
+// 🌐 Rutas de archivos estáticos individuales
+// =======================
 app.get('/recuperar-contraseña.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'recuperar-contraseña.html'));
 });
 
-app.get('/', (req, res) => {
-    res.send('Servidor de Biblioteca de Alejandría funcionando ✅');
-});
-
-// Ruta de salud del servidor
+// =======================
+// 🩺 Ruta de salud del servidor
+// =======================
 app.get('/health', (req, res) => {
     res.json({ 
         status: 'OK', 
@@ -41,12 +52,20 @@ app.get('/health', (req, res) => {
     });
 });
 
-// Manejo de errores 404
+// =======================
+// 🚀 Inicio del servidor
+// =======================
+app.get('/', (req, res) => {
+    res.send('Servidor de Biblioteca de Alejandría funcionando ✅');
+});
+
+// =======================
+// ❌ Manejo de errores
+// =======================
 app.use((req, res) => {
     res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-// Middleware de errores global
 app.use((error, req, res, next) => {
     console.error('❌ Error del servidor:', error);
     res.status(500).json({ 
@@ -55,7 +74,9 @@ app.use((error, req, res, next) => {
     });
 });
 
-// Iniciar servidor
+// =======================
+// ▶️ Escuchar servidor
+// =======================
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     console.log('📁 Rutas modularizadas cargadas correctamente');
