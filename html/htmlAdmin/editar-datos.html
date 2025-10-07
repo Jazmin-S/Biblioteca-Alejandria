@@ -8,55 +8,56 @@
 </head>
 <body>
 
-  <!-- Boton EXIT -->
-  <button id="btnExit" class="exit-btn">EXIT</button>
+  <!-- 🚪 Botón de Salida -->
+  <button id="btnExit" class="exit-btn">⟵ SALIR</button>
   <script>
-  document.getElementById('btnExit').addEventListener('click', function() {
-    window.location.href = '/html/htmlAdmin/editar-usuarios.html';
-  });
+    document.getElementById('btnExit').addEventListener('click', function() {
+      window.location.href = '/html/htmlAdmin/editar-usuarios.html';
+    });
   </script>
 
-
-  <!-- Encabezado rojo -->
+  <!-- 🟥 Encabezado -->
   <header class="header"></header>
 
-  <!-- Fondo biblioteca -->
+  <!-- 📚 Fondo y Formulario -->
   <div class="background">
     <div class="form-container">
       <h2>
         <span class="icon-user">👤</span> Cambia los Datos
       </h2>
-      <hr>
+      <hr style="width: 80%; opacity: 0.6; margin-bottom: 25px;">
 
       <form id="formUsuario">
-        <label for="usuario">Usuario:</label>
-        <input type="text" id="usuario" name="usuario">
+        
+        <!-- 👤 Usuario -->
+        <label for="usuario">Nombre de Usuario:</label>
+        <input type="text" id="usuario" name="usuario" placeholder="Ingresa el nombre del usuario" required>
 
+        <!-- ✉️ Correo -->
         <label for="correo">Correo Institucional:</label>
-        <input type="email" id="correo" name="correo">
-        
+        <input type="email" id="correo" name="correo" placeholder="ejemplo@uv.mx" required>
 
- <!--<label for="domicilio">Domicilio:</label>
-        <input type="text" id="domicilio" name="domicilio">-->
-
-        
-
-        <label for="Rol">Rol:</label>
-        <select id="rol" name="rol" required>
+        <!-- 🧑‍💼 Rol -->
+        <div class="rol-container">
+          <label for="rol">Rol:</label>
+          <select id="rol" class="rol-select" name="rol" required>
+            <option value="">Selecciona un rol...</option>
             <option value="alumno">Alumno</option>
-            <option value="profesor">Profresor</option>
-            <option value="bibliotecario">Biblioteca</option>
-        </select>
+            <option value="profesor">Profesor</option>
+            <option value="bibliotecario">Bibliotecario</option>
+          </select>
+        </div>
 
-        <p class="nota">
-          La contraseña debe contener al menos 8 caracteres y un caracter especial (.,#,-, etc).
-        </p>
+        <!-- 💾 Botón Guardar -->
+        <button type="submit">💾 Guardar Cambios</button>
 
-        <button type="submit">Guardar Usuario</button>
-        
+        <!-- 📝 Nota -->
+        <p class="nota">Verifica los datos antes de guardar los cambios.</p>
       </form>
+
     </div>
   </div>
-    <script src="/jsAdmin/editar-datos.js"></script>
+
+  <script src="/jsAdmin/editar-datos.js"></script>
 </body>
 </html>
