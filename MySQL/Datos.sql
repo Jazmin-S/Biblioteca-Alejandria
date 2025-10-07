@@ -4,12 +4,13 @@
 
 -- Categorías
 INSERT INTO CATEGORIA (nombre, portada) VALUES
-('Cosmos', '/images/categorias/cosmos.jpg'),
-('Psicología', '/images/categorias/psicologia.jpg'),
-('Matemáticas', '/images/categorias/matematicas.jpg'),
-('Medicina', '/images/categorias/medicina.jpg'),
-('Economía', '/images/categorias/economia.jpg'),
-('Pedagogía', '/images/categorias/pedagogia.jpg');
+('Psicología', '/images/portadas/1759388824168.webp'),
+('Matemáticas', '/images/portadas/1759388689616.avif'),
+('Medicina', '/images/portadas/1759388730230.webp'),
+('Economía', '/images/categorias/medicina.jpg'),
+('Economía', '/images/portadas/1759388652463.jpeg'),
+('Pedagogía', '/images/portadas/1759388812077.jpeg'),
+('Filosofia', '/images/portadas/1759388892803.jpg');
 
 -- Libros
 INSERT INTO LIBRO (nombre, titulo, autor, anio_edicion, descripcion, editorial, id_categoria, portada) VALUES
@@ -38,4 +39,4 @@ INSERT INTO DETALLE_PRESTAMO (id_prestamo, id_libro) VALUES
 (2, 2), -- María pidió "La interpretación de los sueños"
 (2, 3); -- María pidió "Álgebra"
 
-SELECT * FROM USUARIO;
+SELECT * FROM categoria;

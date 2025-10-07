@@ -1,87 +1,163 @@
-/* General */
+/* ==========================
+   🎨 ESTILO GENERAL
+========================== */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
   background: url("https://static.nationalgeographicla.com/files/styles/image_3200/public/006-library-biblioteca-angelica-a-roma_0002.jpg?w=1600") no-repeat center center fixed;
   background-size: cover;
+  color: #222;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Botón EXIT */
+/* ==========================
+   🚪 BOTÓN SALIR
+========================== */
 .exit-btn {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #ffeb3b;
-  border: 1px solid #000;
+  top: 20px;
+  left: 20px;
+  background: #fff;
+  color: #800020;
   font-weight: bold;
-  padding: 5px 10px;
+  border: 2px solid #800020;
+  border-radius: 8px;
+  padding: 8px 14px;
   cursor: pointer;
-  z-index: 2;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
 }
 
-/* Encabezado rojo */
+.exit-btn:hover {
+  background: #800020;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* ==========================
+   🟥 ENCABEZADO
+========================== */
 .header {
-  background: #a00;
+  background: linear-gradient(90deg, #800020, #a0002e);
   height: 80px;
   width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Caja formulario */
+/* ==========================
+   📦 CONTENEDOR FORMULARIO
+========================== */
 .form-container {
-  background: #600; /* burdeo oscuro */
-  color: white;
-  max-width: 700px;
-  margin: 50px auto;
-  padding: 20px 40px;
-  border-radius: 5px;
+  background: rgba(128, 0, 32, 0.95);
+  color: #fff;
+  max-width: 680px;
+  width: 90%;
+  margin: 100px auto;
+  padding: 32px 40px;
+  border-radius: 16px;
   position: relative;
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  animation: fadeIn 0.6s ease-in-out;
 }
 
-/* Título */
+/* ==========================
+   🧾 TÍTULO
+========================== */
 .form-container h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.8rem;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+  text-align: center;
+  color: #fff;
+  letter-spacing: 0.5px;
 }
 
 .icon-user {
   margin-right: 10px;
+  font-size: 1.6rem;
 }
 
-/* Campos del formulario */
+/* ==========================
+   🧩 CAMPOS DEL FORMULARIO
+========================== */
 form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 18px;
 }
 
 label {
-  font-weight: bold;
-  margin-bottom: 3px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #fff;
+  font-size: 1rem;
 }
 
 input {
-  padding: 6px;
-  border: none;
-  border-radius: 4px;
+  padding: 10px 14px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
   width: 100%;
+  font-size: 1rem;
+  color: #222;
+  background: #fff;
+  transition: all 0.25s ease;
 }
 
-/* Nota */
+input:focus {
+  border-color: #00c853;
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.3);
+  outline: none;
+}
+
+/* ==========================
+   📝 NOTA / TEXTO SECUNDARIO
+========================== */
 .nota {
-  font-size: 0.8rem;
-  margin-top: 5px;
-  color: #ddd;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  color: #f0e6e6;
+  text-align: center;
+  opacity: 0.9;
 }
 
-/* Icono de libros */
+/* ==========================
+   📚 ICONO DECORATIVO
+========================== */
 .icon-books {
   position: absolute;
   right: 20px;
   bottom: 20px;
-  width: 100px;
+  width: 90px;
+  opacity: 0.85;
+  transition: transform 0.3s ease;
+}
+
+.icon-books:hover {
+  transform: rotate(-5deg) scale(1.05);
 }
 
 .icon-books img {
   width: 100%;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+}
+
+/* ==========================
+   ✨ ANIMACIÓN DE ENTRADA
+========================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

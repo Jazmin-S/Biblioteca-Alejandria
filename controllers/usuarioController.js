@@ -1,7 +1,10 @@
 const db = require('../MySQL/db');
 
 const usuarioController = {
-    // Obtener todos los usuarios
+
+    // =====================================================
+    // 🧩 Obtener todos los usuarios (contando libros prestados)
+    // =====================================================
     obtenerUsuarios: (req, res) => {
         const sql = `
             SELECT 
@@ -9,11 +12,12 @@ const usuarioController = {
                 u.nombre, 
                 u.correo, 
                 u.rol,
-                COUNT(p.id_prestamo) as prestamos
+                COALESCE(SUM(CASE WHEN dp.id_libro IS NOT NULL THEN 1 ELSE 0 END), 0) AS prestamos
             FROM USUARIO u
             LEFT JOIN PRESTAMO p ON u.id_usuario = p.id_usuario
+            LEFT JOIN DETALLE_PRESTAMO dp ON p.id_prestamo = dp.id_prestamo
             GROUP BY u.id_usuario
-            ORDER BY u.nombre
+            ORDER BY u.nombre;
         `;
         
         db.query(sql, (err, results) => {
@@ -30,21 +34,21 @@ const usuarioController = {
                 total: results.length 
             });
         });
-        
     },
 
-    // Crear nuevo usuario
+    // =====================================================
+    // 🧩 Crear nuevo usuario
+    // =====================================================
     crearUsuario: (req, res) => {
         const { nombre, correo, contrasena, rol } = req.body;
 
         if (!nombre || !correo || !contrasena || !rol) {
             return res.status(400).json({ 
                 success: false, 
-                message: "Todos los campos son obligatorios: nombre, correo, contraseña, rol" 
+                message: "Todos los campos son obligatorios: nombre, correo, contraseña y rol" 
             });
         }
 
-        // Verificar si el correo ya existe
         const checkSql = "SELECT id_usuario FROM USUARIO WHERE correo = ?";
         db.query(checkSql, [correo], (err, results) => {
             if (err) {
@@ -62,7 +66,6 @@ const usuarioController = {
                 });
             }
 
-            // Insertar nuevo usuario
             const insertSql = "INSERT INTO USUARIO (nombre, correo, contrasena, rol) VALUES (?, ?, ?, ?)";
             db.query(insertSql, [nombre, correo, contrasena, rol], (err, result) => {
                 if (err) {
@@ -82,7 +85,9 @@ const usuarioController = {
         });
     },
 
-    // Actualizar usuario
+    // =====================================================
+    // 🧩 Actualizar usuario
+    // =====================================================
     actualizarUsuario: (req, res) => {
         const { id } = req.params;
         const { nombre, correo, contrasena, rol } = req.body;
@@ -127,7 +132,9 @@ const usuarioController = {
         });
     },
 
-    // Eliminar usuario
+    // =====================================================
+    // 🧩 Eliminar usuario
+    // =====================================================
     eliminarUsuario: (req, res) => {
         const { id } = req.params;
 
@@ -181,7 +188,9 @@ const usuarioController = {
         });
     },
         
-    // Obtener detalle de un usuario con sus préstamos (pal modal)
+    // =====================================================
+    // 🧩 Obtener detalle de un usuario con sus préstamos
+    // =====================================================
     obtenerDetalleUsuario: (req, res) => {
         const { id } = req.params;
 
@@ -192,14 +201,12 @@ const usuarioController = {
             });
         }
 
-        //Consulta para datos del usuario
         const sqlUsuario = `
-            SELECT id_usuario, nombre, correo, rol, num_prestamos
+            SELECT id_usuario, nombre, correo, rol
             FROM USUARIO
             WHERE id_usuario = ?;
         `;
 
-        // Consulta para libros prestados por el usuario
         const sqlPrestamos = `
             SELECT 
                 p.id_prestamo,
@@ -215,7 +222,6 @@ const usuarioController = {
             ORDER BY p.fecha DESC;
         `;
 
-        // Ejecutar las dos consultas en orden
         db.query(sqlUsuario, [id], (err, usuarioResults) => {
             if (err) {
                 console.error("Error al obtener usuario:", err);
@@ -250,7 +256,9 @@ const usuarioController = {
         });
     },
 
-    // Obtener un usuario por ID (para llenar el formulario de edición)
+    // =====================================================
+    // 🧩 Obtener un usuario por ID
+    // =====================================================
     obtenerUsuarioPorId: (req, res) => {
         const { id } = req.params;
 
@@ -285,7 +293,6 @@ const usuarioController = {
             });
         });
     },
-
 
 };
 

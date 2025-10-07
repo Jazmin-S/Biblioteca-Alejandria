@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  // Obtener el ID del usuario desde la URL (?id=3)
   const params = new URLSearchParams(window.location.search);
   const idUsuario = params.get("id");
 
@@ -22,12 +21,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const user = data.usuario;
-
-    // Rellenar los campos del formulario
     document.getElementById("usuario").value = user.nombre || "";
     document.getElementById("correo").value = user.correo || "";
     document.getElementById("rol").value = user.rol || "alumno";
-    document.getElementById("contrasena").value = ""; // vacía por seguridad
   } catch (error) {
     console.error("Error al obtener datos del usuario:", error);
     alert("⚠ No se pudieron cargar los datos del usuario.");
@@ -39,22 +35,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const nombre = document.getElementById("usuario").value.trim();
     const correo = document.getElementById("correo").value.trim();
-    const contrasena = document.getElementById("contrasena").value.trim();
     const rol = document.getElementById("rol").value;
+    const contrasenaInput = document.getElementById("contrasena");
+    const contrasena = contrasenaInput ? contrasenaInput.value.trim() : "";
 
     if (!nombre || !correo || !rol) {
       alert("Por favor completa todos los campos obligatorios.");
       return;
     }
 
-    // Validación opcional de contraseña
+    // 🔒 Si hay contraseña nueva, se valida
     if (contrasena && (contrasena.length < 8 || !/[!@#$%^&*.,_-]/.test(contrasena))) {
       alert("La contraseña debe tener al menos 8 caracteres y un símbolo especial.");
       return;
     }
 
     try {
-      const body = { nombre, correo, contrasena, rol };
+      // Si la contraseña está vacía, no la mandamos al servidor
+      const body = contrasena ? { nombre, correo, contrasena, rol } : { nombre, correo, rol };
 
       const res = await fetch(`http://localhost:3000/api/usuarios/${idUsuario}`, {
         method: "PUT",
