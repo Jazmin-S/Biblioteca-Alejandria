@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Nuevo Usuario</title>
+  <link rel="stylesheet" href="/css/cssAdmin/crear-usuario.css">
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header class="header">
+    <h1> 👤 Crear Nuevo Usuario</h1>
+  </header>
+
+  <!-- Botón de regreso -->
+  <button id="btnExit" class="exit-btn">← Volver</button>
+
+  <!-- Contenedor principal -->
+  <div class="container">
+    <form id="formUsuario" class="formulario">
+
+      <!-- 👤 Usuario -->
+    <label for="usuario">Nombre de Usuario:</label>
+    <input type="text" id="usuario" name="usuario" placeholder="Ingresa el nombre del usuario" required>
+
+    <!-- ✉️ Correo -->
+    <label for="correo">Correo Institucional:</label>
+    <input type="email" id="correo" name="correo" placeholder="ejemplo@uv.mx" required>
+
+    <!-- 🔑 Contraseña -->
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" name="contrasena" placeholder="12345678!" required>
+
+    <!-- 🧑‍💼 Rol -->
+    <div class="rol-container">
+        <label for="rol">Rol:</label>
+        <select id="rol" class="rol-select" name="rol" required>
+            <option value="">Selecciona un rol...</option>
+            <option value="alumno">Alumno</option>
+            <option value="profesor">Profesor</option>
+           <option value="bibliotecario">Bibliotecario</option>
+    </select>
+    </div>
+
+        <!-- 💾 Botón Guardar -->
+        <button type="submit" class="btn-guardar">💾 Guardar Usuario</button>
+    </form>
+  </div>
+
+  <script>
+    // Botón regresar
+    document.getElementById('btnExit').addEventListener('click', () => {
+      window.location.href = '/html/htmlAdmin/editar-usuarios.html';
+    });
+  </script>
+
+  <script src="/jsAdmin/crear-usuarios.js"></script>
+</body>
+</html>

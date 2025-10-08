@@ -1,4 +1,4 @@
-// jsAdmin/crear-usuario.js
+// jsAdmin/crear-usuarios.js
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formUsuario");
 
@@ -10,39 +10,30 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // 🔹 Capturar valores del formulario
+    // ✅ Capturar valores correctos
     const nombre = document.getElementById("usuario").value.trim();
     const correo = document.getElementById("correo").value.trim();
-    const domicilio = document.getElementById("domicilio").value.trim();
     const contrasena = document.getElementById("contrasena").value.trim();
-    let rol = document.getElementById("rol").value.trim().toLowerCase(); // normalizar
+    const rol = document.getElementById("rol").value.trim().toLowerCase();
 
-    // 🔹 Validaciones básicas
+    // Validar
     if (!nombre || !correo || !contrasena || !rol) {
       alert("Por favor completa todos los campos obligatorios.");
       return;
     }
 
-    // Validación de contraseña (mínimo 8 caracteres y un carácter especial)
     const regexPassword = /^(?=.*[!@#$%^&*.,\-]).{8,}$/;
     if (!regexPassword.test(contrasena)) {
       alert("⚠️ La contraseña debe tener al menos 8 caracteres y un caracter especial.");
       return;
     }
 
-    // 🔹 Preparar cuerpo de la petición
-    const usuarioData = {
-      nombre,
-      correo,
-      contrasena,
-      rol,
-      domicilio
-    };
+    // 🔹 Enviar datos al backend
+    const usuarioData = { nombre, correo, contrasena, rol };
 
     console.log("📤 Enviando datos al servidor:", usuarioData);
 
     try {
-      // 🔹 Enviar petición al backend
       const response = await fetch("http://localhost:3000/api/usuarios", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await response.json();
-
       console.log("📥 Respuesta del servidor:", data);
 
       if (data.success) {
