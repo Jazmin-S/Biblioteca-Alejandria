@@ -2,36 +2,53 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formUsuario");
 
-  if (!form) {
-    console.error("❌ No se encontró el formulario con id='formUsuario'");
-    return;
+  // Crear modal dinámico
+  const modal = document.createElement("div");
+  modal.id = "modal";
+  modal.classList.add("modal");
+  modal.innerHTML = `
+    <div class="modal-content">
+      <p id="modal-message"></p>
+      <button id="closeModal">Cerrar</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const modalMessage = document.getElementById("modal-message");
+  const closeModal = document.getElementById("closeModal");
+
+  function showModal(message, success = false) {
+    modalMessage.textContent = message;
+    modal.classList.add("show");
+    modal.classList.toggle("success", success);
   }
+
+  closeModal.addEventListener("click", () => {
+    modal.classList.remove("show");
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // ✅ Capturar valores correctos
     const nombre = document.getElementById("usuario").value.trim();
     const correo = document.getElementById("correo").value.trim();
     const contrasena = document.getElementById("contrasena").value.trim();
     const rol = document.getElementById("rol").value.trim().toLowerCase();
 
-    // Validar
+    // Validaciones
     if (!nombre || !correo || !contrasena || !rol) {
-      alert("Por favor completa todos los campos obligatorios.");
+      showModal("Por favor completa todos los campos obligatorios.");
       return;
     }
 
-    const regexPassword = /^(?=.*[!@#$%^&*.,\-]).{8,}$/;
+    // ✅ Contraseña exactamente 8 caracteres, 1 mayúscula y 1 caracter especial
+    const regexPassword = /^(?=.*[A-Z])(?=.*[!@#$%^&*.,\-])[A-Za-z\d!@#$%^&*.,\-]{8}$/;
     if (!regexPassword.test(contrasena)) {
-      alert("⚠️ La contraseña debe tener al menos 8 caracteres y un caracter especial.");
+      showModal("La contraseña debe tener exactamente 8 caracteres, incluir al menos una mayúscula y un carácter especial.");
       return;
     }
 
-    // 🔹 Enviar datos al backend
     const usuarioData = { nombre, correo, contrasena, rol };
-
-    console.log("📤 Enviando datos al servidor:", usuarioData);
 
     try {
       const response = await fetch("http://localhost:3000/api/usuarios", {
@@ -41,17 +58,21 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await response.json();
-      console.log("📥 Respuesta del servidor:", data);
 
       if (data.success) {
-        alert("✅ Usuario creado exitosamente");
+        showModal("✅ Usuario creado exitosamente. Redirigiendo...", true);
         form.reset();
+
+        // Esperar 2 segundos y redirigir
+        setTimeout(() => {
+          window.location.href = "/html/htmlAdmin/editar-usuarios.html";
+        }, 1000);
       } else {
-        alert("⚠️ " + data.message);
+        showModal("⚠️ " + (data.message || "Error al crear usuario."));
       }
     } catch (error) {
       console.error("❌ Error al registrar usuario:", error);
-      alert("❌ Error al registrar usuario. Revisa la consola para más detalles.");
+      showModal("❌ Error de conexión con el servidor.");
     }
   });
 });

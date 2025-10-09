@@ -7,8 +7,8 @@
   <link rel="stylesheet" href="/css/cssAdmin/editar-usuarios.css">
 </head>
 <body>
-<button class="exit-btn" onclick="window.location.href='/html/htmlAdmin/InicioAdmin.html'">EXIT</button>
-
+  <!-- Botón de salida -->
+  <button class="exit-btn" onclick="window.location.href='/html/htmlAdmin/InicioAdmin.html'">EXIT</button>
 
   <!-- Encabezado -->
   <header class="header">
@@ -26,10 +26,6 @@
       <input type="text" id="buscar" placeholder="Escribe un usuario...">
       <button class="buscar-btn" id="btn-buscar">🔍</button>
     </div>
-
-    <button class="btn-control editar" id="btn-editar" style="display: none;">
-      <span class="icon">✏️</span> Editar Seleccionado
-    </button>
   </div>
 
   <!-- Tabla de usuarios -->
@@ -50,69 +46,26 @@
     </table>
   </div>
 
-  <!-- Botón eliminar -->
-  <div class="eliminar-container">
-    <button class="btn-eliminar" id="btn-eliminar-multiple" style="display: none;">
-      <span class="icon">🗑️</span> Eliminar Seleccionados
-    </button>
-  </div>
-
   <!-- POPUP de Eliminación -->
   <div id="popup-eliminar" class="popup-overlay">
-    <div class="popup">
-      <h2>Eliminación de usuario</h2>
+    <div class="popup popup-eliminar">
+      <h2>Eliminación de Usuario</h2>
       <p id="popup-message">¿Deseas eliminar al usuario seleccionado?</p>
       <div class="popup-buttons">
-        <button class="btn-rechazar" id="btn-cancelar-eliminar"><span class="icon">❌</span> Cancelar</button>
-        <button class="btn-aceptar" id="btn-confirmar-eliminar"><span class="icon">✔</span> Confirmar</button>
+        <button class="btn-cancelar" id="btn-cancelar-eliminar">❌ Cancelar</button>
+        <button class="btn-confirmar" id="btn-confirmar-eliminar">🗑️ Eliminar</button>
       </div>
     </div>
   </div>
-  <!-- POPUP: Ver Préstamos -->
-<div id="popup-prestamos" class="popup-overlay">
-  <div class="popup">
-    <h2>Préstamos del Usuario</h2>
-    <div id="contenido-prestamos">
-      <!-- Se llenará dinámicamente -->
-    </div>
-    <div class="popup-buttons">
-      <button class="btn-aceptar" id="btn-cerrar-prestamos">
-        <span class="icon">✔</span> Cerrar
-      </button>
-    </div>
-  </div>
-</div>
 
-  <!-- Formulario Agregar/Editar Usuario -->
-  <div id="popup-formulario" class="popup-overlay">
+  <!-- POPUP: Ver Préstamos -->
+  <div id="popup-prestamos" class="popup-overlay">
     <div class="popup">
-      <h2 id="titulo-formulario">Agregar Usuario</h2>
-      <form id="form-usuario">
-        <div class="form-group">
-          <label for="nombre">Nombre:</label>
-          <input type="text" id="nombre" name="nombre" required>
-        </div>
-        <div class="form-group">
-          <label for="correo">Correo Institucional:</label>
-          <input type="email" id="correo" name="correo" required>
-        </div>
-        <div class="form-group">
-          <label for="contrasena">Contraseña:</label>
-          <input type="password" id="contrasena" name="contrasena" required>
-        </div>
-        <div class="form-group">
-          <label for="rol">Rol:</label>
-          <select id="rol" name="rol" required>
-            <option value="">Seleccionar rol</option>
-            <option value="usuario">Usuario</option>
-            <option value="admin">Administrador</option>
-          </select>
-        </div>
-        <div class="popup-buttons">
-          <button type="button" class="btn-rechazar" id="btn-cancelar-form"><span class="icon">❌</span> Cancelar</button>
-          <button type="submit" class="btn-aceptar"><span class="icon">💾</span> Guardar</button>
-        </div>
-      </form>
+      <h2>Préstamos del Usuario</h2>
+      <div id="contenido-prestamos"></div>
+      <div class="popup-buttons">
+        <button class="btn-aceptar" id="btn-cerrar-prestamos">✔ Cerrar</button>
+      </div>
     </div>
   </div>
 

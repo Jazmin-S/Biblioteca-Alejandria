@@ -58,7 +58,7 @@ body {
   justify-content: space-between;
   background: rgba(255, 255, 255, 0.9);
   padding: 10px 20px;
-  border-bottom: 2px solid #b28d00;
+  border-bottom: 2px solid #403103;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
@@ -172,7 +172,7 @@ tbody tr:hover {
 }
 
 /* ==========================
-   🔧 BOTONES DE ACCIÓN (CON TOOLTIP)
+   🔧 BOTONES DE ACCIÓN
 ========================== */
 .btn-accion {
   position: relative;
@@ -192,20 +192,9 @@ tbody tr:hover {
 }
 
 /* Colores individuales */
-.btn-editar {
-  color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-ver-prestamos {
-  color: #ff9800;
-  border-color: #ff9800;
-}
-
-.btn-eliminar {
-  color: #dc3545;
-  border-color: #dc3545;
-}
+.btn-editar { color: #007bff; border-color: #007bff; }
+.btn-ver-prestamos { color: #ff9800; border-color: #ff9800; }
+.btn-eliminar { color: #dc3545; border-color: #dc3545; }
 
 /* Hover */
 .btn-accion:hover {
@@ -213,21 +202,13 @@ tbody tr:hover {
   transform: scale(1.12);
 }
 
-.btn-editar:hover {
-  background: #007bff;
-}
+.btn-editar:hover { background: #007bff; }
+.btn-ver-prestamos:hover { background: #ff9800; }
+.btn-eliminar:hover { background: #dc3545; }
 
-.btn-ver-prestamos:hover {
-  background: #ff9800;
-}
-
-.btn-eliminar:hover {
-  background: #dc3545;
-}
-
-/* ===== Tooltip (nombre flotante del botón) ===== */
+/* Tooltip */
 .btn-accion::after {
-  content: attr(data-tooltip);
+  content: attr(title);
   position: absolute;
   bottom: 110%;
   left: 50%;
@@ -243,7 +224,6 @@ tbody tr:hover {
   transition: all 0.2s ease;
   pointer-events: none;
 }
-
 .btn-accion:hover::after {
   opacity: 1;
   visibility: visible;
@@ -251,7 +231,7 @@ tbody tr:hover {
 }
 
 /* ==========================
-   💬 POPUP GENERAL
+   🌟 MODAL DE PRÉSTAMOS
 ========================== */
 .popup-overlay {
   display: none;
@@ -261,32 +241,157 @@ tbody tr:hover {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 3000;
+  animation: fadeIn 0.3s ease forwards;
 }
 
 .popup {
-  background: #800020;
-  color: white;
-  padding: 30px;
-  border-radius: 10px;
-  text-align: center;
-  width: 420px;
+  background: rgba(128, 0, 32, 0.96);
+  color: #f5f5f5;
+  padding: 30px 35px;
+  border-radius: 16px;
+  text-align: left;
+  width: 520px;
   max-width: 90%;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 2px solid #171612;
+  animation: slideUp 0.35s ease;
+  overflow-y: auto;
+  max-height: 80vh;
 }
 
 .popup h2 {
-  margin: 0 0 15px;
-  font-size: 1.6rem;
-  border-bottom: 2px solid #fff;
-  padding-bottom: 10px;
+  font-size: 1.8rem;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #ffffffb3;
+  padding-bottom: 8px;
 }
 
-.popup p {
+#contenido-prestamos {
   font-size: 1rem;
-  margin-bottom: 20px;
+  line-height: 1.6;
+  color: #f5f5f5;
+  padding-right: 5px;
+}
+#contenido-prestamos p strong { color: #ffffff; }
+
+#contenido-prestamos ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+#contenido-prestamos li {
+  background: #ffffff;
+  color: #222;
+  border-left: 6px solid #217902;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 12px 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+}
+#contenido-prestamos li:hover {
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+}
+
+.popup-buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+.btn-aceptar {
+  background: linear-gradient(90deg, #081c01, #3c3e3b);
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.btn-aceptar:hover {
+  background: #164800;
+  transform: scale(1.05);
+}
+
+/* ==========================
+   💣 MODAL DE ELIMINACIÓN
+========================== */
+.popup-eliminar {
+  background: rgba(128, 0, 32, 0.95);
+  color: #fff;
+  width: 420px;
+  max-width: 90%;
+  text-align: center;
+  border-radius: 14px;
+  padding: 30px 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 2px solid #141413;
+  animation: shakeIn 0.4s ease;
+}
+
+.popup-eliminar h2 {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ffffff90;
+  padding-bottom: 8px;
+}
+.popup-eliminar p {
+  font-size: 1rem;
+  margin-bottom: 25px;
+  color: #f2f2f2;
+}
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.btn-confirmar, .btn-cancelar {
+  font-weight: bold;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 1rem;
+}
+.btn-confirmar {
+  background: linear-gradient(90deg, #b00020, #ff0033);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+.btn-confirmar:hover {
+  background: #ff1a3d;
+  transform: scale(1.06);
+}
+.btn-cancelar {
+  background: #f2f2f2;
+  color: #222;
+  border: 1px solid #ccc;
+}
+.btn-cancelar:hover {
+  background: #ddd;
+  transform: scale(1.04);
+}
+
+/* 🔄 Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shakeIn {
+  0% { transform: scale(0.9); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
 }
 
 /* ==========================
@@ -299,17 +404,15 @@ tbody tr:hover {
   text-align: center;
   font-weight: bold;
 }
-
 .mensaje-exito {
   background: #d4edda;
-  color: #155724;
+  color: #015a16;
   border: 1px solid #c3e6cb;
 }
-
 .mensaje-error {
-  background: #f8d7da;
+  background: #b1aaab;
   color: #721c24;
-  border: 1px solid #f5c6cb;
+  border: 1px solid #130d0e;
 }
 
 /* ==========================
@@ -320,4 +423,64 @@ tbody tr:hover {
   padding: 20px;
   font-style: italic;
   color: #666;
+}
+/* ==========================
+   ⚠️ MODAL DE MENSAJES (ERROR / ÉXITO)
+========================== */
+.popup-mensaje {
+  background: rgba(255, 255, 255, 0.98);
+  width: 420px;
+  max-width: 90%;
+  border-radius: 16px;
+  text-align: center;
+  padding: 30px 25px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  border: 2px solid #0e0d0b;
+  animation: slideUp 0.35s ease;
+}
+
+.popup-mensaje h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+}
+
+.popup-mensaje p {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+/* Estilos específicos para cada tipo */
+.popup-mensaje.error {
+  border: 2px solid #ff0033;
+  background: #fff0f3;
+}
+.popup-mensaje.error h2 {
+  color: #b00020;
+}
+.popup-mensaje.exito {
+  border: 2px solid #005614;
+  background: #f1fff4;
+}
+.popup-mensaje.exito h2 {
+  color: #002408;
+}
+
+/* Botón */
+.popup-mensaje .btn-aceptar {
+  background: linear-gradient(90deg, #800020, #a0002e);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  padding: 10px 22px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.popup-mensaje .btn-aceptar:hover {
+  background: #b4002f;
+  transform: scale(1.05);
 }
