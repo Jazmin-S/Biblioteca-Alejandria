@@ -6,12 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/html/htmlAdmin/AdminLogin.html";
   });
 
-  // === Navegación directa desde icono de editar ===
+  // === Navegación directa ===
   document.querySelector('.icons img[alt="editar"]')?.addEventListener("click", () => {
     window.location.href = "/html/htmlLibros/EditarLibros.html";
   });
 
-  // === Menú lateral ===
   document.getElementById("btn-agregar")?.addEventListener("click", () => {
     window.location.href = "/html/htmlLibros/AgregarLibro.html";
   });
@@ -43,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("http://localhost:3000/api/categorias");
       const categorias = await res.json();
 
-      // Mostrar tarjetas
       contenedorCategorias.innerHTML = "";
       categorias.forEach(cat => {
         const card = document.createElement("div");
@@ -55,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
         contenedorCategorias.appendChild(card);
       });
 
-      // Opciones en filtro de libros
       selectFiltro.innerHTML = `<option value="">-- Todos los libros --</option>`;
       categorias.forEach(cat => {
         const opt = document.createElement("option");
@@ -64,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         selectFiltro.appendChild(opt);
       });
 
-      // Lista de categorías (con editar y eliminar)
       listaCategoriasDiv.innerHTML = "";
       categorias.forEach(cat => {
         const div = document.createElement("div");
@@ -99,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     popupCategorias.style.display = "none";
   });
 
-  // === Modal Editar Categoría ===
+  // === Editar categoría ===
   const popupEditar = document.getElementById("popupEditarCategoria");
   const cerrarEditar = document.getElementById("cerrarEditarCategoria");
   const formEditar = document.getElementById("formEditarCategoria");
@@ -110,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   cerrarEditar?.addEventListener("click", () => popupEditar.style.display = "none");
 
-  // Abrir modal editar categoría
   listaCategoriasDiv?.addEventListener("click", e => {
     if (e.target.classList.contains("btn-editar-cat")) {
       const id = e.target.dataset.id;
@@ -126,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Preview de nueva portada al editar
   editPortada?.addEventListener("change", () => {
     const file = editPortada.files[0];
     if (file) {
@@ -136,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Guardar edición
   formEditar?.addEventListener("submit", async e => {
     e.preventDefault();
     const id = editId.value;
@@ -223,41 +216,37 @@ document.addEventListener("DOMContentLoaded", () => {
       contenedor.appendChild(card);
     });
   }
-  // === Mostrar detalle del libro ===
-function mostrarDetalle(libro) {
-  document.getElementById("detalleTitulo").textContent = libro.titulo || "Sin título";
-  document.getElementById("detalleEditorial").textContent = libro.editorial || "Desconocida";
-  document.getElementById("detalleAutor").textContent = libro.autor || "Desconocido";
-  document.getElementById("detalleCategoria").textContent = libro.categoria_nombre || "Sin categoría";
-  document.getElementById("detalleAnio").textContent = libro.anio_edicion || "N/A";
-  document.getElementById("detalleDescripcion").textContent = libro.descripcion || "Sin descripción";
 
-  document.getElementById("popupDetalle").style.display = "flex";
-}
+  // === Mostrar detalle ===
+  function mostrarDetalle(libro) {
+    document.getElementById("detalleTitulo").textContent = libro.titulo || "Sin título";
+    document.getElementById("detalleEditorial").textContent = libro.editorial || "Desconocida";
+    document.getElementById("detalleAutor").textContent = libro.autor || "Desconocido";
+    document.getElementById("detalleCategoria").textContent = libro.categoria_nombre || "Sin categoría";
+    document.getElementById("detalleAnio").textContent = libro.anio_edicion || "N/A";
+    document.getElementById("detalleEjemplares").textContent = libro.ejemplares || "0";
+    document.getElementById("detalleDescripcion").textContent = libro.descripcion || "Sin descripción";
+    document.getElementById("popupDetalle").style.display = "flex";
+  }
 
-// Cerrar popup de detalle
-document.querySelector(".close-detalle")?.addEventListener("click", () => {
-  document.getElementById("popupDetalle").style.display = "none";
-});
+  document.querySelector(".close-detalle")?.addEventListener("click", () => {
+    document.getElementById("popupDetalle").style.display = "none";
+  });
 
-// Delegar eventos de click en las tarjetas
-document.getElementById("contenedor-libros")?.addEventListener("click", (e) => {
-  const card = e.target.closest(".card-libro");
-  if (!card) return;
+  document.getElementById("contenedor-libros")?.addEventListener("click", (e) => {
+    const card = e.target.closest(".card-libro");
+    if (!card) return;
+    const titulo = card.querySelector("p").textContent;
+    const libro = librosData.find(l => l.titulo === titulo);
+    if (libro) mostrarDetalle(libro);
+  });
 
-  const titulo = card.querySelector("p").textContent;
-  const libro = librosData.find(l => l.titulo === titulo);
-  if (libro) mostrarDetalle(libro);
-});
-
-  // Buscar libros
   document.querySelector(".btn.buscar")?.addEventListener("click", () => {
     const texto = document.getElementById("inputBuscar").value.toLowerCase();
     const filtrados = librosData.filter(l => l.titulo?.toLowerCase().includes(texto));
     renderLibros(filtrados);
   });
 
-  // Filtrar libros por categoría
   selectFiltro?.addEventListener("change", () => {
     const categoria = selectFiltro.value;
     if (!categoria) return renderLibros(librosData);
@@ -265,7 +254,6 @@ document.getElementById("contenedor-libros")?.addEventListener("click", (e) => {
     renderLibros(filtrados);
   });
 
-  // === Inicial ===
   cargarCategorias();
   cargarLibros();
 });

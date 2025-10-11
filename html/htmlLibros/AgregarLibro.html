@@ -7,13 +7,16 @@
   <link rel="stylesheet" href="/css/cssLibros/AgregarLibro.css">
 </head>
 <body>
+  <!-- ===== ENCABEZADO ===== -->
   <div class="header">
     <h1>📚 Agregar Libro</h1>
     <button class="btn-back" onclick="history.back()">⬅ Volver</button>
   </div>
 
+  <!-- ===== FORMULARIO ===== -->
   <section class="form-section">
-    <form id="form-libro">
+    <form id="form-libro" enctype="multipart/form-data">
+
       <label for="nombre">📖 Nombre del libro:</label>
       <input type="text" id="nombre" name="nombre" required><br><br>
 
@@ -37,13 +40,18 @@
         <option value="">-- Selecciona una categoría --</option>
       </select><br><br>
 
+      <label for="ejemplares">🔢 Cantidad de ejemplares:</label>
+      <input type="number" id="ejemplares" name="ejemplares" min="1" value="1" required><br><br>
+
       <label for="portada">🖼️ Portada:</label>
       <input type="file" id="portada" name="portada" accept="image/*"><br><br>
 
-      <button type="submit">💾 Guardar</button>
-      <a href="InicioAdmin.html"><button type="button">⬅️ Volver</button></a>
+      <!-- ===== BOTONES DE ACCIÓN ===== -->
+      <div class="actions">
+        <button type="submit" class="btn-guardar">💾 Guardar</button>
     </form>
   </section>
+
+  <script src="/javaScript/LibrosScript/AgregarLibro.js"></script>
 </body>
-<script src="/javaScript/LibrosScript/AgregarLibro.js"></script>
 </html>

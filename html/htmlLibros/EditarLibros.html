@@ -8,20 +8,14 @@
 </head>
 <body>
 
-  <!-- Botón Exit -->
   <button class="exit-btn" onclick="window.location.href='../htmlAdmin/InicioAdmin.html'">EXIT</button>
 
-  <!-- Encabezado -->
-  <header class="header">
-    Editar Libros
-  </header>
+  <header class="header">Editar Libros</header>
 
-  <!-- Barra de búsqueda -->
   <div class="search-container">
     <input type="text" id="input-busqueda" placeholder="🔍 Buscar por nombre, autor, año o categoría...">
   </div>
 
-  <!-- Tabla -->
   <div class="tabla-container">
     <table>
       <thead>
@@ -30,28 +24,27 @@
           <th>Autor</th>
           <th>Año</th>
           <th>Categoría</th>
+          <th>Ejemplares</th>
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id="tbody-libros">
-        <!-- Dinámico -->
-      </tbody>
+      <tbody id="tbody-libros"></tbody>
     </table>
   </div>
 
-  <!-- POPUP de Eliminación -->
+  <!-- POPUP eliminar -->
   <div id="popup-eliminar" class="popup-overlay">
     <div class="popup">
       <h2>Eliminación de libro</h2>
       <p id="popup-message">¿Deseas eliminar el libro seleccionado?</p>
       <div class="popup-buttons">
-        <button class="btn-rechazar" id="btn-cancelar-eliminar"><span class="icon">❌</span> Cancelar</button>
-        <button class="btn-aceptar" id="btn-confirmar-eliminar"><span class="icon">✔</span> Confirmar</button>
+        <button class="btn-rechazar" id="btn-cancelar-eliminar">❌ Cancelar</button>
+        <button class="btn-aceptar" id="btn-confirmar-eliminar">✔ Confirmar</button>
       </div>
     </div>
   </div>
 
-  <!-- POPUP de Edición -->
+  <!-- POPUP edición -->
   <div id="popup-formulario" class="popup-overlay">
     <div class="popup">
       <h2 id="titulo-formulario">Editar Libro</h2>
@@ -59,7 +52,6 @@
         <input type="hidden" id="id_libro" name="id_libro">
 
         <div class="form-container">
-          <!-- Columna izquierda -->
           <div class="form-left">
             <div class="form-group">
               <label for="nombre">Nombre:</label>
@@ -97,9 +89,13 @@
                 <option value="">-- Selecciona una categoría --</option>
               </select>
             </div>
+
+            <div class="form-group">
+              <label for="ejemplares">Ejemplares:</label>
+              <input type="number" id="ejemplares" name="ejemplares" min="1" required>
+            </div>
           </div>
 
-          <!-- Columna derecha -->
           <div class="form-right">
             <div class="form-group">
               <label for="portada">Portada:</label>
@@ -110,18 +106,24 @@
         </div>
 
         <div class="popup-buttons">
-          <button type="button" class="btn-rechazar" id="btn-cancelar-form">
-            <span class="icon">❌</span> Cancelar
-          </button>
-          <button type="submit" class="btn-aceptar">
-            <span class="icon">💾</span> Guardar
-          </button>
+          <button type="button" class="btn-rechazar" id="btn-cancelar-form">❌ Cancelar</button>
+          <button type="submit" class="btn-aceptar">💾 Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- JS -->
+  <!-- 🟢 POPUP MENSAJE -->
+  <div id="popup-mensaje" class="popup-overlay">
+    <div class="popup">
+      <h2 id="mensaje-titulo">Mensaje</h2>
+      <p id="mensaje-texto"></p>
+      <div class="popup-buttons">
+        <button class="btn-aceptar" id="btn-cerrar-mensaje">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/javaScript/LibrosScript/EditarLibros.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("form-libro");
   const categoriaSelect = document.getElementById("categoria");
   const portada = document.getElementById("portada");
+  const ejemplares = document.getElementById("ejemplares");
 
   // --- Cargar categorías ---
   fetch("http://localhost:3000/api/categorias")
@@ -20,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Error al cargar categorías");
     });
 
-  // --- Vista previa portada ---
+  // --- Vista previa de la portada ---
   const previewWrap = document.createElement("div");
   const img = new Image();
   img.alt = "Vista previa de la portada";
@@ -37,32 +38,42 @@ document.addEventListener("DOMContentLoaded", () => {
       status.textContent = "Sin archivo seleccionado";
       return;
     }
+
     if (file.size > 3 * 1024 * 1024) {
-      status.textContent = "La imagen supera 3 MB.";
+      status.textContent = "⚠️ La imagen supera los 3 MB.";
       portada.value = "";
       return;
     }
+
     const reader = new FileReader();
-    reader.onload = e => { img.src = e.target.result; status.textContent = file.name; };
+    reader.onload = e => {
+      img.src = e.target.result;
+      status.textContent = file.name;
+    };
     reader.readAsDataURL(file);
   });
 
   // --- Enviar formulario ---
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // 👇 Crear el FormData directamente del formulario
     const formData = new FormData(form);
-    if (portada.files.length > 0) {
-      formData.append("portada", portada.files[0]);
-    }
+
+    // 👇 Asegurar cantidad de ejemplares
+    const cantidad = ejemplares.value.trim();
+    formData.set("ejemplares", cantidad || "1");
 
     try {
       const res = await fetch("http://localhost:3000/api/libros", {
         method: "POST",
         body: formData
       });
+
       const data = await res.json();
+
       if (res.ok) {
-        alert("📚 Libro agregado correctamente");
+        alert(`✅ Libro agregado correctamente (${cantidad} ejemplar${cantidad > 1 ? "es" : ""})`);
         form.reset();
         img.src = "";
         status.textContent = "Sin archivo seleccionado";

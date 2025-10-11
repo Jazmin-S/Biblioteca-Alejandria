@@ -285,3 +285,95 @@ table tr:hover {
   from {opacity: 0; transform: scale(0.9);}
   to {opacity: 1; transform: scale(1);}
 }
+/* ========================== */
+/* 🎨 ESTILO DEL POPUP MENSAJE */
+/* ========================== */
+
+#popup-mensaje {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.55);
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+#popup-mensaje .popup {
+  width: 420px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 25px 30px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.35s ease;
+}
+
+#popup-mensaje h2 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  color: #8b0000;
+}
+
+#popup-mensaje p {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* 💫 Ícono principal */
+#popup-mensaje::before {
+  content: attr(data-icon);
+  font-size: 55px;
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* ✅ Colores según tipo */
+#popup-mensaje.success .popup {
+  border-top: 6px solid #28a745;
+}
+#popup-mensaje.warning .popup {
+  border-top: 6px solid #ffc107;
+}
+#popup-mensaje.error .popup {
+  border-top: 6px solid #dc3545;
+}
+
+/* 🟢 Botón aceptar estilizado */
+#popup-mensaje .btn-aceptar {
+  background: linear-gradient(90deg, #8b0000, #b22222);
+  color: #fff;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+#popup-mensaje .btn-aceptar:hover {
+  background: #5c0000;
+}
+
+/* 🧩 Animación */
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
