@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Préstamos</title>
+  <link rel="stylesheet" href="/css/cssAdmin/Gestion-prestamos.css">
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <h1>📚 Gestión de Préstamos</h1>
+  </header>
+
+  <!-- BOTÓN SALIR -->
+  <button id="btnExit" class="exit-btn">← Volver</button>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="container">
+
+    <!-- BUSCADOR Y BOTÓN NUEVO -->
+    <div class="top-controls">
+      <input type="text" id="buscar" placeholder="🔍 Buscar usuario...">
+      <button id="btnBuscar">Buscar</button>
+      <button id="btnNuevo" class="btn-nuevo">➕ Nuevo Préstamo</button>
+    </div>
+
+    <!-- TABLA DE PRÉSTAMOS -->
+    <div class="tabla-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>N° de Préstamos</th>
+            <th>Fecha de Préstamo</th>
+            <th>Fecha de Vencimiento</th>
+            <th>Modo</th>
+            <th>Total a Pagar</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyPrestamos">
+          <tr>
+            <td colspan="6" class="loading">Cargando préstamos...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/jsAdmin/Gestion-prestamos.js"></script>
+</body>
+</html>
