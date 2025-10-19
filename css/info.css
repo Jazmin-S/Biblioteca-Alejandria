@@ -1,0 +1,199 @@
+/* 🌸 PERFIL DE USUARIO - ESTILO VINO ELEGANTE COMPACTO */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #7b1e3c, #3c0a1b);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 🔮 Fondo borroso tipo glass */
+body::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1920&q=80") center/cover;
+  filter: blur(10px) brightness(0.6);
+  z-index: -1;
+}
+
+/* 🪞 Tarjeta del perfil */
+.perfil-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  width: 360px;
+  padding: 28px 24px;
+  text-align: center;
+  color: #fff;
+  animation: fadeIn 0.8s ease;
+}
+
+.foto-container {
+  position: relative;
+  display: inline-block;
+}
+
+.foto {
+  width: 115px;
+  height: 115px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.foto:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+}
+
+.cambiar-foto {
+  position: absolute;
+  bottom: 2px;
+  right: 6px;
+  background: #4e0108;
+  color: #fff;
+  border-radius: 50%;
+  padding: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: background 0.3s ease;
+}
+
+.cambiar-foto:hover {
+  background: #1f060e;
+}
+
+h2 {
+  margin: 12px 0 6px;
+  font-weight: 600;
+  font-size: 22px;
+  color: #fff;
+}
+
+p {
+  color: #eaeaea;
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+strong {
+  color: #3e0107;
+}
+
+.bio {
+  margin-top: 18px;
+  text-align: left;
+}
+
+.bio textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  padding: 8px;
+  font-size: 13.5px;
+  resize: none;
+  height: 70px;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
+
+.bio textarea:focus {
+  border-color: #0e0203;
+  outline: none;
+  box-shadow: 0 0 8px rgba(57, 1, 11, 0.5);
+}
+
+/* Botones */
+button {
+  margin-top: 12px;
+  padding: 9px 22px;
+  background: #400110;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #57020e;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+#editarBioBtn {
+  background: #3e010d;
+}
+
+#guardarBioBtn {
+  background: #43a047;
+}
+
+#guardarBioBtn:hover {
+  background: #4caf50;
+}
+
+#btn-volver {
+  margin-top: 20px;
+  width: 100%;
+  background: linear-gradient(90deg, #600208bb, #23010d);
+  font-weight: 600;
+}
+
+#btn-volver:hover {
+  background: linear-gradient(90deg, #1c1014, #7c0303);
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 📱 Diseño responsivo */
+@media (max-height: 700px) {
+  .perfil-container {
+    transform: scale(0.9);
+  }
+}
+
+@media (max-width: 420px) {
+  .perfil-container {
+    width: 90%;
+    padding: 24px;
+  }
+
+  .foto {
+    width: 100px;
+    height: 100px;
+  }
+
+  button {
+    width: 100%;
+  }
+}

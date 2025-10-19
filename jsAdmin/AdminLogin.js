@@ -56,8 +56,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 if (data.success) {
+                    // ✅ Guardar datos del usuario en sessionStorage (por compatibilidad)
                     sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
                     sessionStorage.setItem('isLoggedIn', 'true');
+
+                    // ✅ Guardar también en localStorage para info.html
+                    localStorage.setItem('usuarioId', data.usuario.id);
+                    localStorage.setItem('usuarioNombre', data.usuario.nombre);
+                    localStorage.setItem('usuarioRol', data.usuario.rol);
 
                     mostrarExito("✅ Login exitoso, redirigiendo...");
 

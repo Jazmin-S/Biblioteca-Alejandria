@@ -20,8 +20,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("btn-prestamos")?.addEventListener("click", () => {
-    window.location.href = "/html/htmlAdmin/Prestamos.html";
+    window.location.href = "/html/htmlAdmin/Gestion-prestamos.html";
   });
+  document.getElementById("btn-perfil")?.addEventListener("click", () => {
+  window.location.href = "/html/info.html";
+});
+
+document.querySelector('.icons img[alt="usuario"]')?.addEventListener("click", () => {
+  window.location.href = "/html/info.html";
+});
+
 
   // === Popup Menú ===
   const menuBtn = document.querySelector(".menu-btn");

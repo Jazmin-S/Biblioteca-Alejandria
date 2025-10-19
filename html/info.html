@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil de Usuario</title>
+  <link rel="stylesheet" href="/css/info.css" />
+</head>
+<body>
+  <div class="perfil-container">
+    <div class="foto-container">
+      <img id="foto" class="foto" src="https://i.pravatar.cc/150?img=1" alt="Foto de perfil" />
+      <label for="fotoInput" class="cambiar-foto">📷 Cambiar foto</label>
+      <input type="file" id="fotoInput" accept="image/*" hidden />
+    </div>
+
+    <h2 id="nombre">Cargando...</h2>
+    <p><strong>Correo:</strong> <span id="correo"></span></p>
+    <p><strong>Rol:</strong> <span id="rol"></span></p>
+    <p><strong>Préstamos realizados:</strong> <span id="prestamos"></span></p>
+
+    <div class="bio">
+      <textarea id="bioText" readonly>Amante de los libros y la tecnología. 🌿📚</textarea>
+      <button id="editarBioBtn">✏️ Editar descripción</button>
+      <button id="guardarBioBtn" hidden>💾 Guardar</button>
+    </div>
+
+    <button id="btn-volver">Volver al inicio</button>
+  </div>
+
+  <script src="/javaScript/info.js"></script>
+</body>
+</html>

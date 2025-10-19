@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Préstamos</title>
+  <link rel="stylesheet" href="/css/cssAdmin/Gestion-prestamos.css">
+</head>
+<body>
+
+  <!-- BOTÓN VOLVER -->
+  <button id="btnExit" class="exit-btn">← Volver</button>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <h1>📚 Gestión de Préstamos</h1>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="container">
+    <div class="top-controls">
+      <input type="text" id="buscar" placeholder="🔍 Buscar usuario...">
+      <button id="btnBuscar">Buscar</button>
+      <button id="btnNuevo" class="btn-nuevo">➕ Nuevo Préstamo</button>
+    </div>
+
+    <div class="tabla-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>N° de Préstamos</th>
+            <th>Fecha de Préstamo</th>
+            <th>Fecha de Vencimiento</th>
+            <th>Estado</th>
+            <th>Total a Pagar</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyPrestamos">
+          <tr>
+            <td colspan="6" class="loading">Cargando préstamos...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 🪟 MODAL DETALLES -->
+  <div id="modalDetalle" class="modal">
+    <div class="modal-content">
+      <span class="cerrar">&times;</span>
+      <h2>📚 Detalle del Préstamo</h2>
+      <div id="detalleContenido"></div>
+    </div>
+  </div>
+
+  <!-- 🪟 MODAL NUEVO PRÉSTAMO -->
+  <div id="modalNuevoPrestamo" class="modal">
+    <div class="modal-content">
+      <span class="cerrarNuevo">&times;</span>
+      <h2>➕ Nuevo Préstamo</h2>
+
+      <form id="formNuevoPrestamo">
+        <label for="usuarioSelect">👤 Usuario:</label>
+        <select id="usuarioSelect" required>
+          <option value="">Seleccione un usuario...</option>
+        </select>
+
+        <label for="librosSelect">📚 Libros a prestar:</label>
+        <select id="librosSelect" multiple required></select>
+
+        <label for="fechaVencimiento">📅 Fecha de vencimiento:</label>
+        <input type="date" id="fechaVencimiento" required>
+
+        <button type="submit" class="btn-guardar">💾 Guardar Préstamo</button>
+      </form>
+
+      <div id="mensajePrestamo" class="mensaje"></div>
+    </div>
+  </div>
+
+  <script src="/jsAdmin/Gestion-prestamos.js"></script>
+</body>
+</html>

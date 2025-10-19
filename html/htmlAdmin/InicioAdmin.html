@@ -56,7 +56,7 @@
     <div class="grid-libros" id="contenedor-libros"></div>
   </section>
 
-  <!-- 📘 Popup Detalle del Libro -->
+  <!-- Popup Detalle del Libro -->
   <div class="popup-detalle" id="popupDetalle">
     <div class="contenido">
       <span class="close-detalle">&times;</span>
@@ -71,7 +71,7 @@
     </div>
   </div>
 
-  <!-- 🔥 Modal de Categorías -->
+  <!-- Modal Categorías -->
   <div class="popup-menu" id="popupCategorias">
     <div class="popup-content modal-categorias">
       <span class="close-popup" id="cerrarCategorias">&times;</span>
@@ -95,32 +95,6 @@
       <hr>
       <h4>Categorías existentes:</h4>
       <div id="listaCategorias"></div>
-    </div>
-  </div>
-
-  <!-- 🔥 Modal editar categoría -->
-  <div class="popup-menu" id="popupEditarCategoria">
-    <div class="popup-content modal-categorias">
-      <span class="close-popup" id="cerrarEditarCategoria">&times;</span>
-      <h3>Editar Categoría</h3>
-
-      <form id="formEditarCategoria" enctype="multipart/form-data" class="form-categoria">
-        <input type="hidden" id="editIdCategoria" name="id_categoria">
-
-        <div class="form-group">
-          <label for="editNombreCategoria">Nombre:</label>
-          <input type="text" id="editNombreCategoria" name="nombre" required>
-        </div>
-
-        <div class="form-group">
-          <label for="editPortadaCategoria">Nueva portada (opcional):</label>
-          <input type="file" id="editPortadaCategoria" name="portada" accept="image/*">
-        </div>
-
-        <img id="previewEditPortada" src="" alt="Portada actual" class="preview-portada">
-
-        <button type="submit" class="btn">💾 Guardar cambios</button>
-      </form>
     </div>
   </div>
 
