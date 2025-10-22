@@ -53,7 +53,8 @@ exports.buscarPrestamos = (req, res) => {
 };
 
 // 📖 Detalle del préstamo (permite múltiples ids)
-exports.detallePrestamo = (req, res) => {
+// 📖 Detalle del préstamo (permite múltiples ids y devuelve id_prestamo por cada libro)
+  exports.detallePrestamo = (req, res) => {
   const ids = req.params.id.split(','); // puede recibir varios IDs (agrupados)
   const sql = `
     SELECT 
@@ -61,13 +62,14 @@ exports.detallePrestamo = (req, res) => {
       u.nombre AS usuario, 
       p.fecha AS fecha_prestamo, 
       COALESCE(p.fecha_vencimiento, DATE_ADD(p.fecha, INTERVAL 15 DAY)) AS fecha_vencimiento,
+      l.id_libro,
       l.titulo, 
       l.autor
     FROM PRESTAMO p
     INNER JOIN USUARIO u ON p.id_usuario = u.id_usuario
     INNER JOIN DETALLE_PRESTAMO dp ON dp.id_prestamo = p.id_prestamo
     INNER JOIN LIBRO l ON dp.id_libro = l.id_libro
-    WHERE p.id_prestamo IN (?);
+    WHERE p.id_prestamo IN (?)
   `;
 
   connection.query(sql, [ids], (err, results) => {
@@ -81,17 +83,22 @@ exports.detallePrestamo = (req, res) => {
     }
 
     const prestamo = results[0];
+    console.log("🧠 Resultado detallePrestamo:", results);
+
     res.json({
       usuario: prestamo.usuario,
       fecha_prestamo: prestamo.fecha_prestamo,
       fecha_vencimiento: prestamo.fecha_vencimiento,
       libros: results.map(l => ({
+        id_prestamo: l.id_prestamo, // ✅ ya viene correcto de cada fila
+        id_libro: l.id_libro,
         titulo: l.titulo,
         autor: l.autor
       }))
     });
   });
 };
+
 
 // ✅ Validar si el usuario tiene préstamo vencido
 exports.validarPrestamoUsuario = (req, res) => {
@@ -122,7 +129,7 @@ exports.agregarPrestamo = (req, res) => {
     return res.status(400).json({ error: 'Datos incompletos' });
   }
 
-  const vencimiento = fecha_vencimiento || new Date(Date.now() + 15*24*60*60*1000)
+  const vencimiento = fecha_vencimiento || new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
     .toISOString().split('T')[0];
 
   const sqlPrestamo = `
@@ -147,6 +154,63 @@ exports.agregarPrestamo = (req, res) => {
       }
 
       res.json({ mensaje: '✅ Préstamo agregado correctamente', id_prestamo: idPrestamo });
+    });
+  });
+};
+
+// 🟢 Marcar préstamo como devuelto (eliminar préstamo y sus detalles)
+exports.marcarComoDevuelto = (req, res) => {
+  const id_prestamo = req.params.id;
+
+  if (!id_prestamo) {
+    return res.status(400).json({ error: 'Falta el ID del préstamo' });
+  }
+
+  // 1️⃣ Obtener los libros asociados
+  const sqlLibros = 'SELECT id_libro FROM DETALLE_PRESTAMO WHERE id_prestamo = ?';
+  connection.query(sqlLibros, [id_prestamo], (err, resultados) => {
+    if (err) {
+      console.error('❌ Error al obtener libros del préstamo:', err);
+      return res.status(500).json({ error: 'Error al obtener libros asociados' });
+    }
+
+    if (resultados.length === 0) {
+      return res.status(404).json({ error: 'No se encontraron libros asociados' });
+    }
+
+    const libros = resultados.map(r => r.id_libro);
+
+    // 2️⃣ Devolver ejemplares
+    const sqlUpdate = `
+      UPDATE LIBRO 
+      SET ejemplares = ejemplares + 1 
+      WHERE id_libro IN (?)
+    `;
+    connection.query(sqlUpdate, [libros], (err2) => {
+      if (err2) {
+        console.error('❌ Error al actualizar ejemplares:', err2);
+        return res.status(500).json({ error: 'Error al devolver los libros' });
+      }
+
+      // 3️⃣ Eliminar detalle del préstamo
+      const sqlDeleteDetalles = 'DELETE FROM DETALLE_PRESTAMO WHERE id_prestamo = ?';
+      connection.query(sqlDeleteDetalles, [id_prestamo], (err3) => {
+        if (err3) {
+          console.error('❌ Error al eliminar detalles del préstamo:', err3);
+          return res.status(500).json({ error: 'Error al eliminar detalles' });
+        }
+
+        // 4️⃣ Eliminar el préstamo principal
+        const sqlDeletePrestamo = 'DELETE FROM PRESTAMO WHERE id_prestamo = ?';
+        connection.query(sqlDeletePrestamo, [id_prestamo], (err4) => {
+          if (err4) {
+            console.error('❌ Error al eliminar préstamo:', err4);
+            return res.status(500).json({ error: 'Error al eliminar préstamo' });
+          }
+
+          res.json({ mensaje: '✅ Préstamo devuelto y eliminado correctamente.' });
+        });
+      });
     });
   });
 };

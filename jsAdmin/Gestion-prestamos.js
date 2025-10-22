@@ -76,14 +76,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     return new Date(f).toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' });
   }
 
-  // 📖 Mostrar detalle préstamo (con multa y días vencidos SOLO en el popup)
+  // 📖 Mostrar detalle préstamo (con botón de finalizar por libro)
   tbody.addEventListener('click', async e => {
     const fila = e.target.closest('tr');
     if (!fila) return;
-    const ids = fila.dataset.ids;
+    const ids = fila.dataset.ids.split(',');
 
     try {
-      const res = await fetch(`${API_URL}/prestamos/detalle/${ids}`);
+      const res = await fetch(`${API_URL}/prestamos/detalle/${ids.join(',')}`);
       const data = await res.json();
 
       if (data.error) {
@@ -95,22 +95,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       const fechaVenc = new Date(data.fecha_vencimiento);
       const hoy = new Date();
 
-      // Calcula días de retraso
       const diasRetraso = hoy > fechaVenc 
         ? Math.floor((hoy - fechaVenc) / (1000 * 60 * 60 * 24)) 
         : 0;
 
-      const multaPorLibro = 3; // pesos por día después del 3er día
+      const multaPorLibro = 3;
       const multaIndividual = diasRetraso > 3 ? (diasRetraso - 3) * multaPorLibro : 0;
-      const multaTotal = multaIndividual * data.libros.length;
 
       const filas = data.libros.map((l, i) => `
-        <tr>
+        <tr data-idprestamo="${l.id_prestamo}">
+
           <td>${i + 1}</td>
           <td>${l.titulo}</td>
           <td>${l.autor}</td>
           <td>${formatearFecha(data.fecha_vencimiento)}</td>
           <td>$${multaIndividual.toFixed(2)}</td>
+          <td><button class="btn-devolver-individual">📘 Finalizar</button></td>
         </tr>
       `).join('');
 
@@ -125,21 +125,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         mensajeMulta = `<p class="info-ok">✅ Sin retraso. Todo en orden.</p>`;
       }
 
-      const colorTotal = multaTotal > 0 ? 'red' : 'white';
-
       detalleContenido.innerHTML = `
         <p><b>👤 Usuario:</b> ${data.usuario}</p>
         <p><b>📅 Fecha préstamo:</b> ${formatearFecha(data.fecha_prestamo)}</p>
         ${mensajeMulta}
         <table class="tabla-libros">
-          <thead><tr><th>#</th><th>Título</th><th>Autor</th><th>Vencimiento</th><th>Multa</th></tr></thead>
+          <thead><tr><th>#</th><th>Título</th><th>Autor</th><th>Vencimiento</th><th>Multa</th><th>Acción</th></tr></thead>
           <tbody>${filas}</tbody>
         </table>
-        <div class="detalle-total" style="color:${colorTotal}; font-weight:bold;">
-          Total a pagar: $${multaTotal.toFixed(2)}
-        </div>
       `;
       modal.style.display = 'block';
+
+      // 🎯 Escuchar botones de devolución individual
+      document.querySelectorAll('.btn-devolver-individual').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          const idPrestamo = e.target.closest('tr').dataset.idprestamo;
+          if (!confirm(`¿Finalizar el préstamo del libro seleccionado?`)) return;
+
+          try {
+            const res = await fetch(`${API_URL}/prestamos/${idPrestamo}`, { method: 'DELETE' });
+            const data = await res.json();
+            alert(data.mensaje || '✅ Libro devuelto correctamente.');
+            e.target.closest('tr').remove(); // quitar fila del modal
+            cargarPrestamos(); // actualizar tabla principal
+          } catch (err) {
+            console.error('Error al devolver préstamo:', err);
+            alert('❌ No se pudo finalizar este préstamo.');
+          }
+        });
+      });
+
     } catch (err) {
       console.error(err);
     }

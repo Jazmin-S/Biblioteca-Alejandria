@@ -285,3 +285,27 @@ tbody tr:hover {
   margin-top: 10px;
   font-weight: bold;
 }
+
+/* 📘 BOTÓN FINALIZAR PRÉSTAMO INDIVIDUAL */
+.btn-devolver-individual {
+  background-color: #4CAF50;         /* Verde suave */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  font-weight: bold;
+}
+
+.btn-devolver-individual:hover {
+  background-color: #43a047;         /* Verde más oscuro */
+  transform: scale(1.05);
+}
+
+/* ✅ Efecto visual al devolver */
+tr.devuelto {
+  background-color: #e8f5e9 !important; /* Verde claro */
+  transition: background 0.4s ease;
+}
