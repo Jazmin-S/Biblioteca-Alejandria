@@ -8,59 +8,65 @@
 </head>
 <body>
 
-  <!-- Encabezado -->
-  <header class="header">
-    <h1> 👤 Crear Nuevo Usuario</h1>
-  </header>
-
   <!-- Botón de regreso -->
   <button id="btnExit" class="exit-btn">← Volver</button>
+
+  <!-- Encabezado -->
+  <header class="header">
+    <h1>➕ Crear Nuevo Usuario</h1>
+  </header>
 
   <!-- Contenedor principal -->
   <div class="container">
     <form id="formUsuario" class="formulario">
 
-      <!-- 👤 Usuario -->
-    <label for="usuario">Nombre de Usuario:</label>
-    <input type="text" id="usuario" name="usuario" placeholder="Ingresa el nombre del usuario" required>
+      <!-- Usuario -->
+      <label for="usuario">Nombre de Usuario:</label>
+      <input type="text" id="usuario" name="usuario" placeholder="Ingresa el nombre del usuario" required>
 
-    <!-- ✉️ Correo -->
-    <label for="correo">Correo Institucional:</label>
-    <input type="email" id="correo" name="correo" placeholder="correo@gmail.com" required>  
+      <!-- Correo -->
+      <label for="correo">Correo Institucional:</label>
+      <input type="email" id="correo" name="correo" placeholder="correo@gmail.com" required>  
 
-    <!-- 🔑 Contraseña -->
-    <label for="contrasena">Contraseña:</label>
-    <input 
-      type="password" 
-      id="contrasena" 
-      name="contrasena" 
-      placeholder="Ejemplo: Abcde!12" 
-      minlength="8" 
-      maxlength="8" 
-      required
-    >
-    <!-- 🧑‍💼 Rol -->
-    <div class="rol-container">
+      <!-- Contraseña -->
+      <label for="contrasena">Contraseña:</label>
+      <div class="password-container">
+        <input 
+          type="password" 
+          id="contrasena" 
+          name="contrasena" 
+          placeholder="Ejemplo: Abcde!12" 
+          minlength="8" 
+          maxlength="20" 
+          required
+        >
+        <button type="button" id="togglePassword" class="toggle-password">👁️</button>
+      </div>
+
+      <!-- Guía de requisitos -->
+      <ul id="passwordGuidelines" class="password-guidelines">
+        <li id="len" class="invalid">Exactamente 8 caracteres</li>
+        <li id="mayus" class="invalid">Al menos una letra mayúscula</li>
+        <li id="minus" class="invalid">Al menos una letra minúscula</li>
+        <li id="num" class="invalid">Al menos un número</li>
+        <li id="esp" class="invalid">Al menos un carácter especial (!, @, #, $, %, ^, &, *, ., , , -)</li>
+      </ul>
+
+      <!-- Rol -->
+      <div class="rol-container">
         <label for="rol">Rol:</label>
         <select id="rol" class="rol-select" name="rol" required>
-            <option value="">Selecciona un rol...</option>
-            <option value="alumno">Alumno</option>
-            <option value="profesor">Profesor</option>
-           <option value="bibliotecario">Bibliotecario</option>
-    </select>
-    </div>
+          <option value="">Selecciona un rol...</option>
+          <option value="alumno">Alumno</option>
+          <option value="profesor">Profesor</option>
+          <option value="bibliotecario">Bibliotecario</option>
+        </select>
+      </div>
 
-        <!-- 💾 Botón Guardar -->
-        <button type="submit" class="btn-guardar">💾 Guardar Usuario</button>
+      <!-- Botón Guardar -->
+      <button type="submit" class="btn-guardar">💾 Guardar Usuario</button>
     </form>
   </div>
-
-  <script>
-    // Botón regresar
-    document.getElementById('btnExit').addEventListener('click', () => {
-      window.location.href = '/html/htmlAdmin/editar-usuarios.html';
-    });
-  </script>
 
   <script src="/jsAdmin/crear-usuarios.js"></script>
 </body>

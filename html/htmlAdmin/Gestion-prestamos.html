@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Préstamos</title>
   <link rel="stylesheet" href="/css/cssAdmin/Gestion-prestamos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -20,10 +21,18 @@
   <div class="container">
     <div class="top-controls">
       <input type="text" id="buscar" placeholder="🔍 Buscar usuario...">
-      <button id="btnBuscar">Buscar</button>
-      <button id="btnNuevo" class="btn-nuevo">➕ Nuevo Préstamo</button>
+      <button id="btnBuscar"><i class="fa-solid fa-search"></i> Buscar</button>
+      <button id="btnNuevo" class="btn-nuevo"><i class="fa-solid fa-plus"></i> Nuevo Préstamo</button>
     </div>
 
+    <!-- FILTROS -->
+    <div class="filtros-estado">
+      <button id="filtroActivos">🟢 Activos</button>
+      <button id="filtroVencidos">🔴 Vencidos</button>
+      <button id="filtroTodos">📋 Todos</button>
+    </div>
+
+    <!-- TABLA -->
     <div class="tabla-container">
       <table>
         <thead>
@@ -45,11 +54,11 @@
     </div>
   </div>
 
-  <!-- 🪟 MODAL DETALLES -->
+  <!-- 🪟 MODAL DETALLE -->
   <div id="modalDetalle" class="modal">
     <div class="modal-content">
       <span class="cerrar">&times;</span>
-      <h2>📚 Detalle del Préstamo</h2>
+      <h2>📖 Detalle del Préstamo</h2>
       <div id="detalleContenido"></div>
     </div>
   </div>
@@ -58,26 +67,50 @@
   <div id="modalNuevoPrestamo" class="modal">
     <div class="modal-content">
       <span class="cerrarNuevo">&times;</span>
-      <h2>➕ Nuevo Préstamo</h2>
+      <h2><i class="fa-solid fa-plus"></i> Nuevo Préstamo</h2>
 
       <form id="formNuevoPrestamo">
-        <label for="usuarioSelect">👤 Usuario:</label>
+        <label for="usuarioSelect"><i class="fa-solid fa-user"></i> Usuario:</label>
         <select id="usuarioSelect" required>
           <option value="">Seleccione un usuario...</option>
         </select>
 
-        <label for="librosSelect">📚 Libros a prestar:</label>
-        <select id="librosSelect" multiple required></select>
+        <label for="buscadorLibros"><i class="fa-solid fa-book"></i> Libros a prestar:</label>
+        <input type="text" id="buscadorLibros" placeholder="Buscar libro por título o autor...">
+        <div id="listaLibros" class="lista-libros"></div>
 
-        <label for="fechaVencimiento">📅 Fecha de vencimiento:</label>
+        <label for="fechaVencimiento"><i class="fa-solid fa-calendar-days"></i> Fecha de vencimiento:</label>
         <input type="date" id="fechaVencimiento" required>
 
-        <button type="submit" class="btn-guardar">💾 Guardar Préstamo</button>
+        <button type="submit" class="btn-guardar"><i class="fa-solid fa-floppy-disk"></i> Guardar Préstamo</button>
       </form>
 
       <div id="mensajePrestamo" class="mensaje"></div>
     </div>
   </div>
+
+  <!-- 🔔 TOASTS -->
+  <div id="toast-container"></div>
+
+  <!-- 💬 POPUP DE CONFIRMACIÓN -->
+  <div id="confirm-popup" class="confirm-popup">
+    <div class="confirm-box">
+      <p id="confirm-message">¿Estás seguro?</p>
+      <div class="confirm-buttons">
+        <button id="confirm-yes">✅ Sí</button>
+        <button id="confirm-no">❌ No</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- 💬 Popup de mensaje -->
+  <div id="popupMensaje" class="popup-mensaje">
+    <div class="popup-contenido">
+      <p id="popupTexto"></p>
+      <button id="popupCerrar" class="btn-popup">Aceptar</button>
+    </div>
+  </div>
+
 
   <script src="/jsAdmin/Gestion-prestamos.js"></script>
 </body>

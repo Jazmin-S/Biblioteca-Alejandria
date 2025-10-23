@@ -10,11 +10,11 @@ body {
 
 /* 🟥 ENCABEZADO PRINCIPAL */
 header {
-  background: rgba(139, 0, 0, 0.85); /* vino con transparencia */
+  background: rgba(139, 0, 0, 0.85);
   color: #fff;
   padding: 10px 0;
   text-align: center;
-  font-weight: 100; /* más delgado */
+  font-weight: 100;
   letter-spacing: 1px;
   text-transform: uppercase;
   box-shadow: 0 3px 60px rgba(0, 0, 0, 0.4);
@@ -35,7 +35,6 @@ header {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
   transition: all 0.3s ease;
 }
-
 .exit-btn:hover {
   background-color: #8b0000;
   color: #fff;
@@ -59,9 +58,8 @@ header {
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
-
 .top-controls input {
   padding: 9px 12px;
   border: 1px solid #bbb;
@@ -69,13 +67,11 @@ header {
   width: 230px;
   transition: border 0.3s, box-shadow 0.3s;
 }
-
 .top-controls input:focus {
   outline: none;
   border-color: #8b0000;
   box-shadow: 0 0 6px rgba(139, 0, 0, 0.4);
 }
-
 .top-controls button {
   background-color: #8b0000;
   color: white;
@@ -85,11 +81,33 @@ header {
   cursor: pointer;
   transition: background 0.3s, transform 0.2s;
 }
-
 .top-controls button:hover {
   background-color: #a60000;
   transform: translateY(-1px);
 }
+
+/* 🎯 NUEVOS FILTROS */
+.filtros-estado {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.filtros-estado button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
+  transition: 0.3s;
+}
+#filtroActivos { background-color: #2e7d32; }
+#filtroActivos:hover { background-color: #388e3c; }
+#filtroVencidos { background-color: #c62828; }
+#filtroVencidos:hover { background-color: #d32f2f; }
+#filtroTodos { background-color: #6d4c41; }
+#filtroTodos:hover { background-color: #8d6e63; }
 
 /* 📚 TABLA PRINCIPAL */
 table {
@@ -98,38 +116,23 @@ table {
   margin-top: 10px;
   font-size: 0.95rem;
 }
-
 thead {
   background: linear-gradient(90deg, #8b0000, #a60000);
   color: white;
 }
-
 th, td {
   padding: 12px;
   text-align: center;
   border: 1px solid #ddd;
 }
-
 tbody tr:nth-child(even) { background-color: #fafafa; }
-
-tbody tr:hover {
-  background-color: #ffe8e6;
-  cursor: pointer;
-  transition: background 0.2s;
-}
+tbody tr:hover { background-color: #ffe8e6; cursor: pointer; transition: background 0.2s; }
 
 /* 🟢 ESTADOS */
-.estado-activo {
-  color: rgb(14, 163, 14);
-  font-weight: bold;
-}
+.estado-activo { color: rgb(14, 163, 14); font-weight: bold; }
+.estado-vencido { color: red; font-weight: bold; }
 
-.estado-vencido {
-  color: red;
-  font-weight: bold;
-}
-
-/* 🪟 MODAL DETALLE DE PRÉSTAMO */
+/* 🪟 MODAL GENERAL */
 .modal {
   display: none;
   position: fixed;
@@ -140,12 +143,7 @@ tbody tr:hover {
   animation: fadeIn 0.3s ease;
   overflow-y: auto;
 }
-
-@keyframes fadeIn { 
-  from { opacity: 0; } 
-  to { opacity: 1; } 
-}
-
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .modal-content {
   background: #fff;
   margin: 4% auto;
@@ -159,20 +157,10 @@ tbody tr:hover {
   animation: slideUp 0.4s ease;
   position: relative;
 }
-
 @keyframes slideUp {
   from { transform: translateY(60px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
-
-.modal-content h2 {
-  text-align: center;
-  color: #8b0000;
-  margin-top: 0;
-  margin-bottom: 18px;
-  font-size: 1.6rem;
-}
-
 .cerrar, .cerrarNuevo {
   color: #8b0000;
   position: absolute;
@@ -183,39 +171,48 @@ tbody tr:hover {
   cursor: pointer;
   transition: transform 0.2s, color 0.3s;
 }
-
 .cerrar:hover, .cerrarNuevo:hover {
   color: #b71c1c;
   transform: scale(1.2);
 }
 
-/* 📘 TABLA DE LIBROS */
+/* 📖 MODAL DETALLE DE PRÉSTAMO */
+#modalDetalle h2 {
+  text-align: center;
+  color: #8b0000;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+#detalleContenido p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+}
+.info-ok {
+  color: #2e7d32;
+  font-weight: 600;
+}
+.info-warn {
+  color: #c62828;
+  font-weight: 600;
+}
 .tabla-libros {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
   border: 1px solid #ddd;
 }
-
 .tabla-libros thead {
   background-color: #8b0000;
   color: white;
   font-size: 0.9rem;
 }
-
 .tabla-libros th, .tabla-libros td {
   padding: 8px;
   border: 1px solid #ddd;
   text-align: center;
 }
-
-.tabla-libros tbody tr:nth-child(even) {
-  background-color: #fafafa;
-}
-
-.tabla-libros tbody tr:hover {
-  background-color: #fff1f1;
-}
+.tabla-libros tbody tr:nth-child(even) { background-color: #fafafa; }
+.tabla-libros tbody tr:hover { background-color: #fff1f1; }
 
 /* 💰 TOTAL FINAL */
 .detalle-total {
@@ -230,7 +227,6 @@ tbody tr:hover {
   letter-spacing: 0.5px;
   box-shadow: 0 2px 6px rgba(78, 52, 52, 0.15);
 }
-
 #detalleContenido p.nota {
   font-size: 0.9rem;
   color: #555;
@@ -238,57 +234,9 @@ tbody tr:hover {
   text-align: center;
 }
 
-/* 🟢 MODAL NUEVO PRÉSTAMO */
-#modalNuevoPrestamo .modal-content form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-#modalNuevoPrestamo label {
-  font-weight: bold;
-  color: #8b0000;
-}
-
-#modalNuevoPrestamo select,
-#modalNuevoPrestamo input {
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #bbb;
-}
-
-#modalNuevoPrestamo select:focus,
-#modalNuevoPrestamo input:focus {
-  border-color: #8b0000;
-  outline: none;
-  box-shadow: 0 0 5px rgba(139, 0, 0, 0.3);
-}
-
-#modalNuevoPrestamo .btn-guardar {
-  background-color: #8b0000;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
-  font-weight: bold;
-}
-
-#modalNuevoPrestamo .btn-guardar:hover {
-  background-color: #a60000;
-  transform: scale(1.02);
-}
-
-#mensajePrestamo {
-  text-align: center;
-  margin-top: 10px;
-  font-weight: bold;
-}
-
 /* 📘 BOTÓN FINALIZAR PRÉSTAMO INDIVIDUAL */
 .btn-devolver-individual {
-  background-color: #4CAF50;         /* Verde suave */
+  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 6px;
@@ -298,14 +246,288 @@ tbody tr:hover {
   transition: background 0.3s, transform 0.2s;
   font-weight: bold;
 }
-
 .btn-devolver-individual:hover {
-  background-color: #43a047;         /* Verde más oscuro */
+  background-color: #43a047;
+  transform: scale(1.05);
+}
+tr.devuelto {
+  background-color: #e8f5e9 !important;
+  transition: background 0.4s ease;
+}
+
+/* 🟢 MODAL NUEVO PRÉSTAMO */
+#modalNuevoPrestamo .modal-content {
+  background: linear-gradient(180deg, #ffffff 0%, #fdf4f4 100%);
+  border: 2px solid #8b0000;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
+  padding: 25px 35px;
+}
+#modalNuevoPrestamo h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #8b0000;
+  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+#modalNuevoPrestamo form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+#modalNuevoPrestamo label {
+  font-weight: 600;
+  color: #8b0000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+}
+#modalNuevoPrestamo select,
+#modalNuevoPrestamo input[type="date"],
+#modalNuevoPrestamo input[type="text"] {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #ccc;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+#modalNuevoPrestamo select:focus,
+#modalNuevoPrestamo input:focus {
+  outline: none;
+  border-color: #8b0000;
+  box-shadow: 0 0 6px rgba(139, 0, 0, 0.4);
+}
+
+/* 📚 Lista de libros interactiva */
+.lista-libros {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  transition: 0.3s;
+}
+.libro-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+  transition: background 0.2s, transform 0.1s;
+}
+.libro-item:hover {
+  background-color: #ffeaea;
+  transform: translateX(3px);
+}
+.libro-item.seleccionado {
+  background-color: #d1e7dd;
+  font-weight: bold;
+  color: #155724;
+  border-left: 4px solid #2e7d32;
+}
+
+/* 💾 Botón Guardar */
+#modalNuevoPrestamo .btn-guardar {
+  background: linear-gradient(90deg, #8b0000, #a60000);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+  font-size: 1rem;
+}
+#modalNuevoPrestamo .btn-guardar:hover {
+  background: linear-gradient(90deg, #a60000, #c62828);
+  transform: scale(1.04);
+}
+
+/* ✉️ Mensaje */
+#mensajePrestamo {
+  display: none; /* 👈 Oculto por defecto */
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+
+/* ✨ Scroll personalizado */
+.lista-libros::-webkit-scrollbar { width: 8px; }
+.lista-libros::-webkit-scrollbar-thumb {
+  background-color: #a60000;
+  border-radius: 4px;
+}
+.lista-libros::-webkit-scrollbar-thumb:hover {
+  background-color: #8b0000;
+}
+
+/* 🔔 NOTIFICACIONES / TOASTS */
+#toast-container {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  min-width: 260px;
+  max-width: 320px;
+  background: #fff;
+  border-left: 6px solid #8b0000;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  animation: slideIn 0.4s ease, fadeOut 0.5s ease 3.8s forwards;
+}
+
+.toast i {
+  font-size: 1.2rem;
+}
+
+.toast.success {
+  border-left-color: #2e7d32;
+  color: #155724;
+}
+
+.toast.error {
+  border-left-color: #c62828;
+  color: #7f0000;
+}
+
+.toast.warn {
+  border-left-color: #f9a825;
+  color: #654a00;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateX(100%); }
+}
+/* 💬 POPUP PERSONALIZADO */
+.popup-mensaje {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-contenido {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px 40px;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  animation: aparecer 0.3s ease;
+}
+
+.popup-contenido p {
+  font-size: 17px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.btn-popup {
+  background-color: #a3080c;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.btn-popup:hover {
+  background-color: #c60f13;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* 🧩 POPUP DE CONFIRMACIÓN */
+.confirm-popup {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+}
+
+.confirm-box {
+  background: #fff;
+  border-radius: 15px;
+  padding: 30px 40px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  animation: aparecer 0.3s ease;
+}
+
+.confirm-box p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #222;
+  font-weight: 500;
+}
+
+.confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.confirm-buttons button {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.3s;
+  font-size: 16px;
+}
+
+#confirm-yes {
+  background-color: #198754;
+  color: #fff;
+}
+
+#confirm-no {
+  background-color: #c70039;
+  color: #fff;
+}
+
+#confirm-yes:hover {
+  background-color: #27a866;
   transform: scale(1.05);
 }
 
-/* ✅ Efecto visual al devolver */
-tr.devuelto {
-  background-color: #e8f5e9 !important; /* Verde claro */
-  transition: background 0.4s ease;
+#confirm-no:hover {
+  background-color: #e12e55;
+  transform: scale(1.05);
 }

@@ -1,19 +1,15 @@
-/* === Estilo general con imagen de fondo borrosa === */
 body {
   margin: 0;
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: url('https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Zm9uZG8lMjBkZSUyMGxhJTIwYmlibGlvdGVjYXxlbnwwfHwwfHx8MA%3D%3D') 
+  background: url('https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0')
               no-repeat center center fixed;
   background-size: cover;
-  position: relative;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #222;
 }
 
-/* Capa borrosa sobre la imagen */
 body::before {
   content: "";
   position: fixed;
@@ -26,110 +22,112 @@ body::before {
   z-index: -1;
 }
 
-/* === Encabezado === */
+/* Encabezado */
 .header {
-  background-color: rgba(160, 0, 0, 0.85);
+  background-color: rgba(160, 0, 0, 0.9);
   color: #fff;
   width: 100%;
   text-align: center;
-  padding: 1.2rem 0;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(5px);
+  padding: 1.3rem 0;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-.header h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  font-weight: 600;
-}
-
-/* === Botón de salida === */
+/* Botón Volver */
 .exit-btn {
   position: fixed;
-  top: 15px;
-  right: 20px;
-  background-color: rgba(68, 68, 68, 0.8);
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  top: 20px;
+  left: 25px;
+  background-color: #ffffff;
+  color: #a00000;
+  border: 2px solid #a00000;
+  padding: 8px 20px;
+  border-radius: 30px;
   cursor: pointer;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 }
-
 .exit-btn:hover {
-  background-color: rgba(34, 34, 34, 0.9);
-  transform: translateY(-1px);
+  background-color: #a00000;
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(160, 0, 0, 0.5);
 }
 
-/* === Contenedor del formulario === */
+/* Contenedor */
 .container {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
-  margin-top: 80px;
+  margin-top: 100px;
   padding: 2.5rem;
   border-radius: 16px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   width: 90%;
   max-width: 460px;
-  transition: all 0.3s ease;
 }
 
-.container:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-/* === Formulario === */
 .formulario {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-label {
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 4px;
-}
-
-input,
-select {
+/* Campos */
+label { font-weight: 600; color: #222; }
+input, select {
   padding: 10px 12px;
   border-radius: 8px;
   border: 1.5px solid #bbb;
   font-size: 1rem;
-  transition: all 0.3s ease;
   background-color: rgba(255, 255, 255, 0.9);
 }
-
-input:focus,
-select:focus {
+input:focus, select:focus {
   border-color: #a00000;
-  background-color: #fff;
-  outline: none;
   box-shadow: 0 0 0 3px rgba(160, 0, 0, 0.2);
 }
 
-/* === Contenedor de rol === */
-.rol-container {
-  margin-top: 10px;
+/* Contraseña */
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
 }
 
-.rol-select {
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #a00000 50%),
-                    linear-gradient(135deg, #a00000 50%, transparent 50%);
-  background-position: calc(100% - 15px) calc(1em + 2px),
-                       calc(100% - 10px) calc(1em + 2px);
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
+/* Guía */
+.password-guidelines {
+  list-style: none;
+  padding-left: 0;
+  margin: 10px 0 0 0;
+}
+.password-guidelines li {
+  font-size: 0.95em;
+  color: #666;
+  transition: color 0.3s ease;
+}
+.password-guidelines li.invalid::before {
+  content: "⚪ ";
+  color: #bbb;
+}
+.password-guidelines li.valid {
+  color: green;
+  font-weight: 600;
+}
+.password-guidelines li.valid::before {
+  content: "🟢 ";
 }
 
-/* === Botón guardar === */
+/* Botón Guardar */
 .btn-guardar {
   background-color: #a00000;
   color: #fff;
@@ -141,15 +139,13 @@ select:focus {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(160, 0, 0, 0.3);
 }
-
 .btn-guardar:hover {
   background-color: #820000;
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(160, 0, 0, 0.4);
 }
-/* === Modal === */
+
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -161,67 +157,15 @@ select:focus {
   background-color: rgba(0,0,0,0.6);
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(5px);
 }
-
-.modal.show {
-  display: flex;
-}
-
+.modal.show { display: flex; }
 .modal-content {
   background: #fff;
   padding: 1.8rem 2rem;
   border-radius: 14px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
   text-align: center;
   max-width: 400px;
-  animation: fadeIn 0.3s ease;
 }
-
-.modal-content p {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-}
-
-.modal-content button {
-  background-color: #a00000;
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s ease;
-}
-
-.modal-content button:hover {
-  background-color: #800000;
-}
-
-/* Estilo para éxito */
 .modal.success .modal-content {
   border-top: 6px solid #28a745;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-
-/* === Responsive === */
-@media (max-width: 480px) {
-  .container {
-    width: 92%;
-    padding: 1.8rem;
-  }
-
-  .header h1 {
-    font-size: 1.4rem;
-  }
-
-  .btn-guardar {
-    padding: 10px;
-    font-size: 0.95rem;
-  }
 }

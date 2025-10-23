@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cerrarNuevo = document.querySelector('.cerrarNuevo');
   const formNuevo = document.getElementById('formNuevoPrestamo');
   const usuarioSelect = document.getElementById('usuarioSelect');
-  const librosSelect = document.getElementById('librosSelect');
   const fechaVencimiento = document.getElementById('fechaVencimiento');
   const mensajePrestamo = document.getElementById('mensajePrestamo');
 
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.href = "http://127.0.0.1:3001/html/htmlAdmin/InicioAdmin.html";
   });
 
-  // 📋 Cargar préstamos (tabla general sin multas ni retrasos)
+  // 📋 Cargar préstamos
   async function cargarPrestamos(nombre = '') {
     tbody.innerHTML = `<tr><td colspan="6" class="loading">Cargando...</td></tr>`;
     let url = `${API_URL}/prestamos`;
@@ -40,29 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      const hoy = new Date();
-      tbody.innerHTML = data.map(p => {
-        const fechaPrestamo = new Date(p.fecha_prestamo);
-        const fechaVenc = new Date(p.fecha_vencimiento);
-        const diasRetraso = hoy > fechaVenc ? Math.floor((hoy - fechaVenc) / (1000 * 60 * 60 * 24)) : 0;
-        const estado = hoy <= fechaVenc ? 
-          '<span class="estado-activo">Activo</span>' : 
-          '<span class="estado-vencido">Vencido</span>';
-        
-        const multaPorLibro = diasRetraso > 3 ? (diasRetraso - 3) * 3 : 0;
-        const multaTotal = multaPorLibro * p.numero_prestamos;
-
-        return `
-          <tr data-ids="${p.ids_prestamos}" data-total="${multaTotal}">
-            <td>${p.usuario}</td>
-            <td>${p.numero_prestamos}</td>
-            <td>${formatearFecha(p.fecha_prestamo)}</td>
-            <td>${formatearFecha(p.fecha_vencimiento)}</td>
-            <td>${estado}</td>
-            <td>$${multaTotal.toFixed(2)}</td>
-          </tr>
-        `;
-      }).join('');
+      renderPrestamosFiltrados(data);
     } catch (err) {
       console.error(err);
       tbody.innerHTML = `<tr><td colspan="6">Error al cargar datos</td></tr>`;
@@ -76,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return new Date(f).toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' });
   }
 
-  // 📖 Mostrar detalle préstamo (con botón de finalizar por libro)
+  // 📖 Mostrar detalle préstamo
   tbody.addEventListener('click', async e => {
     const fila = e.target.closest('tr');
     if (!fila) return;
@@ -104,7 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const filas = data.libros.map((l, i) => `
         <tr data-idprestamo="${l.id_prestamo}">
-
           <td>${i + 1}</td>
           <td>${l.titulo}</td>
           <td>${l.autor}</td>
@@ -117,12 +93,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       let mensajeMulta = '';
       if (diasRetraso > 0) {
         if (diasRetraso <= 3) {
-          mensajeMulta = `<p class="info-ok">📗 El préstamo tiene ${diasRetraso} día(s) de retraso pero aún no genera multa (3 días de gracia).</p>`;
+          mensajeMulta = `<p class="info-ok">📗 ${diasRetraso} día(s) de retraso sin multa (3 días de gracia).</p>`;
         } else {
-          mensajeMulta = `<p class="info-warn">⚠️ Retraso de ${diasRetraso} días. Multa de $${multaPorLibro} por libro por día a partir del cuarto día.</p>`;
+          mensajeMulta = `<p class="info-warn">⚠️ Retraso de ${diasRetraso} días. Multa de $${multaPorLibro} por libro por día.</p>`;
         }
       } else {
-        mensajeMulta = `<p class="info-ok">✅ Sin retraso. Todo en orden.</p>`;
+        mensajeMulta = `<p class="info-ok">✅ Sin retraso.</p>`;
       }
 
       detalleContenido.innerHTML = `
@@ -136,21 +112,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       `;
       modal.style.display = 'block';
 
-      // 🎯 Escuchar botones de devolución individual
       document.querySelectorAll('.btn-devolver-individual').forEach(btn => {
         btn.addEventListener('click', async e => {
           const idPrestamo = e.target.closest('tr').dataset.idprestamo;
-          if (!confirm(`¿Finalizar el préstamo del libro seleccionado?`)) return;
+          if (!confirm(`¿Finalizar este préstamo?`)) return;
 
           try {
             const res = await fetch(`${API_URL}/prestamos/${idPrestamo}`, { method: 'DELETE' });
             const data = await res.json();
-            alert(data.mensaje || '✅ Libro devuelto correctamente.');
-            e.target.closest('tr').remove(); // quitar fila del modal
-            cargarPrestamos(); // actualizar tabla principal
+            mostrarPopup(data.mensaje || '✅ Libro devuelto correctamente.', 'success');
+            e.target.closest('tr').remove();
+            cargarPrestamos();
           } catch (err) {
-            console.error('Error al devolver préstamo:', err);
-            alert('❌ No se pudo finalizar este préstamo.');
+            console.error(err);
+            mostrarPopup('❌ No se pudo finalizar este préstamo.', 'error');
           }
         });
       });
@@ -165,14 +140,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 🟢 Modal nuevo préstamo
   btnNuevo.addEventListener('click', async () => {
-    modalNuevo.style.display = 'block';
-    await cargarUsuarios();
-    await cargarLibros();
+  modalNuevo.style.display = 'block';
+  await cargarUsuarios();
+  await cargarLibros();
 
-    const hoy = new Date();
-    hoy.setDate(hoy.getDate() + 15);
-    fechaVencimiento.value = hoy.toISOString().split('T')[0];
-  });
+  // 🧹 Limpia mensaje anterior
+  mensajePrestamo.textContent = '';
+  mensajePrestamo.style.display = 'none';
+
+  const hoy = new Date();
+  hoy.setDate(hoy.getDate() + 15);
+  fechaVencimiento.value = hoy.toISOString().split('T')[0];
+});
 
   cerrarNuevo.addEventListener('click', () => modalNuevo.style.display = 'none');
   window.addEventListener('click', e => { if (e.target === modalNuevo) modalNuevo.style.display = 'none'; });
@@ -185,28 +164,52 @@ document.addEventListener('DOMContentLoaded', async () => {
       const usuarios = data.usuarios || data;
       usuarioSelect.innerHTML = '<option value="">Seleccione un usuario...</option>';
       usuarios.forEach(u => usuarioSelect.innerHTML += `<option value="${u.id_usuario}">${u.nombre}</option>`);
-    } catch (err) {
+    } catch {
       usuarioSelect.innerHTML = '<option>Error al cargar</option>';
     }
   }
 
-  // 🧩 Cargar libros
+  // 🧩 Cargar libros y buscador dinámico
+  let librosDisponibles = [];
+
   async function cargarLibros() {
     try {
       const res = await fetch(`${API_URL}/libros`);
-      const libros = await res.json();
-      librosSelect.innerHTML = '';
-      libros.forEach(l => librosSelect.innerHTML += `<option value="${l.id_libro}">${l.titulo} - ${l.autor}</option>`);
-    } catch (err) {
-      librosSelect.innerHTML = '<option>Error al cargar</option>';
+      librosDisponibles = await res.json();
+      mostrarLibros(librosDisponibles);
+    } catch {
+      document.getElementById('listaLibros').innerHTML = '<p>Error al cargar libros.</p>';
     }
   }
+
+  function mostrarLibros(libros) {
+    const lista = document.getElementById('listaLibros');
+    if (!libros || libros.length === 0) {
+      lista.innerHTML = '<p>No hay libros disponibles.</p>';
+      return;
+    }
+    lista.innerHTML = libros.map(l => `
+      <label class="libro-item">
+        <input type="checkbox" value="${l.id_libro}">
+        ${l.titulo} — <em>${l.autor}</em>
+      </label>
+    `).join('');
+  }
+
+  document.getElementById('buscadorLibros').addEventListener('input', e => {
+    const q = e.target.value.toLowerCase();
+    const filtrados = librosDisponibles.filter(l =>
+      l.titulo.toLowerCase().includes(q) || l.autor.toLowerCase().includes(q)
+    );
+    mostrarLibros(filtrados);
+  });
 
   // 💾 Guardar préstamo
   formNuevo.addEventListener('submit', async e => {
     e.preventDefault();
     const idUsuario = usuarioSelect.value;
-    const libros = Array.from(librosSelect.selectedOptions).map(o => o.value);
+    const checkboxes = document.querySelectorAll('#listaLibros input[type="checkbox"]:checked');
+    const libros = Array.from(checkboxes).map(c => c.value);
     const fechaVenc = fechaVencimiento.value;
 
     if (!idUsuario || libros.length === 0 || !fechaVenc) {
@@ -232,6 +235,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (res.ok) {
         mostrarMensaje('✅ Préstamo registrado correctamente.', 'success');
         formNuevo.reset();
+        document.getElementById('listaLibros').innerHTML = '';
+        modalNuevo.style.display = 'none';
         cargarPrestamos();
       } else {
         mostrarMensaje(`❌ Error: ${data.error}`, 'error');
@@ -242,7 +247,87 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   function mostrarMensaje(txt, tipo) {
-    mensajePrestamo.textContent = txt;
-    mensajePrestamo.style.color = tipo === 'success' ? 'green' : 'red';
+  mensajePrestamo.textContent = txt;
+  mensajePrestamo.style.display = 'block'; // 👈 Solo se muestra al usar la función
+  mensajePrestamo.style.color = tipo === 'success' ? 'green' : 'red';
+}
+
+
+  // 🟢🔴📋 FILTROS DE PRÉSTAMOS
+  const filtroActivos = document.getElementById('filtroActivos');
+  const filtroVencidos = document.getElementById('filtroVencidos');
+  const filtroTodos = document.getElementById('filtroTodos');
+
+  filtroActivos.addEventListener('click', async () => {
+    try {
+      const res = await fetch(`${API_URL}/prestamos`);
+      const data = await res.json();
+      const hoy = new Date();
+      const activos = data.filter(p => new Date(p.fecha_vencimiento) >= hoy);
+      renderPrestamosFiltrados(activos);
+    } catch {
+      tbody.innerHTML = `<tr><td colspan="6">Error al filtrar préstamos activos.</td></tr>`;
+    }
+  });
+
+  filtroVencidos.addEventListener('click', async () => {
+    try {
+      const res = await fetch(`${API_URL}/prestamos`);
+      const data = await res.json();
+      const hoy = new Date();
+      const vencidos = data.filter(p => new Date(p.fecha_vencimiento) < hoy);
+      renderPrestamosFiltrados(vencidos);
+    } catch {
+      tbody.innerHTML = `<tr><td colspan="6">Error al filtrar préstamos vencidos.</td></tr>`;
+    }
+  });
+
+  filtroTodos.addEventListener('click', () => cargarPrestamos());
+
+  // 🧩 Renderizar tabla (reutilizable)
+  function renderPrestamosFiltrados(lista) {
+    if (!Array.isArray(lista) || lista.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6">No hay préstamos para este filtro.</td></tr>`;
+      return;
+    }
+
+    const hoy = new Date();
+    tbody.innerHTML = lista.map(p => {
+      const fechaVenc = new Date(p.fecha_vencimiento);
+      const diasRetraso = hoy > fechaVenc ? Math.floor((hoy - fechaVenc) / (1000 * 60 * 60 * 24)) : 0;
+      const estado = hoy <= fechaVenc ? 
+        '<span class="estado-activo">Activo</span>' : 
+        '<span class="estado-vencido">Vencido</span>';
+
+      const multaPorLibro = diasRetraso > 3 ? (diasRetraso - 3) * 3 : 0;
+      const multaTotal = multaPorLibro * p.numero_prestamos;
+
+      return `
+        <tr data-ids="${p.ids_prestamos}" data-total="${multaTotal}">
+          <td>${p.usuario}</td>
+          <td>${p.numero_prestamos}</td>
+          <td>${formatearFecha(p.fecha_prestamo)}</td>
+          <td>${formatearFecha(p.fecha_vencimiento)}</td>
+          <td>${estado}</td>
+          <td>$${multaTotal.toFixed(2)}</td>
+        </tr>
+      `;
+    }).join('');
   }
+
+    // 💬 POPUP DE MENSAJE PERSONALIZADO
+    const popup = document.getElementById('popupMensaje');
+    const popupTexto = document.getElementById('popupTexto');
+    const popupCerrar = document.getElementById('popupCerrar');
+
+    function mostrarPopup(mensaje, tipo = 'success') {
+      popupTexto.textContent = mensaje;
+      popupTexto.style.color = tipo === 'error' ? '#c70000' : '#198754';
+      popup.style.display = 'flex';
+    }
+
+    popupCerrar.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+
 });
