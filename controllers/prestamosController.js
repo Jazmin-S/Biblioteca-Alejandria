@@ -1,4 +1,5 @@
 const connection = require('../MySQL/db');
+const nodemailer = require('nodemailer');
 
 // 📚 Obtener todos los préstamos agrupados por usuario y fecha
 exports.obtenerPrestamos = (req, res) => {
@@ -25,7 +26,7 @@ exports.obtenerPrestamos = (req, res) => {
   });
 };
 
-// 🔍 Buscar préstamos por nombre (agrupados por día)
+// 🔍 Buscar préstamos por nombre
 exports.buscarPrestamos = (req, res) => {
   const nombre = req.query.nombre || '';
   const sql = `
@@ -53,9 +54,8 @@ exports.buscarPrestamos = (req, res) => {
 };
 
 // 📖 Detalle del préstamo (permite múltiples ids)
-// 📖 Detalle del préstamo (permite múltiples ids y devuelve id_prestamo por cada libro)
-  exports.detallePrestamo = (req, res) => {
-  const ids = req.params.id.split(','); // puede recibir varios IDs (agrupados)
+exports.detallePrestamo = (req, res) => {
+  const ids = req.params.id.split(',');
   const sql = `
     SELECT 
       p.id_prestamo, 
@@ -82,6 +82,17 @@ exports.buscarPrestamos = (req, res) => {
       return res.status(404).json({ error: 'Préstamo no encontrado o sin libros asociados' });
     }
 
+    // 🔍 Detección de préstamos con fechas inválidas
+    results.forEach(r => {
+      const prestamoDate = new Date(r.fecha_prestamo);
+      const vencimientoDate = new Date(r.fecha_vencimiento);
+      if (vencimientoDate < prestamoDate) {
+        console.warn(`⚠️ El préstamo ${r.id_prestamo} tiene fecha de vencimiento anterior al préstamo.`);
+        // Marcar el préstamo como "vencido" visualmente
+        r.fecha_vencimiento = r.fecha_prestamo;
+      }
+    });
+
     const prestamo = results[0];
     console.log("🧠 Resultado detallePrestamo:", results);
 
@@ -90,7 +101,7 @@ exports.buscarPrestamos = (req, res) => {
       fecha_prestamo: prestamo.fecha_prestamo,
       fecha_vencimiento: prestamo.fecha_vencimiento,
       libros: results.map(l => ({
-        id_prestamo: l.id_prestamo, // ✅ ya viene correcto de cada fila
+        id_prestamo: l.id_prestamo,
         id_libro: l.id_libro,
         titulo: l.titulo,
         autor: l.autor
@@ -98,7 +109,6 @@ exports.buscarPrestamos = (req, res) => {
     });
   });
 };
-
 
 // ✅ Validar si el usuario tiene préstamo vencido
 exports.validarPrestamoUsuario = (req, res) => {
@@ -121,7 +131,7 @@ exports.validarPrestamoUsuario = (req, res) => {
   });
 };
 
-// ➕ Registrar nuevo préstamo
+// ➕ Registrar nuevo préstamo (con cálculo local correcto)
 exports.agregarPrestamo = (req, res) => {
   const { id_usuario, libros, fecha_vencimiento } = req.body;
 
@@ -129,8 +139,18 @@ exports.agregarPrestamo = (req, res) => {
     return res.status(400).json({ error: 'Datos incompletos' });
   }
 
-  const vencimiento = fecha_vencimiento || new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
-    .toISOString().split('T')[0];
+  // 📅 Calcular fecha local sin UTC
+  let vencimiento;
+  if (fecha_vencimiento) {
+    vencimiento = fecha_vencimiento;
+  } else {
+    const hoy = new Date();
+    hoy.setDate(hoy.getDate() + 15);
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    vencimiento = `${yyyy}-${mm}-${dd}`;
+  }
 
   const sqlPrestamo = `
     INSERT INTO PRESTAMO (id_usuario, fecha, fecha_vencimiento, total_prestamos)
@@ -158,7 +178,7 @@ exports.agregarPrestamo = (req, res) => {
   });
 };
 
-// 🟢 Marcar préstamo como devuelto (eliminar préstamo y sus detalles)
+// 🟢 Marcar préstamo como devuelto
 exports.marcarComoDevuelto = (req, res) => {
   const id_prestamo = req.params.id;
 
@@ -166,7 +186,6 @@ exports.marcarComoDevuelto = (req, res) => {
     return res.status(400).json({ error: 'Falta el ID del préstamo' });
   }
 
-  // 1️⃣ Obtener los libros asociados
   const sqlLibros = 'SELECT id_libro FROM DETALLE_PRESTAMO WHERE id_prestamo = ?';
   connection.query(sqlLibros, [id_prestamo], (err, resultados) => {
     if (err) {
@@ -180,7 +199,6 @@ exports.marcarComoDevuelto = (req, res) => {
 
     const libros = resultados.map(r => r.id_libro);
 
-    // 2️⃣ Devolver ejemplares
     const sqlUpdate = `
       UPDATE LIBRO 
       SET ejemplares = ejemplares + 1 
@@ -192,7 +210,6 @@ exports.marcarComoDevuelto = (req, res) => {
         return res.status(500).json({ error: 'Error al devolver los libros' });
       }
 
-      // 3️⃣ Eliminar detalle del préstamo
       const sqlDeleteDetalles = 'DELETE FROM DETALLE_PRESTAMO WHERE id_prestamo = ?';
       connection.query(sqlDeleteDetalles, [id_prestamo], (err3) => {
         if (err3) {
@@ -200,7 +217,6 @@ exports.marcarComoDevuelto = (req, res) => {
           return res.status(500).json({ error: 'Error al eliminar detalles' });
         }
 
-        // 4️⃣ Eliminar el préstamo principal
         const sqlDeletePrestamo = 'DELETE FROM PRESTAMO WHERE id_prestamo = ?';
         connection.query(sqlDeletePrestamo, [id_prestamo], (err4) => {
           if (err4) {
@@ -213,4 +229,111 @@ exports.marcarComoDevuelto = (req, res) => {
       });
     });
   });
+};
+
+// 📧 Notificar préstamos próximos a vencer o vencidos
+exports.notificarVencimientos = async (req, res) => {
+  try {
+    const sql = `
+      SELECT 
+        u.correo,
+        u.nombre,
+        l.titulo,
+        p.fecha,
+        p.fecha_vencimiento
+      FROM PRESTAMO p
+      INNER JOIN USUARIO u ON p.id_usuario = u.id_usuario
+      INNER JOIN DETALLE_PRESTAMO dp ON dp.id_prestamo = p.id_prestamo
+      INNER JOIN LIBRO l ON dp.id_libro = l.id_libro
+      WHERE DATE(p.fecha_vencimiento) <= DATE_ADD(CURDATE(), INTERVAL 2 DAY);
+    `;
+
+    connection.query(sql, async (err, results) => {
+      if (err) {
+        console.error('❌ Error al consultar vencimientos:', err);
+        return res.status(500).json({ success: false, message: 'Error al obtener vencimientos' });
+      }
+
+      if (results.length === 0) {
+        return res.json({ success: true, message: 'No hay préstamos próximos a vencer.' });
+      }
+
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        }
+      });
+
+      const usuarios = {};
+      results.forEach(r => {
+        if (!usuarios[r.correo]) usuarios[r.correo] = { nombre: r.nombre, libros: [] };
+        usuarios[r.correo].libros.push({ titulo: r.titulo, fecha: r.fecha_vencimiento, fechaPrestamo: r.fecha });
+      });
+
+      for (const [correo, data] of Object.entries(usuarios)) {
+        const hoy = new Date();
+
+        const libros = data.libros.map(l => {
+          const fecha = new Date(l.fecha);
+          const fechaPrestamo = new Date(l.fechaPrestamo);
+          const dias = Math.floor((hoy - fecha) / (1000 * 60 * 60 * 24));
+          const estado = fecha < hoy || fecha < fechaPrestamo ? 'Vencido' : 'Por vencer';
+          const multa = dias > 3 ? (dias - 3) * 3 : 0;
+          return { ...l, estado, multa };
+        });
+
+        const porVencer = libros.filter(l => l.estado === 'Por vencer').length;
+        const vencidos = libros.filter(l => l.estado === 'Vencido').length;
+        const totalMulta = libros.reduce((sum, l) => sum + l.multa, 0);
+
+        const listaLibros = libros.map(l => `
+          <li>
+            <b>${l.titulo}</b> — 
+            ${l.estado === 'Vencido' ? '⚠️ <span style="color:red;">Vencido</span>' : '⏰ Por vencer'} 
+            (vence el ${new Date(l.fecha).toLocaleDateString('es-MX')}) 
+            ${l.multa > 0 ? `→ Multa: $${l.multa.toFixed(2)}` : ''}
+          </li>
+        `).join('');
+
+        const mailOptions = {
+          from: `"Biblioteca de Alejandría" <${process.env.EMAIL_USER}>`,
+          to: correo,
+          subject: '📚 Recordatorio de préstamos y multas pendientes',
+          html: `
+            <h2>📘 Hola ${data.nombre},</h2>
+            <p>Este es un recordatorio de tus préstamos:</p>
+            <ul>${listaLibros}</ul>
+            <hr>
+            <p><b>📅 Resumen:</b></p>
+            <ul>
+              <li>Por vencer: ${porVencer}</li>
+              <li>Vencidos: ${vencidos}</li>
+              <li>Total estimado de multa: $${totalMulta.toFixed(2)}</li>
+            </ul>
+            <hr>
+            <p>
+              Puedes devolver los libros en cualquier momento <b>sin pagar en ese instante</b>, 
+              pero recuerda que <b>las multas deberán ser liquidadas antes del fin de semestre</b> 
+              para evitar bloqueos en el sistema de préstamos o afectaciones académicas.
+            </p>
+            <p>Gracias por usar la <b>Biblioteca de Alejandría</b>.</p>
+          `
+        };
+
+        try {
+          await transporter.sendMail(mailOptions);
+          console.log(`✅ Notificación enviada a ${correo}`);
+        } catch (error) {
+          console.error(`❌ Error enviando correo a ${correo}:`, error);
+        }
+      }
+
+      res.json({ success: true, message: 'Notificaciones enviadas correctamente.' });
+    });
+  } catch (error) {
+    console.error('❌ Error general al enviar notificaciones:', error);
+    res.status(500).json({ success: false, message: 'Error al enviar notificaciones' });
+  }
 };

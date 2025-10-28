@@ -531,3 +531,31 @@ tr.devuelto {
   background-color: #e12e55;
   transform: scale(1.05);
 }
+
+/* 🔔 BOTÓN DE NOTIFICACIONES */
+.notificacion-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.btn-notificar {
+  background-color: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+.btn-notificar:hover {
+  background-color: #0d47a1;
+  transform: translateY(-2px);
+}

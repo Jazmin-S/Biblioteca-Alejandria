@@ -5,12 +5,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnBuscar = document.getElementById('btnBuscar');
   const btnExit = document.getElementById('btnExit');
 
-  // Modal detalle
   const modal = document.getElementById('modalDetalle');
   const modalCerrar = document.querySelector('.cerrar');
   const detalleContenido = document.getElementById('detalleContenido');
 
-  // Modal nuevo préstamo
   const btnNuevo = document.getElementById('btnNuevo');
   const modalNuevo = document.getElementById('modalNuevoPrestamo');
   const cerrarNuevo = document.querySelector('.cerrarNuevo');
@@ -19,12 +17,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fechaVencimiento = document.getElementById('fechaVencimiento');
   const mensajePrestamo = document.getElementById('mensajePrestamo');
 
-  // 🔙 Botón volver
   btnExit.addEventListener('click', () => {
     window.location.href = "http://127.0.0.1:3001/html/htmlAdmin/InicioAdmin.html";
   });
 
-  // 📋 Cargar préstamos
   async function cargarPrestamos(nombre = '') {
     tbody.innerHTML = `<tr><td colspan="6" class="loading">Cargando...</td></tr>`;
     let url = `${API_URL}/prestamos`;
@@ -69,15 +65,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
+      const fechaPrestamo = new Date(data.fecha_prestamo);
       const fechaVenc = new Date(data.fecha_vencimiento);
       const hoy = new Date();
 
-      const diasRetraso = hoy > fechaVenc 
-        ? Math.floor((hoy - fechaVenc) / (1000 * 60 * 60 * 24)) 
-        : 0;
+      let diasRetraso = Math.floor((hoy - fechaVenc) / (1000 * 60 * 60 * 24));
+      if (diasRetraso < 0) diasRetraso = 0;
 
-      const multaPorLibro = 3;
-      const multaIndividual = diasRetraso > 3 ? (diasRetraso - 3) * multaPorLibro : 0;
+      let mensajeMulta = '';
+      if (fechaVenc < fechaPrestamo) {
+        mensajeMulta = `<p class="info-warn">⚠️ Fecha de vencimiento anterior al préstamo. Este registro se considera vencido o incorrecto.</p>`;
+      } else if (diasRetraso > 0) {
+        if (diasRetraso <= 3) {
+          mensajeMulta = `<p class="info-ok">📗 ${diasRetraso} día(s) de retraso sin multa (3 días de gracia).</p>`;
+        } else {
+          mensajeMulta = `<p class="info-warn">⚠️ Retraso de ${diasRetraso} días. Multa de $3 por libro por día.</p>`;
+        }
+      } else {
+        mensajeMulta = `<p class="info-ok">✅ Sin retraso.</p>`;
+      }
 
       const filas = data.libros.map((l, i) => `
         <tr data-idprestamo="${l.id_prestamo}">
@@ -85,21 +91,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           <td>${l.titulo}</td>
           <td>${l.autor}</td>
           <td>${formatearFecha(data.fecha_vencimiento)}</td>
-          <td>$${multaIndividual.toFixed(2)}</td>
+          <td>$${(diasRetraso > 3 ? (diasRetraso - 3) * 3 : 0).toFixed(2)}</td>
           <td><button class="btn-devolver-individual">📘 Finalizar</button></td>
         </tr>
       `).join('');
-
-      let mensajeMulta = '';
-      if (diasRetraso > 0) {
-        if (diasRetraso <= 3) {
-          mensajeMulta = `<p class="info-ok">📗 ${diasRetraso} día(s) de retraso sin multa (3 días de gracia).</p>`;
-        } else {
-          mensajeMulta = `<p class="info-warn">⚠️ Retraso de ${diasRetraso} días. Multa de $${multaPorLibro} por libro por día.</p>`;
-        }
-      } else {
-        mensajeMulta = `<p class="info-ok">✅ Sin retraso.</p>`;
-      }
 
       detalleContenido.innerHTML = `
         <p><b>👤 Usuario:</b> ${data.usuario}</p>
@@ -140,18 +135,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 🟢 Modal nuevo préstamo
   btnNuevo.addEventListener('click', async () => {
-  modalNuevo.style.display = 'block';
-  await cargarUsuarios();
-  await cargarLibros();
+    modalNuevo.style.display = 'block';
+    await cargarUsuarios();
+    await cargarLibros();
 
-  // 🧹 Limpia mensaje anterior
-  mensajePrestamo.textContent = '';
-  mensajePrestamo.style.display = 'none';
+    mensajePrestamo.textContent = '';
+    mensajePrestamo.style.display = 'none';
 
-  const hoy = new Date();
-  hoy.setDate(hoy.getDate() + 15);
-  fechaVencimiento.value = hoy.toISOString().split('T')[0];
-});
+    const hoy = new Date();
+    hoy.setDate(hoy.getDate() + 15);
+    fechaVencimiento.value = hoy.toISOString().split('T')[0];
+  });
 
   cerrarNuevo.addEventListener('click', () => modalNuevo.style.display = 'none');
   window.addEventListener('click', e => { if (e.target === modalNuevo) modalNuevo.style.display = 'none'; });
@@ -169,9 +163,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // 🧩 Cargar libros y buscador dinámico
+  // 🧩 Cargar libros
   let librosDisponibles = [];
-
   async function cargarLibros() {
     try {
       const res = await fetch(`${API_URL}/libros`);
@@ -247,44 +240,51 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   function mostrarMensaje(txt, tipo) {
-  mensajePrestamo.textContent = txt;
-  mensajePrestamo.style.display = 'block'; // 👈 Solo se muestra al usar la función
-  mensajePrestamo.style.color = tipo === 'success' ? 'green' : 'red';
-}
+    mensajePrestamo.textContent = txt;
+    mensajePrestamo.style.display = 'block';
+    mensajePrestamo.style.color = tipo === 'success' ? 'green' : 'red';
+  }
 
-
-  // 🟢🔴📋 FILTROS DE PRÉSTAMOS
+  // 🟢🔴📋 FILTROS
   const filtroActivos = document.getElementById('filtroActivos');
   const filtroVencidos = document.getElementById('filtroVencidos');
   const filtroTodos = document.getElementById('filtroTodos');
-
-  filtroActivos.addEventListener('click', async () => {
-    try {
-      const res = await fetch(`${API_URL}/prestamos`);
-      const data = await res.json();
-      const hoy = new Date();
-      const activos = data.filter(p => new Date(p.fecha_vencimiento) >= hoy);
-      renderPrestamosFiltrados(activos);
-    } catch {
-      tbody.innerHTML = `<tr><td colspan="6">Error al filtrar préstamos activos.</td></tr>`;
-    }
-  });
 
   filtroVencidos.addEventListener('click', async () => {
     try {
       const res = await fetch(`${API_URL}/prestamos`);
       const data = await res.json();
       const hoy = new Date();
-      const vencidos = data.filter(p => new Date(p.fecha_vencimiento) < hoy);
+      const vencidos = data.filter(p => {
+        const venc = new Date(p.fecha_vencimiento);
+        const prest = new Date(p.fecha_prestamo);
+        return venc < hoy || venc < prest;
+      });
       renderPrestamosFiltrados(vencidos);
     } catch {
       tbody.innerHTML = `<tr><td colspan="6">Error al filtrar préstamos vencidos.</td></tr>`;
     }
   });
 
+  filtroActivos.addEventListener('click', async () => {
+    try {
+      const res = await fetch(`${API_URL}/prestamos`);
+      const data = await res.json();
+      const hoy = new Date();
+      const activos = data.filter(p => {
+        const venc = new Date(p.fecha_vencimiento);
+        const prest = new Date(p.fecha_prestamo);
+        return venc >= hoy && venc >= prest;
+      });
+      renderPrestamosFiltrados(activos);
+    } catch {
+      tbody.innerHTML = `<tr><td colspan="6">Error al filtrar préstamos activos.</td></tr>`;
+    }
+  });
+
   filtroTodos.addEventListener('click', () => cargarPrestamos());
 
-  // 🧩 Renderizar tabla (reutilizable)
+  // 🧩 Render tabla
   function renderPrestamosFiltrados(lista) {
     if (!Array.isArray(lista) || lista.length === 0) {
       tbody.innerHTML = `<tr><td colspan="6">No hay préstamos para este filtro.</td></tr>`;
@@ -294,10 +294,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const hoy = new Date();
     tbody.innerHTML = lista.map(p => {
       const fechaVenc = new Date(p.fecha_vencimiento);
+      const fechaPrest = new Date(p.fecha_prestamo);
       const diasRetraso = hoy > fechaVenc ? Math.floor((hoy - fechaVenc) / (1000 * 60 * 60 * 24)) : 0;
-      const estado = hoy <= fechaVenc ? 
-        '<span class="estado-activo">Activo</span>' : 
-        '<span class="estado-vencido">Vencido</span>';
+      const estado = fechaVenc < fechaPrest || fechaVenc < hoy
+        ? '<span class="estado-vencido">Vencido</span>'
+        : '<span class="estado-activo">Activo</span>';
 
       const multaPorLibro = diasRetraso > 3 ? (diasRetraso - 3) * 3 : 0;
       const multaTotal = multaPorLibro * p.numero_prestamos;
@@ -315,19 +316,60 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).join('');
   }
 
-    // 💬 POPUP DE MENSAJE PERSONALIZADO
-    const popup = document.getElementById('popupMensaje');
-    const popupTexto = document.getElementById('popupTexto');
-    const popupCerrar = document.getElementById('popupCerrar');
+  // 💬 Popup
+  const popup = document.getElementById('popupMensaje');
+  const popupTexto = document.getElementById('popupTexto');
+  const popupCerrar = document.getElementById('popupCerrar');
 
-    function mostrarPopup(mensaje, tipo = 'success') {
-      popupTexto.textContent = mensaje;
-      popupTexto.style.color = tipo === 'error' ? '#c70000' : '#198754';
-      popup.style.display = 'flex';
-    }
+  function mostrarPopup(mensaje, tipo = 'success') {
+    popupTexto.textContent = mensaje;
+    popupTexto.style.color = tipo === 'error' ? '#c70000' : '#198754';
+    popup.style.display = 'flex';
+  }
 
-    popupCerrar.addEventListener('click', () => {
-      popup.style.display = 'none';
+  popupCerrar.addEventListener('click', () => popup.style.display = 'none');
+
+  // 🔔 Enviar notificaciones manualmente
+  const btnNotificar = document.getElementById('btnNotificar');
+  if (btnNotificar) {
+    btnNotificar.addEventListener('click', async () => {
+      if (!confirm('¿Deseas enviar recordatorios de vencimiento por correo a los usuarios?')) return;
+
+      try {
+        const res = await fetch(`${API_URL}/prestamos/notificar/vencimientos`);
+        const data = await res.json();
+
+        if (data.success) {
+          mostrarPopup(data.message || '✅ Notificaciones enviadas correctamente.');
+        } else {
+          mostrarPopup('❌ No se pudieron enviar las notificaciones.', 'error');
+        }
+      } catch (error) {
+        console.error('Error al enviar notificaciones:', error);
+        mostrarPopup('⚠️ Error al conectar con el servidor.', 'error');
+      }
     });
+  }
 
+  // 📊 Contador de vencidos
+  async function actualizarContadorVencidos() {
+    try {
+      const res = await fetch(`${API_URL}/prestamos`);
+      const data = await res.json();
+      const hoy = new Date();
+      const vencidos = data.filter(p => {
+        const venc = new Date(p.fecha_vencimiento);
+        const prest = new Date(p.fecha_prestamo);
+        return venc < hoy || venc < prest;
+      }).length;
+
+      if (btnNotificar) {
+        btnNotificar.innerHTML = `<i class="fa-solid fa-envelope-circle-check"></i> Enviar recordatorios (${vencidos})`;
+      }
+    } catch {
+      console.warn('No se pudo contar los préstamos vencidos.');
+    }
+  }
+
+  actualizarContadorVencidos();
 });
