@@ -294,6 +294,60 @@ const usuarioController = {
         });
     },
 
+
+ // =====================================================
+    // 🧩 Login de usuario (solo alumnos y profesores)
+    // =====================================================
+    loginUsuario: (req, res) => {
+        console.log("🟢 Datos recibidos en login:", req.body);
+        const { correo, contrasena } = req.body;
+
+        if (!correo || !contrasena) {
+            return res.status(400).json({
+                success: false,
+                message: "Correo y contraseña requeridos."
+            });
+        }
+
+        const sql = `
+            SELECT id_usuario, nombre, correo, rol 
+            FROM USUARIO 
+            WHERE correo = ? AND contrasena = ?;
+        `;
+
+        db.query(sql, [correo, contrasena], (err, results) => {
+            if (err) {
+                console.error("Error al iniciar sesión:", err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Error en el servidor."
+                });
+            }
+
+            if (results.length === 0) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Credenciales incorrectas."
+                });
+            }
+
+            const usuario = results[0];
+
+            // Solo permitir ingreso a alumnos y profesores
+            if (usuario.rol !== "alumno" && usuario.rol !== "profesor") {
+                return res.status(403).json({
+                    success: false,
+                    message: "Acceso denegado. Solo alumnos o profesores pueden ingresar."
+                });
+            }
+
+            res.json({
+                success: true,
+                message: "Inicio de sesión exitoso",
+                usuario
+            });
+        });
+    }
 };
 
 module.exports = usuarioController;

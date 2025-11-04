@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     userBtn.addEventListener('click', () => {
         console.log('Botón Usuario clickeado');
-        redirectTo('html/UserLogin.html'); // ✅ Correcto
+        redirectTo('htmlUser/UserLogin.html'); // ✅ Correcto (esa cosa vio el futuro de como le iba de nombre, k miedo)
     });
 
     adminBtn.addEventListener('click', () => {
