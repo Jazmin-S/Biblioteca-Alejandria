@@ -8,6 +8,7 @@ exports.obtenerPrestamos = (req, res) => {
       u.nombre AS usuario,
       DATE(p.fecha) AS fecha_prestamo,
       COALESCE(MAX(p.fecha_vencimiento), DATE_ADD(MAX(p.fecha), INTERVAL 15 DAY)) AS fecha_vencimiento,
+      MAX(entregado) AS entregado,
       SUM(p.total_prestamos) AS numero_prestamos,
       GROUP_CONCAT(p.id_prestamo) AS ids_prestamos
     FROM PRESTAMO p
@@ -34,6 +35,7 @@ exports.buscarPrestamos = (req, res) => {
       u.nombre AS usuario,
       DATE(p.fecha) AS fecha_prestamo,
       COALESCE(MAX(p.fecha_vencimiento), DATE_ADD(MAX(p.fecha), INTERVAL 15 DAY)) AS fecha_vencimiento,
+      MAX(p.entregado) AS entregado, -- <-- CAMBIADO (ambos lados)
       SUM(p.total_prestamos) AS numero_prestamos,
       GROUP_CONCAT(p.id_prestamo) AS ids_prestamos
     FROM PRESTAMO p
@@ -62,6 +64,7 @@ exports.buscarPrestamos = (req, res) => {
       u.nombre AS usuario, 
       p.fecha AS fecha_prestamo, 
       COALESCE(p.fecha_vencimiento, DATE_ADD(p.fecha, INTERVAL 15 DAY)) AS fecha_vencimiento,
+      p.entregado,
       l.id_libro,
       l.titulo, 
       l.autor
@@ -93,7 +96,8 @@ exports.buscarPrestamos = (req, res) => {
         id_prestamo: l.id_prestamo, // ✅ ya viene correcto de cada fila
         id_libro: l.id_libro,
         titulo: l.titulo,
-        autor: l.autor
+        autor: l.autor,
+        entregado: l.entregado
       }))
     });
   });
@@ -212,5 +216,34 @@ exports.marcarComoDevuelto = (req, res) => {
         });
       });
     });
+  });
+};
+
+
+// 📦 Marcar préstamo como entregado (sin eliminarlo)
+exports.marcarEntregado = (req, res) => {
+  const id_prestamo = req.params.id;
+  
+  // ❗❗ ESTA ES LA CONSULTA CORREGIDA ❗❗
+  // 1. SET entregado = 1 (para marcarlo como 'true')
+  // 2. WHERE entregado = 0 (busca los que están en 'false')
+  const sql = `
+    UPDATE PRESTAMO 
+    SET entregado = 1 
+    WHERE id_prestamo = ? AND (entregado = 0 OR entregado IS NULL)
+  `;
+  // (Añadí 'OR entregado IS NULL' por si acaso alguno está como NULL)
+  
+  connection.query(sql, [id_prestamo], (err, result) => {
+    if (err) {
+      console.error('❌ Error al marcar como entregado:', err);
+      return res.status(500).json({ error: 'Error al actualizar el préstamo' });
+    }
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Préstamo no encontrado o ya estaba entregado' });
+    }
+
+    res.json({ mensaje: '✅ Préstamo marcado como entregado. La multa ha sido fijada.' });
   });
 };

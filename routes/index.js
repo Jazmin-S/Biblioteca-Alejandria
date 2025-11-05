@@ -11,6 +11,7 @@ const librosRoutes = require('./libros');
 const categoriasRoutes = require('./categorias'); 
 const informacionRoutes = require('./informacion');
 const prestamosRoutes = require('./prestamos'); 
+const reporteRoutes = require('./reporte'); // 1. IMPORTA EL NUEVO ARCHIVO
 
 // Combinar rutas
 router.use(usuarioRoutes);
@@ -21,6 +22,7 @@ router.use(librosRoutes);
 router.use(categoriasRoutes); 
 router.use(informacionRoutes);
 router.use('/prestamos', prestamosRoutes);
+router.use('/reportes', reporteRoutes); // 2. AÑADE ESTA LÍNEA
 
 // Ruta de prueba API
 router.get('/test', (req, res) => {
@@ -30,6 +32,5 @@ router.get('/test', (req, res) => {
     version: '1.0.0'
   });
 });
-
 
 module.exports = router;
