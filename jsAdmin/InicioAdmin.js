@@ -22,16 +22,192 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-prestamos")?.addEventListener("click", () => {
     window.location.href = "/html/htmlAdmin/Gestion-prestamos.html";
   });
-  document.getElementById("btn-perfil")?.addEventListener("click", () => {
-  window.location.href = "/html/info.html";
-});
 
-document.querySelector('.icons img[alt="usuario"]')?.addEventListener("click", () => {
-  window.location.href = "/html/info.html";
-});
+  // ⬇️ BLOQUE DE REPORTE CORREGIDO Y ACTUALIZADO ⬇️
+  document.getElementById("btn-reporte")?.addEventListener("click", async () => {
+    // Ocultar el menú popup
+    // (Necesitamos definir popupMenu antes, lo muevo más abajo)
+    
+    // Usar la librería que cargamos en el HTML
+    const { jsPDF } = window.jspdf;
+
+    alert("Generando reporte detallado... por favor espera.");
+
+    try {
+      // 1. Llamar a nuestro endpoint (que ahora trae listas)
+      const res = await fetch("http://localhost:3000/api/reportes");
+      if (!res.ok) throw new Error("No se pudo obtener el reporte del servidor");
+      
+      const stats = await res.json();
+      
+      // 2. Crear el documento PDF
+      const doc = new jsPDF();
+      const fecha = new Date().toLocaleDateString('es-MX', { 
+        year: 'numeric', month: 'long', day: 'numeric' 
+      });
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
+      let y = margin; // Posición Y inicial
+
+      // === FUNCIÓN AUXILIAR DE PAGINACIÓN ===
+      // Esta función comprueba si 'y' se pasó del límite y añade una página
+      function checkPageBreak(yPos) {
+        if (yPos >= pageHeight - margin) {
+          doc.addPage();
+          return margin; // Reinicia 'y' al margen superior
+        }
+        return yPos; // Continúa en la misma página
+      }
+
+      // === FUNCIÓN AUXILIAR PARA TÍTULOS ===
+      function addTitle(doc, yPos, text) {
+        yPos = checkPageBreak(yPos + 10); // Espacio antes del título
+        doc.setFontSize(18);
+        doc.text(text, margin, yPos);
+        doc.setLineWidth(0.5);
+        doc.line(margin, yPos + 2, pageWidth - margin, yPos + 2); // Línea divisoria
+        doc.setFontSize(12);
+        return yPos + 12; // Nueva posición Y
+      }
+
+      // === INICIO DEL DOCUMENTO ===
+
+      // --- PÁGINA 1: PORTADA Y RESUMEN ---
+      doc.setFontSize(24);
+      doc.text("Reporte General de Biblioteca", pageWidth / 2, y, { align: 'center' });
+      y += 10;
+      doc.setFontSize(12);
+      doc.text(`Fecha de generación: ${fecha}`, pageWidth / 2, y, { align: 'center' });
+      y += 15;
+      
+      doc.setFontSize(16);
+      doc.text(" Resumen General", margin, y);
+      y += 8;
+
+      doc.setFontSize(12);
+      doc.text(`Total de Títulos Únicos: ${stats.total_libros}`, margin + 5, y);
+      y += 7;
+      doc.text(`Total de Ejemplares (Stock): ${stats.total_ejemplares}`, margin + 5, y);
+      y += 7;
+      doc.text(`Total de Usuarios Registrados: ${stats.total_usuarios}`, margin + 5, y);
+      y += 12;
+      doc.text(`Préstamos Actualmente Activos: ${stats.prestamos_activos}`, margin + 5, y);
+      y += 7;
+      doc.text(`Préstamos Vencidos (sin entregar): ${stats.prestamos_vencidos}`, margin + 5, y);
+      y += 10;
+      
+      doc.setFontSize(14);
+      doc.text(`Monto Total de Adeudos (Vencidos): $${stats.monto_total_adeudos} MXN`, margin, y);
+      y += 10;
+
+      // --- PÁGINA 2: PRÉSTAMOS VENCIDOS ---
+      doc.addPage();
+      y = addTitle(doc, margin, "Listado de Préstamos Vencidos");
+
+      if (stats.lista_vencidos.length === 0) {
+        doc.text("No hay préstamos vencidos.", margin, y);
+      }
+      stats.lista_vencidos.forEach((p, i) => {
+        y = checkPageBreak(y + 5); // Espacio entre préstamos
+        doc.setFontSize(12).setFont(undefined, 'bold');
+        doc.text(`${i + 1}. Usuario: ${p.nombre}`, margin, y);
+        y += 6;
+        doc.setFontSize(10).setFont(undefined, 'normal');
+        doc.text(`  Fecha Vencimiento: ${new Date(p.fecha_vencimiento).toLocaleDateString('es-MX')}`, margin, y);
+        y += 5;
+        doc.text(`  Días de Retraso: ${p.dias_retraso}`, margin, y);
+        y += 5;
+        doc.text(`  Libros (${p.numero_libros}): ${p.libros}`, margin, y, { maxWidth: pageWidth - (margin * 2) });
+        y += 10; // Espacio extra por si 'libros' ocupa varias líneas
+      });
+
+      // --- PÁGINA 3: PRÉSTAMOS ACTIVOS (VIGENTES) ---
+      y = addTitle(doc, y, "Listado de Préstamos Activos (Vigentes)");
+
+      if (stats.lista_activos.length === 0) {
+        doc.text("No hay préstamos vigentes.", margin, y);
+      }
+      stats.lista_activos.forEach((p, i) => {
+        y = checkPageBreak(y + 5);
+        doc.setFontSize(12).setFont(undefined, 'bold');
+        doc.text(`${i + 1}. Usuario: ${p.nombre}`, margin, y);
+        y += 6;
+        doc.setFontSize(10).setFont(undefined, 'normal');
+        doc.text(`  Fecha Vencimiento: ${new Date(p.fecha_vencimiento).toLocaleDateString('es-MX')}`, margin, y);
+        y += 5;
+        doc.text(`  Libros: ${p.libros}`, margin, y, { maxWidth: pageWidth - (margin * 2) });
+        y += 10; 
+      });
+
+      // --- PÁGINA 4: LISTA DE USUARIOS CON ADEUDOS ---
+      y = addTitle(doc, y, "Listado de Usuarios con Adeudos");
+
+      if (stats.lista_deudores.length === 0) {
+        doc.text("Ningún usuario tiene adeudos actualmente.", margin, y);
+      }
+      stats.lista_deudores.forEach((u, i) => {
+        y = checkPageBreak(y + 7);
+        // (Usa 'u.correo' como corregimos)
+        doc.text(`${i + 1}. ${u.nombre} - ${u.correo || 'N/A'}`, margin, y);
+      });
+
+      // --- PÁGINA 5: LISTA DE TODOS LOS USUARIOS ---
+      y = addTitle(doc, y, "Listado de Todos los Usuarios");
+
+      if (stats.lista_usuarios.length === 0) {
+        doc.text("No hay usuarios registrados.", margin, y);
+      }
+      stats.lista_usuarios.forEach((u, i) => {
+        y = checkPageBreak(y + 7);
+        // (Usa 'u.correo' como corregimos)
+        doc.text(`${i + 1}. ${u.nombre} - ${u.correo || 'N/A'}`, margin, y);
+      });
+
+      // --- ❗ NUEVA PÁGINA: LISTA DE LIBROS DISPONIBLES ---
+      y = addTitle(doc, y, "Listado de Libros Disponibles");
+
+      if (stats.lista_libros_disponibles.length === 0) {
+        doc.text("No hay libros disponibles en este momento.", margin, y);
+      }
+      stats.lista_libros_disponibles.forEach((l, i) => {
+        y = checkPageBreak(y + 7);
+        doc.text(`${i + 1}. ${l.titulo} (Autor: ${l.autor}) - ${l.ejemplares} ejemplares`, margin, y, { maxWidth: pageWidth - (margin * 2) });
+      });
+
+      // --- ❗ NUEVA PÁGINA: LISTA DE CATEGORÍAS ---
+      y = addTitle(doc, y, "Listado de Categorías");
+
+      if (stats.lista_categorias.length === 0) {
+        doc.text("No hay categorías registradas.", margin, y);
+      }
+      stats.lista_categorias.forEach((c, i) => {
+        y = checkPageBreak(y + 7);
+        doc.text(`${i + 1}. ${c.nombre}`, margin, y);
+      });
+
+      // 3. Guardar el archivo
+      doc.save(`Reporte_Detallado_Biblioteca_${new Date().toISOString().split('T')[0]}.pdf`);
+
+    } catch (err) {
+      console.error("❌ Error al generar PDF:", err);
+      alert("❌ Hubo un error al generar el reporte detallado. Revisa la consola.");
+    }
+  });
+  // ⬆️ FIN DEL BLOQUE DE REPORTE ⬆️
+
+
+  document.getElementById("btn-perfil")?.addEventListener("click", () => {
+    window.location.href = "/html/info.html";
+  });
+
+  document.querySelector('.icons img[alt="usuario"]')?.addEventListener("click", () => {
+    window.location.href = "/html/info.html";
+  });
 
 
   // === Popup Menú ===
+  // (Definición movida aquí para que 'btn-reporte' la pueda usar)
   const menuBtn = document.querySelector(".menu-btn");
   const popupMenu = document.getElementById("popupMenu");
   menuBtn?.addEventListener("click", () => popupMenu.style.display = "flex");

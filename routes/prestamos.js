@@ -8,7 +8,10 @@ router.get('/buscar', prestamosCtrl.buscarPrestamos);
 router.get('/detalle/:id', prestamosCtrl.detallePrestamo);
 router.get('/validar/:id', prestamosCtrl.validarPrestamoUsuario);
 router.post('/', prestamosCtrl.agregarPrestamo);
+router.put('/entregar/:id', prestamosCtrl.marcarEntregado);
 router.delete('/:id', prestamosCtrl.marcarComoDevuelto);
+
+
 
 
 module.exports = router;

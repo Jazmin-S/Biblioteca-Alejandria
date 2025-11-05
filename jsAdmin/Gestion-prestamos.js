@@ -44,10 +44,27 @@ document.addEventListener('DOMContentLoaded', async () => {
       tbody.innerHTML = data.map(p => {
         const fechaPrestamo = new Date(p.fecha_prestamo);
         const fechaVenc = new Date(p.fecha_vencimiento);
-        const diasRetraso = hoy > fechaVenc ? Math.floor((hoy - fechaVenc) / (1000 * 60 * 60 * 24)) : 0;
-        const estado = hoy <= fechaVenc ? 
-          '<span class="estado-activo">Activo</span>' : 
-          '<span class="estado-vencido">Vencido</span>';
+
+        // 📍 CORRECCIÓN: Usamos 'entregado' para que coincida con el backend
+        const fechaEntrega = p.entregado ? new Date(p.entregado) : null;
+        
+        // Si ya se entregó, la fecha para calcular la multa es la fecha de entrega.
+        // Si no, es "hoy".
+        const fechaFinCalculo = fechaEntrega || hoy;
+
+        const diasRetraso = fechaFinCalculo > fechaVenc 
+          ? Math.floor((fechaFinCalculo - fechaVenc) / (1000 * 60 * 60 * 24)) 
+          : 0;
+
+        let estado = '';
+        // 📍 CORRECCIÓN: Usamos 'entregado' para que coincida con el backend
+        if (p.entregado) { 
+          estado = '<span class="estado-entregado">Entregado</span>'; // <-- USA LA NUEVA CLASE
+        } else if (hoy <= fechaVenc) {
+          estado = '<span class="estado-activo">Activo</span>';
+        } else {
+          estado = '<span class="estado-vencido">Vencido</span>';
+        }
         
         const multaPorLibro = diasRetraso > 3 ? (diasRetraso - 3) * 3 : 0;
         const multaTotal = multaPorLibro * p.numero_prestamos;
@@ -102,17 +119,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       const multaPorLibro = 3;
       const multaIndividual = diasRetraso > 3 ? (diasRetraso - 3) * multaPorLibro : 0;
 
-      const filas = data.libros.map((l, i) => `
-        <tr data-idprestamo="${l.id_prestamo}">
+      const filas = data.libros.map((l, i) => {
+        // ❗ NUEVA LÓGICA DE BOTÓN
+        // Comprueba si 'l.entregado' tiene un valor (no es null)
+        const yaEntregado = l.entregado ? true : false;
+        const isDisabled = yaEntregado ? 'disabled' : '';
+        const buttonText = yaEntregado ? 'Entregado' : '📦 Entregado';
 
+        return `
+        <tr data-idprestamo="${l.id_prestamo}">
           <td>${i + 1}</td>
           <td>${l.titulo}</td>
           <td>${l.autor}</td>
           <td>${formatearFecha(data.fecha_vencimiento)}</td>
           <td>$${multaIndividual.toFixed(2)}</td>
-          <td><button class="btn-devolver-individual">📘 Finalizar</button></td>
+          <td>
+            <button class="btn-marcar-entregado" title="Marcar como entregado (congela multa)" ${isDisabled}>${buttonText}</button> 
+            <button class="btn-devolver-individual" title="Finalizar y eliminar préstamo">📘 Finalizar</button>
+          </td>
         </tr>
-      `).join('');
+      `}).join('');
 
       let mensajeMulta = '';
       if (diasRetraso > 0) {
@@ -154,7 +180,38 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
         });
       });
+      
+      // 🎯 Escuchar botones de "Marcar Entregado" (YA ESTÁ EN EL LUGAR CORRECTO)
+      document.querySelectorAll('.btn-marcar-entregado').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          console.log("¡CLIC en Entregado detectado!"); // <-- Prueba de depuración
+          const idPrestamo = e.target.closest('tr').dataset.idprestamo;
+          if (!confirm('¿Marcar este libro como entregado? Esto detendrá el cálculo de la multa.')) return;
 
+          try {
+            const res = await fetch(`${API_URL}/prestamos/entregar/${idPrestamo}`, { 
+              method: 'PUT' 
+            });
+            const data = await res.json();
+            
+            if (res.ok) {
+              alert(data.mensaje || '✅ Libro entregado.');
+              // Opcional: deshabilitar el botón
+              e.target.disabled = true;
+              e.target.textContent = 'Entregado';
+              // Recargar la tabla principal para que recalcule la multa
+              cargarPrestamos(); 
+            } else {
+              alert(`❌ Error: ${data.error}`);
+            }
+
+          } catch (err) {
+            console.error('Error al marcar como entregado:', err);
+            alert('❌ No se pudo marcar como entregado.');
+          }
+        });
+      });
+      
     } catch (err) {
       console.error(err);
     }
