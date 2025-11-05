@@ -24,4 +24,7 @@ router.delete("/usuarios/:id", usuarioController.eliminarUsuario);
 // Obtener detalle de un usuario con sus préstamos (para el popup)
 router.get("/usuarios/:id/detalle", usuarioController.obtenerDetalleUsuario);
 
+// LOGIN DE USUARIO (solo alumnos y profesores)
+router.post("/loginUsuario", usuarioController.loginUsuario);
+
 module.exports = router;
