@@ -1,0 +1,87 @@
+:root {
+  --wine:#7f1d1d;
+  --wine-dark:#5b0b0b;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+  --bg:#0b1120;
+  --border:#1f2937;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:"Segoe UI", Roboto, Arial, sans-serif;
+  background:radial-gradient(1000px 400px at 15% 0%, rgba(127,29,29,.22), transparent 55%), var(--bg);
+  color:var(--text);
+}
+
+/* Header */
+.header{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:18px 22px; background:rgba(11,17,32,.92); backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--border); position:sticky; top:0; z-index:10;
+}
+.brand{display:flex; gap:10px; align-items:center}
+.logo{font-size:28px}
+.header h1{margin:0; font-size:22px}
+.subtitle{margin:2px 0 0; font-size:13px; color:var(--muted)}
+.actions{display:flex; gap:12px; align-items:end; flex-wrap:wrap}
+
+/* Campos Mes / Año modernos */
+.field{display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--muted)}
+.field select, .field input{
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  background:#0f172a; border:1px solid var(--border); color:#fff;
+  padding:10px 40px 10px 12px; border-radius:12px; outline:none;
+  transition:.25s; line-height:1.2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 20 20' fill='white'><path d='M5.25 7.5L10 12.25L14.75 7.5' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat:no-repeat; background-position:right 10px center;
+}
+.field select:focus, .field input:focus{
+  border-color:var(--wine);
+  box-shadow:0 0 0 3px rgba(127,29,29,.35);
+}
+
+/* Botones */
+.btn{
+  border:none; border-radius:12px; font-weight:700; cursor:pointer;
+  padding:10px 16px; color:white; transition:.2s; box-shadow:0 4px 12px rgba(0,0,0,.35);
+}
+.btn:hover{transform:translateY(-2px) scale(1.02)}
+.btn.primary{background:linear-gradient(135deg, var(--wine), var(--wine-dark))}
+.btn.wine{background:linear-gradient(135deg, #9f1d1d, #6b0e0e)}
+.btn.muted{background:#374151; color:#e5e7eb}
+
+/* Layout */
+.grid{
+  display:grid; gap:20px; padding:20px;
+  grid-template-columns:repeat(12,1fr); max-width:1200px; margin:0 auto;
+}
+.card{
+  grid-column:span 12; background:rgba(17,24,39,.94);
+  border:1px solid var(--border); border-radius:16px; padding:18px;
+  box-shadow:0 12px 26px rgba(0,0,0,.45);
+}
+.card h2{margin-top:0; color:#fca5a5}
+
+/* Tablas */
+.table-wrap{overflow:auto; border-radius:12px; border:1px solid var(--border); margin-bottom:12px} /* ↑ crea espacio para bajar el botón */
+.table{width:100%; min-width:620px; border-collapse:collapse; background:#0b1220}
+.table thead{background:var(--wine); color:#fff}
+.table th, .table td{padding:12px; border-bottom:1px solid var(--border)}
+.table tbody tr:nth-child(even){background:rgba(255,255,255,.05)}
+.table tbody tr:hover{background:rgba(127,29,29,.18)}
+
+/* KPIs */
+.kpis{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:10px}
+.kpi{flex:1; min-width:180px; background:rgba(255,255,255,.05); border:1px solid var(--border); border-radius:12px; padding:14px 16px}
+.kpi span{font-size:22px; font-weight:800}
+.kpi small{color:var(--muted)}
+
+/* Botones PDF dentro de cards (un poco más abajo) */
+.btnPDF{display:inline-block; margin-top:18px}
+
+/* Responsive */
+@media (min-width:900px){
+  .card{grid-column:span 6}
+  #cardGeneral{grid-column:span 12}
+}

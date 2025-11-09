@@ -25,6 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-perfil")?.addEventListener("click", () => {
   window.location.href = "/html/info.html";
 });
+// === Nuevo botón: INFORMES ===
+document.getElementById("btn-informes")?.addEventListener("click", () => {
+  window.location.href = "/html/Informes.html";
+});
+
 
 document.querySelector('.icons img[alt="usuario"]')?.addEventListener("click", () => {
   window.location.href = "/html/info.html";

@@ -3,63 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio de sesión - Biblioteca de Alejandría</title>
+  <title>Iniciar Sesión | Biblioteca Alejandría</title>
   <link rel="stylesheet" href="/css/cssUser/UserLogin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Botón de salida -->
-  <button class="exit-btn" id="exitBtn">EXIT</button>
+  <!-- Botón Salir -->
+  <button class="exit-btn" id="exitBtn">Salir ✖</button>
 
-  <!-- Encabezado -->
-  <header class="header">
-    <h1>Inicio de sesión</h1>
-    <p>Biblioteca de Alejandría</p>
-  </header>
-
-  <!-- Contenedor de login -->
+  <!-- Contenedor principal -->
   <div class="login-container">
     <div class="login-box">
       <div class="login-header">
-        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="icono usuario" class="user-icon">
+        <div class="user-circle">👤</div>
         <h2>Bienvenido</h2>
       </div>
 
-      <!-- 🔹 FORMULARIO DE LOGIN -->
       <form id="formLogin">
         <label for="correo">Correo electrónico:</label>
         <input type="email" id="correo" name="correo" placeholder="usuario@gmail.com" required>
 
         <label for="contrasena">Contraseña:</label>
-        <input 
-          type="password"
-          id="contrasena"
-          name="contrasena"
-          placeholder="********"
-          minlength="8"
-          maxlength="8"
-          required
-          title="La contraseña debe tener al menos 8 caracteres">
-
-        <!-- Botones -->
-        <div class="login-actions">
-          <button type="submit" class="login-btn">Iniciar sesión</button>
-          <button type="button" id="forgot-password-btn">¿Olvidaste tu contraseña?</button>
+        <div class="password-container">
+          <input 
+            type="password"
+            id="contrasena"
+            name="contrasena"
+            placeholder="Ingrese su contraseña"
+            required
+          >
+          <span id="togglePassword" class="toggle-icon">👁️</span>
         </div>
+
+        <button type="submit" class="login-btn">Iniciar sesión</button>
+
+        <!-- Enlace de recuperación -->
+        <a href="/html/recuperar-contraseña.html" class="forgot-link">¿Olvidaste tu contraseña?</a>
       </form>
 
-      <!-- Crear cuenta -->
       <div class="create-account">
         <button type="button" id="create-account-btn">Crear cuenta</button>
       </div>
 
-      <!-- Mensaje de validación -->
-      <p id="mensaje" class="mensaje"></p>
+      <p id="mensaje"></p>
     </div>
   </div>
 
-  <!-- 🔹 Cargar script al final del body -->
   <script src="/jsUser/UserLogin.js"></script>
-
 </body>
 </html>

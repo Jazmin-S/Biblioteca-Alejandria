@@ -1,17 +1,17 @@
-// Validación de registro de administrador
+// Validación de registro de administrador con guía, longitud exacta de 8 caracteres y ver/ocultar contraseña
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("registroForm");
   const usuario = document.getElementById("usuario");
   const correo = document.getElementById("correo");
   const pass = document.getElementById("contrasena");
   const pass2 = document.getElementById("contrasena2");
-
-  const usuarioError = document.getElementById("usuarioError");
-  const correoError = document.getElementById("correoError");
-  const passError = document.getElementById("contrasenaError");
-  const pass2Error = document.getElementById("contrasena2Error");
   const formMessage = document.getElementById("formMessage");
 
+  // Botones de mostrar/ocultar
+  const togglePassBtn = document.getElementById("togglePass");
+  const togglePass2Btn = document.getElementById("togglePass2");
+
+  // Lista de requisitos visuales
   const reqList = document.getElementById("passReqs");
   const reqItems = {
     len: reqList.querySelector('[data-req="len"]'),
@@ -19,23 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
     special: reqList.querySelector('[data-req="special"]'),
   };
 
-  // Regex: mínimo 8, al menos 1 mayúscula y 1 especial
-  const passRegex = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/;
+  // Regex: exactamente 8 caracteres, 1 mayúscula, 1 especial
+  const passRegex = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9])[A-Za-z\d\W]{8}$/;
 
-  const setValid = (el, ok, msgEl, msg = "") => {
-    el.classList.remove("is-valid", "is-invalid");
-    if (ok) {
-      el.classList.add("is-valid");
-      if (msgEl) msgEl.textContent = "";
-    } else {
-      el.classList.add("is-invalid");
-      if (msgEl) msgEl.textContent = msg;
-    }
-  };
-
-  const updateRequirements = (value) => {
+  // Actualiza el estado visual de los requisitos
+  function updateRequirements(value) {
     const checks = {
-      len: value.length >= 8,
+      len: value.length === 8,
       upper: /[A-Z]/.test(value),
       special: /[^A-Za-z0-9]/.test(value),
     };
@@ -44,115 +34,102 @@ document.addEventListener("DOMContentLoaded", () => {
       reqItems[key].classList.toggle("good", checks[key]);
       reqItems[key].classList.toggle("bad", !checks[key]);
     }
+
     return checks.len && checks.upper && checks.special;
-  };
+  }
 
-  // Live validation
-  usuario.addEventListener("input", () => {
-    const ok = usuario.value.trim().length >= 3;
-    setValid(usuario, ok, usuarioError, ok ? "" : "Mínimo 3 caracteres.");
-  });
-
-  correo.addEventListener("input", () => {
-    const ok = correo.validity.valid;
-    setValid(correo, ok, correoError, ok ? "" : "Correo inválido.");
-  });
-
+  // Mostrar guía mientras el usuario escribe
   pass.addEventListener("input", () => {
-    const ok = updateRequirements(pass.value);
-    setValid(
-      pass,
-      ok,
-      passError,
-      ok ? "" : "La contraseña no cumple los requisitos."
-    );
+    // Limitar la longitud máxima a 8 caracteres
+    if (pass.value.length > 8) {
+      pass.value = pass.value.slice(0, 8);
+    }
 
-    // Mientras escribe la primera, verifica coincidencia con la segunda
+    const cumple = updateRequirements(pass.value);
+    pass.classList.toggle("is-valid", cumple);
+    pass.classList.toggle("is-invalid", !cumple);
+
+    // Verificar coincidencia si ya escribió la segunda
     if (pass2.value.length > 0) {
-      const same = pass.value === pass2.value;
-      setValid(
-        pass2,
-        same,
-        pass2Error,
-        same ? "" : "Las contraseñas no coinciden."
-      );
+      const iguales = pass.value === pass2.value;
+      pass2.classList.toggle("is-valid", iguales);
+      pass2.classList.toggle("is-invalid", !iguales);
     }
   });
 
+  // Comparar contraseñas
   pass2.addEventListener("input", () => {
-    const same = pass.value === pass2.value;
-    setValid(
-      pass2,
-      same,
-      pass2Error,
-      same ? "" : "Las contraseñas no coinciden."
-    );
+    const iguales = pass.value === pass2.value;
+    pass2.classList.toggle("is-valid", iguales);
+    pass2.classList.toggle("is-invalid", !iguales);
   });
 
-  // Envío
+  // Validación de usuario y correo
+  usuario.addEventListener("input", () => {
+    usuario.classList.toggle("is-valid", usuario.value.trim().length >= 3);
+    usuario.classList.toggle("is-invalid", usuario.value.trim().length < 3);
+  });
+
+  correo.addEventListener("input", () => {
+    correo.classList.toggle("is-valid", correo.validity.valid);
+    correo.classList.toggle("is-invalid", !correo.validity.valid);
+  });
+
+  // Mostrar / ocultar contraseñas
+  function toggleVisibility(input, button) {
+    if (input.type === "password") {
+      input.type = "text";
+      button.textContent = "🙈 Ocultar";
+    } else {
+      input.type = "password";
+      button.textContent = "👁️ Ver";
+    }
+  }
+
+  togglePassBtn.addEventListener("click", () => toggleVisibility(pass, togglePassBtn));
+  togglePass2Btn.addEventListener("click", () => toggleVisibility(pass2, togglePass2Btn));
+
+  // Envío del formulario
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     formMessage.textContent = "";
 
-    // Disparar validaciones finales
     const uOK = usuario.value.trim().length >= 3;
-    setValid(usuario, uOK, usuarioError, uOK ? "" : "Mínimo 3 caracteres.");
-
     const cOK = correo.validity.valid;
-    setValid(correo, cOK, correoError, cOK ? "" : "Correo inválido.");
-
     const pOK = passRegex.test(pass.value);
-    setValid(
-      pass,
-      pOK,
-      passError,
-      pOK ? "" : "La contraseña no cumple los requisitos."
-    );
-    updateRequirements(pass.value);
-
     const p2OK = pass.value === pass2.value;
-    setValid(
-      pass2,
-      p2OK,
-      pass2Error,
-      p2OK ? "" : "Las contraseñas no coinciden."
-    );
 
     if (!(uOK && cOK && pOK && p2OK)) {
       formMessage.textContent = "⚠️ Revisa los campos marcados en rojo.";
+      updateRequirements(pass.value);
       return;
     }
 
-    // Si tu backend ya recibe este payload, ajusta la URL si es necesario:
     const payload = {
       usuario: usuario.value.trim(),
       correo: correo.value.trim(),
-      contrasena: pass.value, // En el backend hashea antes de guardar
+      contrasena: pass.value,
       rol: document.getElementById("rol").value || "bibliotecario",
     };
 
     try {
-      const res = await fetch("http://localhost:3000/api/admin/registro", {
+      const res = await fetch("http://localhost:3000/api/registroadmin/registro", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        throw new Error(data?.message || "Error al registrar.");
-      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error desconocido");
 
       formMessage.textContent = "✅ Registro exitoso.";
       form.reset();
-      // Limpia estilos
+      updateRequirements(""); // limpiar guía
       [usuario, correo, pass, pass2].forEach((el) =>
         el.classList.remove("is-valid", "is-invalid")
       );
-      updateRequirements("");
     } catch (err) {
-      formMessage.textContent = "❌ " + err.message;
+      formMessage.textContent = "❌ Error: " + err.message;
     }
   });
 });

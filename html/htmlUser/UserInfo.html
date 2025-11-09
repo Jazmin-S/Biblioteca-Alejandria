@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil del Usuario</title>
+  <link rel="stylesheet" href="/css/cssUser/UserInfo.css" />
+</head>
+<body>
+  <div class="container">
+    <button id="backBtn" class="btn-back">⬅ Volver</button>
+
+    <section class="perfil">
+      <div class="perfil-imagen">
+        <img id="userFoto" src="/images/default-profile.png" alt="Foto de perfil">
+        <input type="file" id="inputFoto" accept="image/*" hidden>
+        <button id="btnCambiarFoto" class="btn-secundario">Cambiar foto</button>
+      </div>
+
+      <div class="perfil-info">
+        <h1 id="userNombre">Nombre del Usuario</h1>
+        <p class="correo" id="userCorreo">correo@ejemplo.com</p>
+        <p class="rol"><strong>Rol:</strong> <span id="userRol"></span></p>
+        <p class="deuda"><strong>Deuda total:</strong> $<span id="userDeuda">0.00</span></p>
+
+        <textarea id="userDescripcion" placeholder="Escribe una breve descripción sobre ti..."></textarea>
+        <button id="btnGuardarDescripcion" class="btn-guardar">💾 Guardar descripción</button>
+      </div>
+    </section>
+
+    <section class="prestamos">
+      <h2>Historial de Préstamos</h2>
+      <div id="prestamosContainer"></div>
+    </section>
+  </div>
+
+  <script src="/jsUser/UserInfo.js"></script>
+</body>
+</html>
+

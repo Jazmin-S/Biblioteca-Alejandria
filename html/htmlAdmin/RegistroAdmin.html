@@ -27,19 +27,21 @@
 
       <div class="field">
         <label for="contrasena">Contraseña:</label>
-        <input
-          type="password"
-          id="contrasena"
-          name="contrasena"
-          autocomplete="new-password"
-          required
-          pattern="^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$"
-          title="Mínimo 8 caracteres, al menos una mayúscula y un carácter especial"
-        />
+        <div class="password-wrapper">
+          <input
+            type="password"
+            id="contrasena"
+            name="contrasena"
+            maxlength="8"
+            required
+            pattern="^(?=.*[A-Z])(?=.*[^A-Za-z0-9])[A-Za-z\d\W]{8}$"
+            title="Debe tener exactamente 8 caracteres, con al menos una mayúscula y un carácter especial"
+          />
+          <button type="button" id="togglePass" class="toggle-btn">👁️ Ver</button>
+        </div>
 
-        <!-- Indicador de requisitos -->
         <ul class="requirements" id="passReqs" aria-live="polite">
-          <li data-req="len" class="bad">Tener 8 caracteres</li>
+          <li data-req="len" class="bad">Tener exactamente 8 caracteres</li>
           <li data-req="upper" class="bad">Al menos 1 mayúscula (A-Z)</li>
           <li data-req="special" class="bad">Al menos 1 carácter especial (!@#$...)</li>
         </ul>
@@ -49,13 +51,16 @@
 
       <div class="field">
         <label for="contrasena2">Repite la contraseña:</label>
-        <input
-          type="password"
-          id="contrasena2"
-          name="contrasena2"
-          autocomplete="new-password"
-          required
-        />
+        <div class="password-wrapper">
+          <input
+            type="password"
+            id="contrasena2"
+            name="contrasena2"
+            maxlength="8"
+            required
+          />
+          <button type="button" id="togglePass2" class="toggle-btn">👁️ Ver</button>
+        </div>
         <div id="contrasena2Error" class="error" aria-live="polite"></div>
       </div>
 

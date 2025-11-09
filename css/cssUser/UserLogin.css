@@ -1,204 +1,193 @@
-/* Estilos generales */
+/* ======== Fondo general ======== */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: url("https://static.nationalgeographicla.com/files/styles/image_3200/public/006-library-biblioteca-angelica-a-roma_0002.jpg?w=1600") no-repeat center center fixed;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
+              url("https://static.nationalgeographicla.com/files/styles/image_3200/public/006-library-biblioteca-angelica-a-roma_0002.jpg?w=1600") no-repeat center center fixed;
   background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-/* Botón de salida */
+/* ======== Botón Salir ======== */
 .exit-btn {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #ffeb3b;
-  border: 1px solid #000;
+  top: 15px;
+  left: 15px;
+  background: rgba(255, 235, 59, 0.95);
+  border: none;
   font-weight: bold;
-  padding: 5px 10px;
+  padding: 8px 15px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+}
+.exit-btn:hover {
+  background: #fff176;
+  transform: scale(1.08);
 }
 
-/* Encabezado */
-.header {
-  text-align: center;
-  padding: 30px;
-  background-color: #a00;
-  color: white;
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 2rem;
-}
-
-.header p {
-  margin: 5px 0 0;
-  font-size: 1.2rem;
-}
-
-/* Caja de login */
+/* ======== Caja principal ======== */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 40px;
+  width: 100%;
 }
 
 .login-box {
-  background: #800000;
+  background: rgba(139, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
   color: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 320px;
-  box-shadow: 0 4px 10px rgba(8, 6, 6, 0.4);
-  text-align:center;
+  padding: 35px 40px;
+  border-radius: 15px;
+  width: 300px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  animation: fadeIn 1s ease;
 }
 
+/* ======== Animación ======== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ======== Encabezado ======== */
 .login-header {
   margin-bottom: 20px;
 }
-
-.user-icon {
-  width: 50px;
+.user-circle {
+  font-size: 45px;
+  background: rgba(255,255,255,0.15);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
 }
-
 h2 {
-  margin: 10px 0 0;
   font-size: 1.5rem;
-  border-bottom: 1px solid #ffffff;
-  padding-bottom: 10px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding-bottom: 8px;
 }
 
-/* Inputs */
-form label {
+/* ======== Campos ======== */
+label {
   display: block;
   text-align: left;
-  margin: 10px 0 5px;
+  margin-top: 10px;
+  font-weight: 600;
 }
-
-form input {
+input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-top: 5px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+}
+input:focus {
+  box-shadow: 0 0 8px rgba(255, 235, 59, 0.9);
 }
 
-.login-btn {
-  width: 100%;
-  padding: 10px;
-  background: #cfcfcf;
-  color: rgb(0, 0, 0);
-  border: none;
-  border-radius: 5px;
+/* ======== Contenedor de contraseña ======== */
+.password-container {
+  position: relative;
+}
+.toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  opacity: 0.8;
+  transition: 0.3s;
+}
+.toggle-icon:hover {
+  transform: translateY(-50%) scale(1.2);
+  opacity: 1;
 }
 
+/* ======== Botón Iniciar sesión ======== */
+.login-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #f5f5f5;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+}
 .login-btn:hover {
-  background: #222;
-  color: white;
+  background: #fff176;
+  transform: translateY(-2px);
 }
 
-/* Crear cuenta */
+/* ======== Enlace Olvidaste tu contraseña ======== */
+.forgot-link {
+  display: block;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin: 12px auto 0;
+  transition: 0.3s;
+  width: fit-content;
+}
+.forgot-link:hover {
+  color: #ffeb3b;
+  text-decoration: underline;
+}
+
+/* ======== Crear cuenta ======== */
 .create-account {
   margin-top: 15px;
 }
-
 .create-account button {
+  display: block;
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 5px;
-  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  font-weight: bold;
   cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
 }
-
 .create-account button:hover {
-  background: #222;
-  color: white;
+  background: #fff;
+  color: #800000;
 }
 
-/* Estilos para campos válidos/inválidos */
-input:valid {
-    border: 2px solid green;
+/* ======== Mensaje ======== */
+#mensaje {
+  margin-top: 12px;
+  font-weight: bold;
+  text-align: center;
 }
 
-input:invalid {
-    border: 2px solid red;
-}
-
-/* Mensajes de error */
-.error-message {
-    background: rgba(255, 0, 0, 0.1);
-    border: 1px solid #ff4d4d;
-    color: #ff4d4d;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    text-align: center;
-    font-weight: bold;
-    animation: fadeIn 0.6s ease-in-out;
-}
-
-/* Mensajes de éxito */
-.success-message {
-    background: #d4edda;
-    border: 1px solid #2e7d32;
-    color: #2e7d32;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    text-align: center;
-    font-weight: bold;
-    animation: fadeIn 0.6s ease-in-out;
-}
-
-/* Animación de entrada */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Botón de recuperación de contraseña */
-#forgot-password-btn {
-    background: none;
-    border: none;
-    color: #cfcfcf;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 0.9rem;
-    padding: 8px 0;
-    margin: 5px 0 15px 0;
-    transition: all 0.3s ease;
-    display: inline-block;
-    width: auto;
-    text-align: right;
-    float: right;
-}
-
-#forgot-password-btn:hover {
-    color: #ffeb3b;
-    text-decoration: underline;
-}
-
-/* Responsive */
+/* ======== Responsive ======== */
 @media (max-width: 768px) {
-    #forgot-password-btn {
-        float: none;
-        text-align: center;
-        display: block;
-        margin: 10px auto;
-    }
-}
-
-/* Animación fade-out para mensajes */
-.fade-out {
-    animation: fadeOut 1s forwards;
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-5px); }
+  .login-box {
+    width: 80%;
+    padding: 30px;
+  }
 }

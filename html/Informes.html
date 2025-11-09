@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Informes | Biblioteca de Alejandría</title>
+  <link rel="stylesheet" href="/css/cssAdmin/Informes.css"/>
+
+  <!-- jsPDF -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <div class="logo">📚</div>
+      <div>
+        <h1>Informes</h1>
+        <p class="subtitle">Panel mensual - Biblioteca de Alejandría</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <label class="field">
+        <span>Mes</span>
+        <select id="selectMes">
+          <option value="1">Enero</option><option value="2">Febrero</option>
+          <option value="3">Marzo</option><option value="4">Abril</option>
+          <option value="5">Mayo</option><option value="6">Junio</option>
+          <option value="7">Julio</option><option value="8">Agosto</option>
+          <option value="9">Septiembre</option><option value="10">Octubre</option>
+          <option value="11">Noviembre</option><option value="12">Diciembre</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Año</span>
+        <input id="inputAnio" type="number" min="2000" max="2100" />
+      </label>
+
+      <button id="btnAplicar" class="btn primary">Aplicar</button>
+      <button id="btnPDFGeneral" class="btn wine">📥 PDF General</button>
+      <button id="btnVolver" class="btn muted">⟵ Volver</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <!-- GENERAL -->
+    <section class="card" id="cardGeneral">
+      <h2>Informe General</h2>
+      <div class="kpis">
+        <div class="kpi"><span id="kpiUsuarios">0</span><small>Usuarios totales</small></div>
+        <div class="kpi"><span id="kpiLibros">0</span><small>Libros totales</small></div>
+        <div class="kpi"><span id="kpiPrestamosMes">0</span><small>Préstamos del mes</small></div>
+      </div>
+
+      <h3>Préstamos por día</h3>
+      <div class="table-wrap">
+        <table id="tblPrestamosDia" class="table">
+          <thead><tr><th>Fecha</th><th>Total</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h3>Top 5 libros más prestados</h3>
+      <div class="table-wrap">
+        <table id="tblTopLibros" class="table">
+          <thead><tr><th>Libro</th><th>Autor</th><th>Total préstamos</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <button class="btn wine btnPDF" data-target="general">Descargar PDF (General)</button>
+    </section>
+
+    <!-- USUARIOS -->
+    <section class="card">
+      <h2>Usuarios</h2>
+      <div class="table-wrap">
+        <table id="tblUsuarios" class="table">
+          <thead>
+            <tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Préstamos del mes</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn wine btnPDF" data-target="usuarios">Descargar PDF (Usuarios)</button>
+    </section>
+
+    <!-- PRÉSTAMOS -->
+    <section class="card">
+      <h2>Préstamos</h2>
+      <div class="table-wrap">
+        <table id="tblPrestamos" class="table">
+          <thead>
+            <tr><th>ID</th><th>Fecha</th><th>Vencimiento</th><th>Usuario</th><th># Libros</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn wine btnPDF" data-target="prestamos">Descargar PDF (Préstamos)</button>
+    </section>
+
+    <!-- LIBROS -->
+    <section class="card">
+      <h2>Libros</h2>
+      <div class="table-wrap">
+        <table id="tblLibros" class="table">
+          <thead>
+            <tr><th>ID</th><th>Título</th><th>Autor</th><th>Categoría</th><th>Ejemplares</th><th>Préstamos del mes</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn wine btnPDF" data-target="libros">Descargar PDF (Libros)</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Biblioteca de Alejandría · Informes</span>
+    <span id="footDate"></span>
+  </footer>
+
+  <script src="/jsAdmin/Informes.js"></script>
+</body>
+</html>

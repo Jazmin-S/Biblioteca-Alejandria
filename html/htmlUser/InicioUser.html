@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio Admin - Biblioteca de Alejandría</title>
+  <title>Inicio Usuario - Biblioteca de Alejandría</title>
   <link rel="stylesheet" href="/css/cssUser/InicioUser.css">
 </head>
 <body>
   <!-- Botón EXIT -->
-  <button class="exit-btn">Salir</button>
+  <button id="exitBtn" class="exit-btn">Cerrar Sesión</button>
 
   <!-- Encabezado -->
   <header class="header">
     <h1>Inicio</h1>
     <div class="icons">
-      <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="usuario" class="icon">
+      <!-- 👇 Nombre del usuario al lado del icono -->
+      <span id="userNameHeader" class="user-name" title="Ver perfil"></span>
+      <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="usuario" class="icon" title="Ver perfil">
     </div>
   </header>
 
@@ -27,12 +29,12 @@
 
   <!-- Sección Libros -->
   <section class="mas-leidos">
-    <h2>Libros más leídos</h2>
+    <h2>Libros disponibles</h2>
     <div class="actions" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
       <input type="text" id="inputBuscar" placeholder="Buscar libro por nombre..." style="padding:6px; border-radius:6px; border:none; width:220px;">
       <button class="btn buscar">🔍 Buscar</button>
       <select id="selectFiltro" style="padding:6px; border-radius:6px; border:none;">
-        <option value="">-- Todos los libros --</option>
+        <option value="">-- Todas las categorías --</option>
       </select>
     </div>
     <div class="grid-libros" id="contenedor-libros"></div>
@@ -50,12 +52,6 @@
       <p><strong>Cantidad de ejemplares:</strong> <span id="detalleEjemplares"></span></p>
       <p><strong>Descripción:</strong></p>
       <p id="detalleDescripcion"></p>
-    </div>
-  </div>
-
-      <hr>
-      <h4>Categorías existentes:</h4>
-      <div id="listaCategorias"></div>
     </div>
   </div>
 
