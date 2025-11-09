@@ -559,3 +559,55 @@ tr.devuelto {
   background-color: #0d47a1;
   transform: translateY(-2px);
 }
+/* 🎨 BOTONES DE ENTREGADO Y FINALIZADO */
+.btn-entregado,
+.btn-finalizado {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* 🟡 ENTREGADO (amarillo) */
+.btn-entregado {
+  background-color: #f4c542;
+  color: #222;
+}
+.btn-entregado:hover {
+  background-color: #ffda3d;
+  transform: scale(1.05);
+}
+
+/* 🟢 FINALIZADO (verde) */
+.btn-finalizado {
+  background-color: #43a047;
+}
+.btn-finalizado:hover {
+  background-color: #2e7d32;
+  transform: scale(1.05);
+}
+
+/* 📘 Contenedor de los botones dentro de la tabla */
+td.acciones {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ayuda-acciones {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #444;
+  font-style: italic;
+}
+
+/* 🔴 Fondo para filas vencidas */
+.fila-vencida {
+  background-color: #ffefef !important;
+}
