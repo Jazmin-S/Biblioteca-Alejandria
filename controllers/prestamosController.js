@@ -9,7 +9,7 @@ exports.obtenerPrestamos = (req, res) => {
     SELECT 
       u.id_usuario,
       u.nombre AS usuario,
-      DATE_FORMAT(p.fecha, '%Y-%m-%d') AS fecha_prestamo,
+      DATE_FORMAT(MIN(p.fecha), '%Y-%m-%d') AS fecha_prestamo,
       DATE_FORMAT(
         COALESCE(MAX(p.fecha_vencimiento), DATE_ADD(MAX(p.fecha), INTERVAL 15 DAY)),
         '%Y-%m-%d'
@@ -18,7 +18,7 @@ exports.obtenerPrestamos = (req, res) => {
       GROUP_CONCAT(p.id_prestamo) AS ids_prestamos
     FROM PRESTAMO p
     INNER JOIN USUARIO u ON p.id_usuario = u.id_usuario
-    GROUP BY u.id_usuario, u.nombre, DATE(p.fecha)
+    GROUP BY u.id_usuario, u.nombre
     ORDER BY MAX(p.fecha) DESC;
   `;
 
@@ -40,7 +40,7 @@ exports.buscarPrestamos = (req, res) => {
     SELECT 
       u.id_usuario,
       u.nombre AS usuario,
-      DATE_FORMAT(p.fecha, '%Y-%m-%d') AS fecha_prestamo,
+      DATE_FORMAT(MIN(p.fecha), '%Y-%m-%d') AS fecha_prestamo,
       DATE_FORMAT(
         COALESCE(MAX(p.fecha_vencimiento), DATE_ADD(MAX(p.fecha), INTERVAL 15 DAY)),
         '%Y-%m-%d'
@@ -50,7 +50,7 @@ exports.buscarPrestamos = (req, res) => {
     FROM PRESTAMO p
     INNER JOIN USUARIO u ON p.id_usuario = u.id_usuario
     WHERE u.nombre LIKE ?
-    GROUP BY u.id_usuario, u.nombre, DATE(p.fecha)
+    GROUP BY u.id_usuario, u.nombre
     ORDER BY MAX(p.fecha) DESC;
   `;
 

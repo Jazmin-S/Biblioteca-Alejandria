@@ -1,32 +1,43 @@
+// 📁 routes/prestamos.js
 const express = require('express');
 const router = express.Router();
 const prestamosCtrl = require('../controllers/prestamosController');
 
-// 📚 Obtener préstamos
+// 📚 Obtener todos los préstamos
 router.get('/', prestamosCtrl.obtenerPrestamos);
 
-// 🔍 Buscar por nombre
+// 🔍 Buscar préstamos por nombre
 router.get('/buscar', prestamosCtrl.buscarPrestamos);
 
-// 📖 Detalle por ID
+// 📖 Ver detalle de un préstamo por ID
 router.get('/detalle/:id', prestamosCtrl.detallePrestamo);
 
-// ✅ Validar si usuario tiene préstamo vencido
+// ✅ Validar si el usuario tiene préstamos vencidos
 router.get('/validar/:id', prestamosCtrl.validarPrestamoUsuario);
 
-// 📨 Notificaciones por correo
+// 📨 Enviar notificaciones por correo de vencimientos
 router.get('/notificar/vencimientos', prestamosCtrl.notificarVencimientos);
 
-// ➕ Nuevo préstamo
+// ➕ Agregar nuevo préstamo
 router.post('/', prestamosCtrl.agregarPrestamo);
 
-// ❌ Eliminar préstamo (versión anterior, compatibilidad)
-router.delete('/:id', prestamosCtrl.marcarComoDevuelto);
-
-// 🟡 Nuevo: marcar préstamo como ENTREGADO (sin pagar deuda)
+// 🟡 Marcar préstamo como ENTREGADO (sin pago)
 router.patch('/:id/entregado', prestamosCtrl.entregadoSinPago);
 
-// 🟢 Nuevo: marcar préstamo como FINALIZADO (pagado)
+// 🟢 Marcar préstamo como FINALIZADO (pagado)
 router.patch('/:id/finalizar', prestamosCtrl.finalizarConPago);
+
+// ❌ Marcar préstamo como DEVUELTO (compatibilidad con versiones anteriores)
+router.delete('/:id', (req, res) => {
+    try {
+        const id = req.params.id;
+        // Aquí puedes conectar con tu base de datos si aún quieres soportar esta acción
+        // o simplemente devolver un mensaje de compatibilidad.
+        res.json({ mensaje: `Ruta antigua: el préstamo con ID ${id} sería marcado como devuelto.` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensaje: 'Error al procesar la eliminación del préstamo' });
+    }
+});
 
 module.exports = router;
