@@ -1,0 +1,113 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(120deg, #5a2a82, #c94b4b);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.registro-container {
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  width: 340px;
+  text-align: center;
+}
+
+h2 {
+  color: #5a2a82;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: #7a3ea7;
+}
+
+button {
+  width: 100%;
+  background-color: #5a2a82;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #7a3ea7;
+}
+
+/* 👁️ Campo de contraseña */
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.toggle-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #5a2a82;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.toggle-icon:hover {
+  transform: scale(1.2);
+  color: #7a3ea7;
+}
+
+/* ✅ Checklist de validaciones */
+#passwordChecklist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+.check-item {
+  transition: color 0.3s ease;
+}
+
+/* ✅ Barras de fuerza */
+#passwordStrength {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+#passwordStrength div {
+  width: 30%;
+  height: 6px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  transition: background-color 0.4s ease;
+}
+
+#mensaje {
+  margin-top: 10px;
+  font-weight: bold;
+}

@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   if (crearCuentaBtn) {
     crearCuentaBtn.addEventListener("click", () => {
-      window.location.href = "/html/htmlUser/RegisterUser.html";
+      window.location.href = "/html/htmlUser/RegistroUsuario.html";
     });
   }
 

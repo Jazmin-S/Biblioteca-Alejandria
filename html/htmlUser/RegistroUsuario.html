@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crear cuenta - Biblioteca Alejandría</title>
+  <link rel="stylesheet" href="/css/cssUser/registroUsuario.css" />
+</head>
+<body>
+  <div class="registro-container">
+    <h2>Crear cuenta</h2>
+
+    <form id="formRegistro">
+      <label>Nombre completo:</label>
+      <input type="text" id="nombre" required />
+
+      <label>Correo electrónico:</label>
+      <input type="email" id="correo" required />
+
+      <label>Contraseña:</label>
+      <div class="password-container">
+        <input type="password" id="contrasena" maxlength="8" required placeholder="********" />
+        <span id="togglePassword" class="toggle-icon" title="Mostrar/ocultar contraseña">👁️</span>
+      </div>
+
+      <div id="passwordChecklist">
+        <div class="check-item" id="len-check">✖ 8 caracteres</div>
+        <div class="check-item" id="upper-check">✖ Mayúscula</div>
+        <div class="check-item" id="special-check">✖ Carácter especial</div>
+      </div>
+
+      <div id="passwordStrength">
+        <div id="bar1"></div>
+        <div id="bar2"></div>
+        <div id="bar3"></div>
+      </div>
+
+      <label>Rol:</label>
+      <select id="rol" required>
+        <option value="">Seleccionar...</option>
+        <option value="alumno">Alumno</option>
+        <option value="profesor">Profesor</option>
+      </select>
+
+      <button type="submit">Crear cuenta</button>
+      <p id="mensaje"></p>
+    </form>
+
+    <button id="volverBtn">Volver</button>
+  </div>
+
+  <script src="/jsUser/RegistroUsuario.js"></script>
+</body>
+</html>
