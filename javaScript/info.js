@@ -1,87 +1,166 @@
-// info.js — versión mejorada con cambio de imagen y bio
-document.addEventListener('DOMContentLoaded', async () => {
-  const nombreEl = document.getElementById('nombre');
-  const correoEl = document.getElementById('correo');
-  const rolEl = document.getElementById('rol');
-  const prestamosEl = document.getElementById('prestamos');
-  const volverBtn = document.getElementById('btn-volver');
-  const fotoEl = document.getElementById('foto');
-  const fotoInput = document.getElementById('fotoInput');
-  const bioText = document.getElementById('bioText');
-  const editarBioBtn = document.getElementById('editarBioBtn');
-  const guardarBioBtn = document.getElementById('guardarBioBtn');
+// Archivo: /javaScript/info.js
+document.addEventListener("DOMContentLoaded", async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  let userId = urlParams.get("id") || localStorage.getItem("usuarioId");
 
-  const userId = localStorage.getItem('usuarioId');
-  const rolUsuario = localStorage.getItem('usuarioRol');
+  const backBtn = document.getElementById("backBtn");
+  const container = document.getElementById("prestamosContainer");
 
   if (!userId) {
-    nombreEl.textContent = '⚠️ No hay usuario en sesión';
+    alert("⚠️ No se encontró la sesión del usuario.");
+    window.location.href = "/html/htmlUser/UserLogin.html";
+    return;
+  }
+
+  // =============================
+  // DETECTAR SERVIDOR DISPONIBLE
+  // =============================
+  let baseURL = "";
+  const origins = [
+    "http://localhost:3000",
+    "http://localhost:3001", 
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001"
+  ];
+
+  for (const origin of origins) {
+    try {
+      const response = await fetch(`${origin}/api/status`);
+      if (response.ok) {
+        baseURL = origin;
+        console.log(`✅ Servidor encontrado: ${baseURL}`);
+        break;
+      }
+    } catch (error) {
+      console.log(`❌ No se pudo conectar a: ${origin}`);
+    }
+  }
+
+  if (!baseURL) {
+    alert("❌ No se puede conectar al servidor. Verifica que el servidor esté ejecutándose.");
     return;
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/api/informacion/${userId}`);
-    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
-
-    const data = await res.json();
-    if (data.error) {
-      nombreEl.textContent = 'Usuario no encontrado';
-      return;
+    // =============================
+    // CARGAR INFORMACIÓN COMPLETA
+    // =============================
+    console.log(`📥 Cargando información del usuario ${userId} desde: ${baseURL}`);
+    const res = await fetch(`${baseURL}/api/informacion/completa/${userId}`);
+    
+    if (!res.ok) {
+      throw new Error(`Error ${res.status}: ${res.statusText}`);
     }
+    
+    const data = await res.json();
+    const usuario = data.usuario;
 
-    // Mostrar datos del usuario
-    nombreEl.textContent = data.nombre;
-    correoEl.textContent = data.correo;
-    rolEl.textContent = data.rol;
-    prestamosEl.textContent = data.num_prestamos;
+    // Datos básicos
+    document.getElementById("userNombre").textContent = usuario.nombre;
+    document.getElementById("userCorreo").textContent = usuario.correo;
+    document.getElementById("userRol").textContent = usuario.rol;
+    document.getElementById("userDeuda").textContent =
+      usuario.deudaTotal?.toFixed(2) || "0.00";
 
-    // Cargar imagen y bio personalizadas si existen
-    const userFoto = localStorage.getItem('usuarioFoto');
-    const userBio = localStorage.getItem('usuarioBio');
-    if (userFoto) fotoEl.src = userFoto;
-    if (userBio) bioText.value = userBio;
+    // FOTO
+    document.getElementById("userFoto").src = usuario.foto
+      ? `${baseURL}${usuario.foto}?t=${Date.now()}`
+      : "/images/default-profile.png";
 
+    // =============================
+    // DESCRIPCIÓN - CARGAR
+    // =============================
+    document.getElementById("userDescripcion").value =
+      usuario.descripcion || "";
+
+    // =============================
+    // DESCRIPCIÓN - GUARDAR (MEJORADO)
+    // =============================
+    document
+      .getElementById("btnGuardarDescripcion")
+      .addEventListener("click", async () => {
+        const nuevaDescripcion = document
+          .getElementById("userDescripcion")
+          .value;
+
+        console.log(`💾 Guardando descripción: "${nuevaDescripcion}" para usuario ${userId}`);
+
+        try {
+          const res = await fetch(`${baseURL}/api/info/descripcion/${userId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ descripcion: nuevaDescripcion }),
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            console.error("❌ Error del servidor:", data);
+            throw new Error(data.error || `Error ${res.status} al guardar`);
+          }
+
+          alert("✅ Descripción guardada correctamente");
+          console.log("✅ Descripción guardada:", data);
+        } catch (error) {
+          console.error("❌ Error al guardar descripción:", error);
+          alert(`Error al guardar la descripción: ${error.message}`);
+        }
+      });
+
+    // =============================
+    // PRÉSTAMOS
+    // =============================
+    let prestamosValidos = (data.prestamos || []).filter(
+      (p) => p && (p.libros || p.fecha || p.fecha_vencimiento || p.estado)
+    );
+
+    if (prestamosValidos.length === 0) {
+      container.innerHTML =
+        '<div class="no-prestamos"><p>No hay préstamos.</p></div>';
+    } else {
+      container.innerHTML = prestamosValidos
+        .map((p) => {
+          const fechaPrestamo = p.fecha ? new Date(p.fecha) : null;
+          const fechaVencimiento = p.fecha_vencimiento
+            ? new Date(p.fecha_vencimiento)
+            : null;
+
+          let estado = p.estado ? p.estado.toLowerCase() : "activo";
+          if (fechaVencimiento && new Date() > fechaVencimiento) {
+            estado = "vencido";
+          }
+
+          return `
+          <div class="prestamo-card ${estado}">
+            <h3>${p.libros || "Libro sin nombre"}</h3>
+            <p><strong>ID Préstamo:</strong> ${p.id_prestamo || "N/A"}</p>
+            <p><strong>Estado:</strong> <span class="estado ${estado}">${estado}</span></p>
+            <p><strong>Fecha préstamo:</strong> ${
+              fechaPrestamo
+                ? fechaPrestamo.toLocaleDateString()
+                : "No disponible"
+            }</p>
+            <p><strong>Vencimiento:</strong> ${
+              fechaVencimiento
+                ? fechaVencimiento.toLocaleDateString()
+                : "No disponible"
+            }</p>
+          </div>`;
+        })
+        .join("");
+    }
   } catch (err) {
-    console.error('❌ Error al cargar el perfil:', err);
-    nombreEl.textContent = 'Error al conectar con el servidor';
+    console.error("❌ Error al cargar datos:", err);
+    container.innerHTML =
+      '<div class="no-prestamos"><p>Error al cargar los datos.</p></div>';
   }
 
-  // 🖼️ Cambiar foto de perfil
-  fotoInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        fotoEl.src = reader.result;
-        localStorage.setItem('usuarioFoto', reader.result); // Guarda la foto localmente
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  // ✏️ Editar descripción
-  editarBioBtn.addEventListener('click', () => {
-    bioText.removeAttribute('readonly');
-    bioText.focus();
-    editarBioBtn.hidden = true;
-    guardarBioBtn.hidden = false;
-  });
-
-  // 💾 Guardar descripción
-  guardarBioBtn.addEventListener('click', () => {
-    const nuevaBio = bioText.value.trim();
-    localStorage.setItem('usuarioBio', nuevaBio);
-    bioText.setAttribute('readonly', true);
-    editarBioBtn.hidden = false;
-    guardarBioBtn.hidden = true;
-  });
-
-  // 🔙 Botón volver al inicio
-  volverBtn.addEventListener('click', () => {
-    if (rolUsuario === 'bibliotecario') {
-      window.location.href = '/html/htmlAdmin/InicioAdmin.html';
-    } else {
-      window.location.href = '/html/Biblioteca.html';
-    }
+  // =============================
+  // VOLVER AL INICIO
+  // =============================
+  backBtn.addEventListener("click", () => {
+    window.location.href = "/html/htmlUser/InicioUser.html";
   });
 });

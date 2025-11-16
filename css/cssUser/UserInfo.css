@@ -1,211 +1,199 @@
-/* 🌈 Archivo: /public/css/cssUser/UserInfo.css */
-
+/* 🌈 Archivo: css/cssUser/UserInfo.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body {
   font-family: "Poppins", sans-serif;
   margin: 0;
   padding: 0;
-  height: 100vh;
-  overflow-x: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
   background: linear-gradient(270deg, #ff9966, #ff5e62, #4facfe, #00f2fe);
   background-size: 800% 800%;
   animation: gradientShift 15s ease infinite;
 }
 
-/* 🎞️ Animación del fondo degradado */
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* 🧊 Contenedor principal */
-.container {
-  width: 95%;
-  max-width: 950px;
-  margin: 60px auto;
+/* ░░░░ TOP BAR ░░░░ */
+.top-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra el título */
+  position: relative;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+#backBtn {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #812202;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.top-bar h1 {
+  font-size: 2rem;
+  color: #030913;
+}
+
+/* TÍTULO PRINCIPAL */
+.main-title {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+  color: rgb(29, 1, 1);
+  font-weight: 600;
+}
+
+/* PERFIL */
+.perfil-container {
+  width: 90%;
+  max-width: 900px;
+  margin: 20px auto;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 20px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   padding: 30px;
-  backdrop-filter: blur(10px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.container:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
+.foto-box {
+  text-align: center;
 }
 
-/* 🔙 Botón volver */
-.btn-back {
-  background: linear-gradient(90deg, #0078d7, #00a8ff);
+.foto-box img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid white;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+#btnCambiarFoto {
+  margin-top: 10px;
+  background: rgb(103, 2, 2);
+  border: 2px solid #770505;
+  color: #e0e1e2;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.info-box {
+  flex: 2;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+.info-box p {
+  margin: 6px 0;
+}
+
+/* DESCRIPCIÓN — CORREGIDA Y SIMÉTRICA */
+.descripcion {
+  background: rgba(255,255,255,0.9);
+  width: 90%;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 25px;               /* Aumentamos padding para equilibrio visual */
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;                   /* Espaciado uniforme */
+}
+
+.descripcion h2 {
+  margin: 0;
+  color: #580802;
+  font-size: 1.3rem;
+}
+
+#userDescripcion {
+  width: 100%;
+  min-height: 120px;           /* Más proporcional con el diseño */
+  resize: none;
+  padding: 15px;               /* Igual padding que las tarjetas */
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: #f8f9fb;
+  font-size: 0.95rem;
+  box-sizing: border-box;      /* Evita que se desborde */
+}
+
+#btnGuardarDescripcion {
+  align-self: flex-end;        /* 🔥 Botón alineado a la derecha (simétrico) */
+  margin-top: 10px;
+  background: #610202;
   color: white;
   border: none;
   padding: 10px 18px;
   border-radius: 10px;
   cursor: pointer;
-  font-weight: 500;
-  box-shadow: 0 4px 10px rgba(0, 120, 215, 0.3);
-  transition: background 0.4s, transform 0.2s;
-}
-.btn-back:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #005fa3, #0078d7);
-}
-
-/* 👤 Perfil */
-.perfil {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 40px;
-}
-
-/* 🖼️ Imagen de perfil */
-.perfil-imagen {
-  text-align: center;
-  flex: 1;
-}
-
-.perfil-imagen img {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 5px solid #ffffff;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-  transition: transform 0.4s ease;
-}
-.perfil-imagen img:hover {
-  transform: scale(1.05);
-}
-
-.btn-secundario {
-  margin-top: 12px;
-  background: #fff;
-  color: #0078d7;
-  border: 2px solid #0078d7;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.btn-secundario:hover {
-  background: #0078d7;
-  color: white;
-}
-
-/* 🧾 Información de usuario */
-.perfil-info {
-  flex: 2;
-  color: #2c3e50;
-}
-
-.perfil-info h1 {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 600;
-  color: #1f3b73;
-}
-
-.correo {
-  color: #333;
-  font-style: italic;
-  margin-top: 4px;
-}
-
-.rol, .deuda {
-  font-size: 1rem;
-  margin-top: 8px;
-  color: #2c3e50;
-}
-
-/* ✍️ Descripción */
-#userDescripcion {
-  width: 100%;
-  min-height: 90px;
-  resize: none;
-  margin-top: 15px;
-  padding: 12px;
   font-size: 0.95rem;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  outline: none;
-  background: #f8f9fb;
-  transition: border 0.3s, box-shadow 0.3s;
-}
-#userDescripcion:focus {
-  border-color: #0078d7;
-  box-shadow: 0 0 8px rgba(0, 120, 215, 0.2);
 }
 
-/* 💾 Botón guardar */
-.btn-guardar {
-  margin-top: 10px;
-  background: linear-gradient(90deg, #00c6ff, #0072ff);
-  color: white;
-  border: none;
-  padding: 9px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: transform 0.3s, background 0.3s;
-}
-.btn-guardar:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #0072ff, #00c6ff);
+
+/* PRÉSTAMOS */
+.prestamos {
+  background: rgba(255,255,255,0.9);
+  width: 90%;
+  max-width: 900px;
+  margin: 25px auto;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* 📚 Sección de préstamos */
 .prestamos h2 {
   text-align: center;
-  color: #1f3b73;
+  color: #490101;
   margin-bottom: 20px;
-  font-size: 1.6rem;
-  position: relative;
-}
-.prestamos h2::after {
-  content: "";
-  display: block;
-  width: 70px;
-  height: 3px;
-  background: #0078d7;
-  margin: 8px auto 0;
-  border-radius: 2px;
-}
-
-#prestamosContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
 }
 
 .prestamo-card {
-  background: rgba(255, 255, 255, 0.8);
-  border-left: 6px solid #0078d7;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, background 0.3s;
-}
-.prestamo-card:hover {
-  transform: translateY(-3px);
-  background: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  background: #fff;
+  margin-bottom: 15px;
 }
 
 .prestamo-card.activo {
-  border-left-color: #27ae60;
+  border-left: 6px solid #27ae60;
+  background: #e8f9ef;
 }
 
 .prestamo-card.vencido {
-  border-left-color: #e74c3c;
-  background: #fff6f6;
+  border-left: 6px solid #e74c3c;
+  background: #fdeaea;
+}
+
+.estado.activo {
+  color: #27ae60;
+}
+
+.estado.vencido {
+  color: #e74c3c;
+}
+
+.no-prestamos {
+  text-align: center;
+  padding: 25px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 15px;
+  font-size: 1.1rem;
 }

@@ -1,10 +1,13 @@
+// ===============================
+// 📦 Conexión a MySQL (modo clásico con callbacks)
+// ===============================
 const mysql = require('mysql2');
 
-// Crear conexión a la base de datos
+// Crear conexión directa
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '123456',  // tu contraseña real de MySQL
+  password: '123456',  // tu contraseña real
   database: 'biblioteca',
   charset: 'utf8mb4'
 });
@@ -12,10 +15,11 @@ const connection = mysql.createConnection({
 // Conectar
 connection.connect((err) => {
   if (err) {
-    console.error('❌ Error de conexión: ' + err.stack);
+    console.error('❌ Error de conexión a la base de datos:', err.stack);
     return;
   }
   console.log('✅ Conectado a la base de datos con id ' + connection.threadId);
 });
 
 module.exports = connection;
+

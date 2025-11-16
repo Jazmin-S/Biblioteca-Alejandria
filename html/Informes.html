@@ -6,16 +6,19 @@
   <title>Informes | Biblioteca de Alejandría</title>
   <link rel="stylesheet" href="/css/cssAdmin/Informes.css"/>
 
-  <!-- jsPDF -->
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+  <!-- Librerías PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
+  <!-- Botón volver -->
+  <button id="btnVolver" class="btn muted volver-fixed">Volver</button>
+
   <header class="header">
     <div class="brand">
       <div class="logo">📚</div>
-      <div>
-        <h1>Informes</h1>
+      <div class="brand-text">
+        <h1 class="title">Informes</h1>
         <p class="subtitle">Panel mensual - Biblioteca de Alejandría</p>
       </div>
     </div>
@@ -39,86 +42,118 @@
       </label>
 
       <button id="btnAplicar" class="btn primary">Aplicar</button>
-      <button id="btnPDFGeneral" class="btn wine">📥 PDF General</button>
-      <button id="btnVolver" class="btn muted">⟵ Volver</button>
+      <button id="btnReporteGeneral" class="btn wine">📄 Generar PDF General</button>
     </div>
   </header>
 
   <main class="grid">
-    <!-- GENERAL -->
-    <section class="card" id="cardGeneral">
-      <h2>Informe General</h2>
+    <!-- Resumen general -->
+    <section class="card">
+      <h2 class="card-title">Informe General</h2>
       <div class="kpis">
         <div class="kpi"><span id="kpiUsuarios">0</span><small>Usuarios totales</small></div>
         <div class="kpi"><span id="kpiLibros">0</span><small>Libros totales</small></div>
         <div class="kpi"><span id="kpiPrestamosMes">0</span><small>Préstamos del mes</small></div>
+        <div class="kpi kpi-ok"><span id="kpiEntregados">0</span><small>Entregados (mes)</small></div>
+        <div class="kpi kpi-warn"><span id="kpiVencidosMes">0</span><small>Vencidos (mes)</small></div>
+        <div class="kpi kpi-warn"><span id="kpiVencidosGlobal">0</span><small>Vencidos globales</small></div>
       </div>
 
-      <h3>Préstamos por día</h3>
+      <h3 class="block-title">Préstamos por día</h3>
       <div class="table-wrap">
         <table id="tblPrestamosDia" class="table">
-          <thead><tr><th>Fecha</th><th>Total</th></tr></thead>
+          <thead><tr><th>Fecha</th><th>Usuario</th><th>Libro</th><th>Cantidad</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
 
-      <h3>Top 5 libros más prestados</h3>
+      <h3 class="block-title">Top 5 libros más prestados</h3>
       <div class="table-wrap">
         <table id="tblTopLibros" class="table">
-          <thead><tr><th>Libro</th><th>Autor</th><th>Total préstamos</th></tr></thead>
+          <thead><tr><th>Libro</th><th>Autor</th><th>Total</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
-
-      <button class="btn wine btnPDF" data-target="general">Descargar PDF (General)</button>
     </section>
 
-    <!-- USUARIOS -->
+    <!-- Usuarios -->
     <section class="card">
-      <h2>Usuarios</h2>
+      <h2 class="card-title">Usuarios</h2>
       <div class="table-wrap">
         <table id="tblUsuarios" class="table">
-          <thead>
-            <tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Préstamos del mes</th></tr>
-          </thead>
+          <thead><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Préstamos</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
-      <button class="btn wine btnPDF" data-target="usuarios">Descargar PDF (Usuarios)</button>
     </section>
 
-    <!-- PRÉSTAMOS -->
+    <!-- Préstamos del mes -->
     <section class="card">
-      <h2>Préstamos</h2>
+      <div class="title-row">
+        <h2 class="card-title">Préstamos (mes)</h2>
+        <div class="chips">
+          <span class="chip chip-warn">Vencidos: <b id="chipVencidos">0</b></span>
+          <span class="chip chip-ok">Entregados: <b id="chipEntregados">0</b></span>
+        </div>
+      </div>
       <div class="table-wrap">
         <table id="tblPrestamos" class="table">
-          <thead>
-            <tr><th>ID</th><th>Fecha</th><th>Vencimiento</th><th>Usuario</th><th># Libros</th></tr>
-          </thead>
+          <thead><tr><th>ID</th><th>Fecha</th><th>Vencimiento</th><th>Usuario</th><th># Libros</th><th>Estado</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
-      <button class="btn wine btnPDF" data-target="prestamos">Descargar PDF (Préstamos)</button>
     </section>
 
-    <!-- LIBROS -->
+    <!-- Entregados -->
     <section class="card">
-      <h2>Libros</h2>
+      <h2 class="card-title">Préstamos Entregados (mes)</h2>
       <div class="table-wrap">
-        <table id="tblLibros" class="table">
-          <thead>
-            <tr><th>ID</th><th>Título</th><th>Autor</th><th>Categoría</th><th>Ejemplares</th><th>Préstamos del mes</th></tr>
-          </thead>
+        <table id="tblPrestamosEntregados" class="table">
+          <thead><tr><th>ID</th><th>Fecha</th><th>Vencimiento</th><th>Usuario</th><th># Libros</th><th>Estado</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
-      <button class="btn wine btnPDF" data-target="libros">Descargar PDF (Libros)</button>
+    </section>
+
+    <!-- Vencidos -->
+    <section class="card">
+      <h2 class="card-title">Préstamos Vencidos (mes)</h2>
+      <div class="table-wrap">
+        <table id="tblPrestamosVencidos" class="table">
+          <thead><tr><th>ID</th><th>Fecha</th><th>Vencimiento</th><th>Usuario</th><th># Libros</th><th>Estado</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Vencidos global -->
+    <section class="card">
+      <div class="title-row">
+        <h2 class="card-title">Vencidos vigentes (global)</h2>
+        <div class="chips"><span class="chip chip-warn">Total: <b id="chipVencidosGlobal">0</b></span></div>
+      </div>
+      <div class="table-wrap">
+        <table id="tblVencidosGlobal" class="table">
+          <thead><tr><th>ID</th><th>Fecha</th><th>Vencimiento</th><th>Usuario</th><th># Libros</th><th>Mes préstamo</th><th>Estado</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Libros -->
+    <section class="card" id="cardLibros">
+      <h2 class="card-title">Libros</h2>
+      <div class="table-wrap">
+        <table id="tblLibros" class="table">
+          <thead><tr><th>ID</th><th>Título</th><th>Autor</th><th>Categoría</th><th>Ejemplares</th><th>Préstamos totales</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
   </main>
 
   <footer class="footer">
     <span>Biblioteca de Alejandría · Informes</span>
-    <span id="footDate"></span>
   </footer>
 
   <script src="/jsAdmin/Informes.js"></script>

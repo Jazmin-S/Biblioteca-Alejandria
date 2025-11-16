@@ -1,267 +1,366 @@
-/* General */
+/* ===========================
+   GENERAL
+=========================== */
 body {
   margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: url("https://wallpapers.com/images/hd/library-background-zp3y3gk7am2pnsar.jpg") no-repeat center center fixed;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: url("https://wallpapers.com/images/hd/library-background-zp3y3gk7am2pnsar.jpg")
+    no-repeat center center fixed;
   background-size: cover;
   color: #fff;
 }
 
-/* Botón EXIT */
+/* ===========================
+   BOTÓN CERRAR SESIÓN
+=========================== */
 .exit-btn {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 6000;               /* siempre al frente */
+  background: rgb(244, 244, 244);
+  color: #121111;
   border: none;
-  font-weight: bold;
-  padding: 6px 14px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 2000;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .exit-btn::before {
-  content: "⬅️";
+  content: "⬅";
   font-size: 1rem;
 }
 .exit-btn:hover {
-  background: rgb(8, 4, 4);
-  transform: scale(1.08);
+  background: #f4f4f4;
+  transform: scale(1.05);
+  box-shadow: 0 5px 12px rgba(231, 229, 229, 0.9);
 }
 
-/* Encabezado */
+/* ===========================
+   HEADER
+=========================== */
 .header {
-  background: rgba(160, 0, 0, 0.85);
+  background: rgba(128, 0, 32, 0.9); /* rojo vino */
   color: white;
-  padding: 10px;
+  padding: 24px 40px;
   text-align: center;
   font-size: 1.6rem;
   position: relative;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-}
-.header .icons {
-  position: absolute;
-  right: 15px;
-  top: 12px;
-  display: flex;
-  gap: 12px;
-}
-.header .icon {
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  transition: transform 0.3s;
-  filter: brightness(0) invert(1);
-}
-.header .icon:hover {
-  transform: scale(1.15);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
 }
 
-/* Sección Categorías */
-.categorias {
-  padding: 20px;
-  background: rgba(0,0,0,0.6);
+.header h1 {
+  margin: 0;
+  font-size: 3rem;
+  letter-spacing: 1px;
+}
+
+/* Contenedor de los iconos del header */
+.header .icons {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 2px;              /* 🔹 aún más juntos */
+  align-items: center;
+}
+
+/* Contenedor de cada icono + texto */
+.icons .icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  position: relative;
+  padding: 2px;                         /* 🔹 menos padding = más cerca */
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: background 0.2s ease,
+              transform 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+/* TAMAÑO Y ESTILO DE LOS ICONOS 🔧 */
+.header .icons .icon {
+  width: 30px !important;
+  height: 30px !important;
+  cursor: pointer;
+  filter: brightness(0); /* negros */
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* Efecto al pasar el mouse: resaltado */
+.icon-wrapper:hover {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+  transform: translateY(-1px);
+}
+
+.icon-wrapper:hover .icon {
+  transform: scale(1.08);
+  filter: brightness(0.1);
+}
+
+/* Texto que aparece al pasar el mouse */
+.icon-label {
+  font-size: 0.7rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2px 6px;
   border-radius: 10px;
-  margin: 20px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Mostrar la etiqueta al hacer hover */
+.icon-wrapper:hover .icon-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ===========================
+   SECCIÓN CATEGORÍAS
+=========================== */
+.categorias {
+  padding: 20px 30px;
+  background: rgba(0, 0, 0, 0.6); /* fondo negro translúcido */
+  border-radius: 14px;
+  margin: 20px 40px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
 }
 .categorias h2 {
-  font-size: 1.4rem;
-  margin-bottom: 12px;
-  color: #eee9e9;
-  border-left: 5px solid #a00;
+  font-size: 1.6rem;
+  margin: 0 0 12px;
+  color: #f5f5f5;
+  border-left: 5px solid #800020;
   padding-left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
+/* Botón engrane */
+.btn-engranaje {
+  background: rgba(128, 0, 32, 0.9);
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+.btn-engranaje:hover {
+  background: #000;
+}
+
+/* Carrusel horizontal */
 .scroll-container {
   display: flex;
   overflow-x: auto;
-  gap: 20px;
+  gap: 16px;
   padding: 12px 0;
 }
 .scroll-container::-webkit-scrollbar {
   height: 8px;
 }
 .scroll-container::-webkit-scrollbar-thumb {
-  background: #a00;
+  background: #800020;
   border-radius: 5px;
 }
-.card {
+
+/* Tarjetas de categoría */
+.scroll-container .card {
   flex: 0 0 auto;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
-.card img {
+.scroll-container .card img {
   width: 120px;
   height: 180px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
   object-fit: cover;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+.scroll-container .card img:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.9);
 }
-.card p {
+.scroll-container .card p {
   margin-top: 6px;
   font-size: 0.95rem;
-  font-weight: bold;
-  color: #fff;
+  font-weight: 600;
 }
 
-/* Sección Libros más leídos */
+/* ===========================
+   SECCIÓN LIBROS
+=========================== */
 .mas-leidos {
-  padding: 20px;
-  background: rgba(0,0,0,0.6);
-  border-radius: 10px;
-  margin: 20px;
+  padding: 20px 30px 30px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 14px;
+  margin: 10px 40px 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
 }
 .mas-leidos h2 {
-  font-size: 1.4rem;
-  margin-bottom: 12px;
-  color: #e8e6e6;
-  border-left: 5px solid #c00;
+  font-size: 1.8rem;
+  margin: 0 0 12px;
+  color: #f3f3f3;
+  border-left: 5px solid #800020;
   padding-left: 10px;
 }
+
 .actions {
   display: flex;
-  gap: 15px;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-bottom: 18px;
 }
+
+/* Inputs & select */
+.actions input[type="text"] {
+  padding: 10px 12px;
+  border-radius: 20px;
+  border: none;
+  width: 260px;
+  font-size: 0.95rem;
+  outline: none;
+}
+.actions select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+/* Botones generales */
 .btn {
   padding: 8px 15px;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 .btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  opacity: 0.9;
+  transform: translateY(-2px);
+  opacity: 0.95;
 }
 .buscar {
-  background: linear-gradient(90deg, #a00, #c00);
+  background: linear-gradient(90deg, #800020, #b52a3a);
   color: white;
 }
-.filtrar {
-  background: linear-gradient(90deg, #c00, #a00);
-  color: white;
-}
-.grid-libros {
+
+/* CONTENEDOR DE LIBROS (pequeños) */
+.libros-container {
   display: flex;
-  justify-content: left;
   flex-wrap: wrap;
-  gap: 12px; 
+  gap: 14px;
 }
-.grid-libros img {
-  width: 120px;
+
+.card-libro {
+  text-align: center;
+  width: 130px;
+}
+
+.card-libro img {
+  width: 120px;      /* aquí controlas el tamaño */
   height: 180px;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-  transition: transform 0.3s ease;
-  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   display: block;
+  margin: 0 auto;
 }
-.grid-libros img:hover {
+.card-libro img:hover {
   transform: translateY(-6px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.9);
   cursor: pointer;
-}
-
-/* 🔥 Tarjetas dinámicas de libros */
-.card-libro {
-  text-align: center;
 }
 .card-libro p {
   margin-top: 6px;
-  font-size: 0.95rem;
-  font-weight: bold;
-  color: #fff;
-  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-/* 📌 Popup de detalles de libro */
+/* ===========================
+   POPUP DETALLE DE LIBRO
+=========================== */
 .popup-detalle {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
   z-index: 3000;
   justify-content: center;
   align-items: center;
 }
 .popup-detalle .contenido {
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.97);
   color: #000;
-  padding: 20px;
-  border-radius: 12px;
-  width: 350px;
-  max-width: 90%;
-  box-shadow: 0 5px 14px rgba(0,0,0,0.6);
+  padding: 20px 24px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 300px;
+  max-height: 80vh;
+  overflow-y: auto;
   position: relative;
-  animation: fadeIn 0.3s ease;
 }
-.popup-detalle .contenido h3 {
+.popup-detalle h3 {
   margin-top: 0;
-  color: #a00;
+  color: #800020;
 }
-.popup-detalle .contenido p {
-  margin: 6px 0;
-  font-size: 0.95rem;
-}
-.popup-detalle .close-detalle {
+.close-detalle {
   position: absolute;
   top: 8px;
   right: 12px;
-  font-size: 22px;
-  font-weight: bold;
   cursor: pointer;
+  font-size: 1.4rem;
   color: #333;
 }
-.popup-detalle .close-detalle:hover {
-  color: #a00;
-}
 
-/* Popup menú (general) */
+/* ===========================
+   POPUP MENÚ HAMBURGUESA
+=========================== */
 .popup-menu {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(24, 23, 23, 0.6);
-  z-index: 1000;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 5000;
   justify-content: center;
   align-items: center;
 }
 .popup-content {
-  background: rgba(104, 2, 2, 0.95);
-  padding: 22px;
-  border-radius: 12px;
-  width: 320px;
-  max-width: 95%;
-  box-shadow: 0 5px 14px rgba(229, 216, 216, 0.6);
+  background: rgba(128, 0, 32, 0.96);
+  padding: 20px 26px;
+  border-radius: 18px;
+  /* 🔽 aquí controlas el tamaño del menú */
+  width: 370px;      /* ancho fijo */
+  max-width: 90%;    /* para que en pantallas chicas no se desborde */
+  color: #fff;
   position: relative;
-  animation: fadeIn 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
 }
-.close-popup {
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  font-size: 26px;
-  font-weight: bold;
-  cursor: pointer;
-  color: rgb(228, 228, 228);
-  transition: transform 0.2s;
-}
-.close-popup:hover {
-  transform: rotate(90deg);
+
+.popup-content h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 .popup-content ul {
   list-style: none;
@@ -269,114 +368,116 @@ body {
   margin: 0;
 }
 .popup-content li {
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-bottom: 1px solid #0b0707;
-  transition: background 0.3s;
-}
-.popup-content li:hover {
-  background: #000000;
+  gap: 8px;
+  border-radius: 8px;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 .popup-content li:last-child {
   border-bottom: none;
 }
-.popup-content img {
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
+.popup-content li:hover {
+  background: #000;       /* se pone negro al elegir/hover */
+  transform: translateX(4px);
+}
+.menu-icon {
+  font-size: 1.2rem;
+}
+.menu-text {
+  font-size: 1rem;
+}
+.menu-descripcion {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #f8f8f8;
+  opacity: 0.9;
+}
+.close-popup {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 1.3rem;
 }
 
-/* ====== Formularios de categorías ====== */
+/* ===========================
+   MODAL CATEGORÍAS
+=========================== */
+
+.modal-categorias {
+  max-width: 700px;   /* ancho máximo del cuadro */
+  width: 90%;
+  max-height: 80vh;   /* máximo 80% del alto de la pantalla */
+  overflow-y: auto;   /* si se pasa, aparece scroll dentro del cuadro */
+  margin: 20px 0;     /* separarlo un poco del borde superior e inferior */
+}
+
+
 .form-categoria {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
   margin-top: 10px;
 }
-
-.form-categoria .form-group {
+.form-group {
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
-
-.form-categoria label {
-  font-weight: bold;
-  font-size: 0.95rem;
-  color: #f5f5f5;
+.form-group label {
+  font-size: 0.9rem;
 }
-
-.form-categoria input[type="text"],
-.form-categoria input[type="file"] {
-  padding: 8px;
+.form-group input[type="text"],
+.form-group input[type="file"] {
+  padding: 6px 8px;
   border-radius: 6px;
   border: none;
-  outline: none;
   font-size: 0.9rem;
 }
 
-.preview-portada {
-  width: 100px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 6px;
-  margin-top: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+#listaCategorias {
+  margin-top: 10px;
+  max-height: 260px;
+  overflow-y: auto;
 }
-
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(-10px);}
-  to {opacity: 1; transform: translateY(0);}
+#listaCategorias::-webkit-scrollbar {
+  width: 6px;
 }
-
-/* ====== Modales scrollables ====== */
-.modal-categorias {
-  max-height: 80vh;         /* ocupa máximo 80% de la pantalla */
-  overflow-y: auto;         /* permite scroll interno */
-  overflow-x: hidden;       /* oculta scroll horizontal */
-}
-
-/* Scroll estilizado dentro del modal */
-.modal-categorias::-webkit-scrollbar {
-  width: 8px;
-}
-.modal-categorias::-webkit-scrollbar-thumb {
-  background: #a00;
+#listaCategorias::-webkit-scrollbar-thumb {
+  background: #800020;
   border-radius: 5px;
 }
-.modal-categorias::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.2);
+
+/* Vista previa portada al editar */
+.preview-portada {
+  display: block;
+  margin-top: 8px;
+  max-width: 120px;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
 }
 
-/* ====== Botones editar y eliminar en lista de categorías ====== */
-.btn-editar-cat, 
+/* Botones editar / eliminar */
+.btn-editar-cat,
 .btn-eliminar-cat {
-  background: transparent;
+  background: none;
   border: none;
-  font-size: 1.2rem;
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
+  font-size: 1.1rem;
   margin-left: 6px;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
-
-/* Lápiz (editar) */
 .btn-editar-cat {
-  color: #4cafef;
+  color: #64b5f6;
 }
 .btn-editar-cat:hover {
   color: #2196f3;
   transform: scale(1.2);
 }
-.btn-editar-cat:active {
-  color: #0d47a1;
-  transform: scale(0.95);
-}
-
-/* Basura (eliminar) */
 .btn-eliminar-cat {
   color: #f06292;
 }
@@ -384,7 +485,33 @@ body {
   color: #e91e63;
   transform: scale(1.2);
 }
-.btn-eliminar-cat:active {
-  color: #880e4f;
-  transform: scale(0.95);
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+  .header {
+    padding: 16px 12px;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+  }
+
+  .categorias,
+  .mas-leidos {
+    margin: 16px;
+    padding: 16px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .actions input[type="text"] {
+    width: 100%;
+  }
+
+  .libros-container {
+    justify-content: center;
+  }
 }

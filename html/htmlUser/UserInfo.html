@@ -1,40 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Perfil del Usuario</title>
-  <link rel="stylesheet" href="/css/cssUser/UserInfo.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+
+    <link rel="stylesheet" href="/css/cssUser/UserInfo.css">
 </head>
 <body>
-  <div class="container">
-    <button id="backBtn" class="btn-back">⬅ Volver</button>
 
-    <section class="perfil">
-      <div class="perfil-imagen">
-        <img id="userFoto" src="/images/default-profile.png" alt="Foto de perfil">
-        <input type="file" id="inputFoto" accept="image/*" hidden>
-        <button id="btnCambiarFoto" class="btn-secundario">Cambiar foto</button>
-      </div>
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+        <button id="backBtn">Volver al inicio</button>
+        <h1>Biblioteca de Alejandria</h1>
+    </div>
 
-      <div class="perfil-info">
-        <h1 id="userNombre">Nombre del Usuario</h1>
-        <p class="correo" id="userCorreo">correo@ejemplo.com</p>
-        <p class="rol"><strong>Rol:</strong> <span id="userRol"></span></p>
-        <p class="deuda"><strong>Deuda total:</strong> $<span id="userDeuda">0.00</span></p>
+    <h1 class="main-title">Mi Perfil</h1>
 
-        <textarea id="userDescripcion" placeholder="Escribe una breve descripción sobre ti..."></textarea>
-        <button id="btnGuardarDescripcion" class="btn-guardar">💾 Guardar descripción</button>
-      </div>
-    </section>
+    <!-- CONTENEDOR PERFIL -->
+    <div class="perfil-container">
 
-    <section class="prestamos">
-      <h2>Historial de Préstamos</h2>
-      <div id="prestamosContainer"></div>
-    </section>
-  </div>
+        <div class="foto-box">
+            <img id="userFoto" src="/images/default-profile.png" alt="Foto de perfil">
+            <button id="btnCambiarFoto">Cambiar foto</button>
+            <input type="file" id="inputFoto" accept="image/*" style="display:none">
+        </div>
 
-  <script src="/jsUser/UserInfo.js"></script>
+        <div class="info-box">
+            <p><strong>Nombre:</strong> <span id="userNombre"></span></p>
+            <p><strong>Correo:</strong> <span id="userCorreo"></span></p>
+            <p><strong>Rol:</strong> <span id="userRol"></span></p>
+            <p><strong>Deuda total:</strong> $<span id="userDeuda"></span></p>
+        </div>
+    </div>
+
+    <!-- DESCRIPCIÓN PERSONAL -->
+    <div class="descripcion">
+        <h2>Descripción personal</h2>
+        <textarea id="userDescripcion"></textarea>
+        <button id="btnGuardarDescripcion">Guardar descripción</button>
+    </div>
+
+    <!-- PRÉSTAMOS -->
+    <div class="prestamos">
+        <h2>Mis préstamos</h2>
+        <div id="prestamosContainer"></div>
+    </div>
+
+    <script src="/jsUser/UserInfo.js"></script>
 </body>
 </html>
-

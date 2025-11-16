@@ -8,23 +8,29 @@
 </head>
 <body>
 
+  <!-- Botón de regresar corregido -->
+  <button class="back-button" onclick="window.location.href='AdminLogin.html'"> Volver</button>
+
   <div class="form-container">
     <h2>👤 Crear Cuenta de Administrador</h2>
     <hr>
 
     <form id="registroForm" novalidate>
+      <!-- Campo de usuario -->
       <div class="field">
         <label for="usuario">Usuario:</label>
         <input type="text" id="usuario" name="usuario" autocomplete="username" required>
         <div id="usuarioError" class="error" aria-live="polite"></div>
       </div>
 
+      <!-- Campo de correo -->
       <div class="field">
         <label for="correo">Correo Institucional:</label>
         <input type="email" id="correo" name="correo" autocomplete="email" required>
         <div id="correoError" class="error" aria-live="polite"></div>
       </div>
 
+      <!-- Campo de contraseña -->
       <div class="field">
         <label for="contrasena">Contraseña:</label>
         <div class="password-wrapper">
@@ -49,6 +55,7 @@
         <div id="contrasenaError" class="error" aria-live="polite"></div>
       </div>
 
+      <!-- Repetir contraseña -->
       <div class="field">
         <label for="contrasena2">Repite la contraseña:</label>
         <div class="password-wrapper">
@@ -64,15 +71,19 @@
         <div id="contrasena2Error" class="error" aria-live="polite"></div>
       </div>
 
+      <!-- Rol oculto -->
       <input type="hidden" id="rol" name="rol" value="bibliotecario">
 
+      <!-- Rol mostrado -->
       <div class="field">
         <label for="rolDisplay">Rol:</label>
         <input type="text" id="rolDisplay" name="rolDisplay" value="Bibliotecario" readonly>
       </div>
 
+      <!-- Mensaje de formulario -->
       <div id="formMessage" class="form-message" aria-live="polite"></div>
 
+      <!-- Botón de registro -->
       <button type="submit" id="submitBtn">Registrar</button>
     </form>
   </div>

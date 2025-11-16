@@ -21,6 +21,29 @@ body {
   color: var(--text);
 }
 
+/* ======= BOTÓN DE REGRESAR ======= */
+.back-button {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: var(--vino);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.back-button:hover {
+  background-color: #a00000;
+  transform: scale(1.05);
+}
+.back-button:active {
+  transform: scale(0.95);
+}
+
 /* ======= CONTENEDOR ======= */
 .form-container {
   width: min(680px, 92vw);
@@ -144,7 +167,6 @@ input:focus {
   content: "❌";
 }
 
-
 /* ======= MENSAJES ======= */
 .error {
   display: none; /* Oculta la línea vacía debajo de los campos */
@@ -157,7 +179,7 @@ input:focus {
   margin-top: 8px;
 }
 
-/* ======= BOTÓN ======= */
+/* ======= BOTÓN DE REGISTRO ======= */
 button#submitBtn {
   margin-top: 10px;
   width: 100%;

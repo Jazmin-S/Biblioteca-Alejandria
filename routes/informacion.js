@@ -1,11 +1,21 @@
-// routes/informacion.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const informacionController = require('../controllers/informacionController');
+const infoCtrl = require("../controllers/informacionController");
 
-router.get('/informacion/:id', informacionController.obtenerInformacion);
-router.get('/informacion', informacionController.listarUsuarios);
-router.put('/informacion/:id', informacionController.actualizarInformacion);
-router.get('/informacion/completa/:id', informacionController.obtenerDatosCompletos);
+// 🔍 Verificar estado del servidor
+router.get("/status", (req, res) => {
+  res.json({
+    status: "OK",
+    message: "Servidor funcionando desde /informacion/status"
+  });
+});
+
+// Rutas principales
+router.get("/completa/:id", infoCtrl.obtenerDatosCompletos);
+router.get("/:id", infoCtrl.obtenerInformacion);
+router.get("/", infoCtrl.listarUsuarios);
+
+// Subir foto
+router.post("/subir-foto/:id", infoCtrl.uploadFoto, infoCtrl.subirFoto);
 
 module.exports = router;
