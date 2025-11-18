@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!userId) {
     alert("⚠️ No se encontró la sesión del usuario.");
-    window.location.href = "/html/htmlUser/UserLogin.html";
+    window.location.href = "/html/htmlAdmin/InicioAdmin.html";
     return;
   }
 
@@ -161,6 +161,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   // VOLVER AL INICIO
   // =============================
   backBtn.addEventListener("click", () => {
-    window.location.href = "/html/htmlUser/InicioUser.html";
+    window.location.href = "/html/htmlAdmin/InicioAdmin.html";
   });
 });
