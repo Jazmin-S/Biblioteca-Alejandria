@@ -13,7 +13,6 @@ const categoriasRoutes = require("./categorias");
 const prestamosRoutes = require("./prestamos");
 const informesRoutes = require("./informes");
 const infoRoutes = require("./info");
-const informacionRoutes = require("./informacion");
 
 const router = express.Router();
 
@@ -31,6 +30,5 @@ router.use(categoriasRoutes);
 router.use("/info", infoRoutes);
 router.use("/prestamos", prestamosRoutes);
 router.use("/informes", informesRoutes);
-router.use("/informacion", informacionRoutes);
 
 module.exports = router;

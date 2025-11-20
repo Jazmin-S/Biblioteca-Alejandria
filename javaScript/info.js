@@ -1,166 +1,133 @@
-// Archivo: /javaScript/info.js
+// javaScript/info.js (ADMIN)
 document.addEventListener("DOMContentLoaded", async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  let userId = urlParams.get("id") || localStorage.getItem("usuarioId");
-
-  const backBtn = document.getElementById("backBtn");
-  const container = document.getElementById("prestamosContainer");
+  const userId = localStorage.getItem("usuarioId");
 
   if (!userId) {
-    alert("⚠️ No se encontró la sesión del usuario.");
+    alert("⚠️ No se encontró la sesión.");
     window.location.href = "/html/htmlAdmin/InicioAdmin.html";
     return;
   }
 
+  const baseURL = "http://localhost:3000";
+
   // =============================
-  // DETECTAR SERVIDOR DISPONIBLE
+  // CARGAR DATOS COMPLETOS
   // =============================
-  let baseURL = "";
-  const origins = [
-    "http://localhost:3000",
-    "http://localhost:3001", 
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:3001"
-  ];
-
-  for (const origin of origins) {
-    try {
-      const response = await fetch(`${origin}/api/status`);
-      if (response.ok) {
-        baseURL = origin;
-        console.log(`✅ Servidor encontrado: ${baseURL}`);
-        break;
-      }
-    } catch (error) {
-      console.log(`❌ No se pudo conectar a: ${origin}`);
-    }
-  }
-
-  if (!baseURL) {
-    alert("❌ No se puede conectar al servidor. Verifica que el servidor esté ejecutándose.");
-    return;
-  }
-
+  let data;
   try {
-    // =============================
-    // CARGAR INFORMACIÓN COMPLETA
-    // =============================
-    console.log(`📥 Cargando información del usuario ${userId} desde: ${baseURL}`);
-    const res = await fetch(`${baseURL}/api/informacion/completa/${userId}`);
-    
-    if (!res.ok) {
-      throw new Error(`Error ${res.status}: ${res.statusText}`);
-    }
-    
-    const data = await res.json();
-    const usuario = data.usuario;
-
-    // Datos básicos
-    document.getElementById("userNombre").textContent = usuario.nombre;
-    document.getElementById("userCorreo").textContent = usuario.correo;
-    document.getElementById("userRol").textContent = usuario.rol;
-    document.getElementById("userDeuda").textContent =
-      usuario.deudaTotal?.toFixed(2) || "0.00";
-
-    // FOTO
-    document.getElementById("userFoto").src = usuario.foto
-      ? `${baseURL}${usuario.foto}?t=${Date.now()}`
-      : "/images/default-profile.png";
-
-    // =============================
-    // DESCRIPCIÓN - CARGAR
-    // =============================
-    document.getElementById("userDescripcion").value =
-      usuario.descripcion || "";
-
-    // =============================
-    // DESCRIPCIÓN - GUARDAR (MEJORADO)
-    // =============================
-    document
-      .getElementById("btnGuardarDescripcion")
-      .addEventListener("click", async () => {
-        const nuevaDescripcion = document
-          .getElementById("userDescripcion")
-          .value;
-
-        console.log(`💾 Guardando descripción: "${nuevaDescripcion}" para usuario ${userId}`);
-
-        try {
-          const res = await fetch(`${baseURL}/api/info/descripcion/${userId}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ descripcion: nuevaDescripcion }),
-          });
-
-          const data = await res.json();
-
-          if (!res.ok) {
-            console.error("❌ Error del servidor:", data);
-            throw new Error(data.error || `Error ${res.status} al guardar`);
-          }
-
-          alert("✅ Descripción guardada correctamente");
-          console.log("✅ Descripción guardada:", data);
-        } catch (error) {
-          console.error("❌ Error al guardar descripción:", error);
-          alert(`Error al guardar la descripción: ${error.message}`);
-        }
-      });
-
-    // =============================
-    // PRÉSTAMOS
-    // =============================
-    let prestamosValidos = (data.prestamos || []).filter(
-      (p) => p && (p.libros || p.fecha || p.fecha_vencimiento || p.estado)
-    );
-
-    if (prestamosValidos.length === 0) {
-      container.innerHTML =
-        '<div class="no-prestamos"><p>No hay préstamos.</p></div>';
-    } else {
-      container.innerHTML = prestamosValidos
-        .map((p) => {
-          const fechaPrestamo = p.fecha ? new Date(p.fecha) : null;
-          const fechaVencimiento = p.fecha_vencimiento
-            ? new Date(p.fecha_vencimiento)
-            : null;
-
-          let estado = p.estado ? p.estado.toLowerCase() : "activo";
-          if (fechaVencimiento && new Date() > fechaVencimiento) {
-            estado = "vencido";
-          }
-
-          return `
-          <div class="prestamo-card ${estado}">
-            <h3>${p.libros || "Libro sin nombre"}</h3>
-            <p><strong>ID Préstamo:</strong> ${p.id_prestamo || "N/A"}</p>
-            <p><strong>Estado:</strong> <span class="estado ${estado}">${estado}</span></p>
-            <p><strong>Fecha préstamo:</strong> ${
-              fechaPrestamo
-                ? fechaPrestamo.toLocaleDateString()
-                : "No disponible"
-            }</p>
-            <p><strong>Vencimiento:</strong> ${
-              fechaVencimiento
-                ? fechaVencimiento.toLocaleDateString()
-                : "No disponible"
-            }</p>
-          </div>`;
-        })
-        .join("");
-    }
+    const res = await fetch(`${baseURL}/api/info/completa/${userId}`);
+    data = await res.json();
   } catch (err) {
-    console.error("❌ Error al cargar datos:", err);
-    container.innerHTML =
-      '<div class="no-prestamos"><p>Error al cargar los datos.</p></div>';
+    console.error("❌ Error obteniendo datos:", err);
+    return;
+  }
+
+  const usuario = data.usuario;
+  const prestamos = data.prestamos;
+
+  // =============================
+  // MOSTRAR DATOS PERSONALES
+  // =============================
+  document.getElementById("userNombre").textContent = usuario.nombre;
+  document.getElementById("userCorreo").textContent = usuario.correo;
+  document.getElementById("userRol").textContent = usuario.rol;
+  document.getElementById("userDeuda").textContent = usuario.deudaTotal;
+
+  const userFoto = document.getElementById("userFoto");
+  userFoto.src = `${baseURL}${usuario.foto}?t=${Date.now()}`;
+
+  const txtDescripcion = document.getElementById("userDescripcion");
+  txtDescripcion.value = usuario.descripcion || "";
+
+  // =============================
+  // BOTÓN REGRESAR
+  // =============================
+  document.getElementById("backBtn").onclick = () => {
+    window.location.href = "/html/htmlAdmin/InicioAdmin.html";
+  };
+
+  // =============================
+  // FORMATEAR FECHAS (DD/MM/YYYY)
+  // =============================
+  function formatearFecha(fechaISO) {
+    const fecha = new Date(fechaISO);
+    if (isNaN(fecha.getTime())) return fechaISO; // por si viene null o raro
+    const dia = String(fecha.getDate()).padStart(2, "0");
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const anio = fecha.getFullYear();
+    return `${dia}/${mes}/${anio}`;
   }
 
   // =============================
-  // VOLVER AL INICIO
+  // MOSTRAR PRÉSTAMOS
   // =============================
-  backBtn.addEventListener("click", () => {
-    window.location.href = "/html/htmlAdmin/InicioAdmin.html";
-  });
+  const container = document.getElementById("prestamosContainer");
+  container.innerHTML = "";
+
+  if (!prestamos || prestamos.length === 0) {
+    container.innerHTML = `<p class="no-prestamos">No tienes préstamos registrados.</p>`;
+  } else {
+    prestamos.forEach((p) => {
+      const card = document.createElement("div");
+      card.classList.add("prestamo-card");
+
+      // Estado normalizado a minúsculas para las clases CSS
+      const estadoLower = (p.estado || "").toLowerCase(); // "vencido" o "activo"
+
+      if (estadoLower === "vencido") {
+        card.classList.add("vencido");
+      } else if (estadoLower === "activo") {
+        card.classList.add("activo");
+      }
+
+      card.innerHTML = `
+        <p><strong>ID Préstamo:</strong> ${p.id_prestamo}</p>
+        <p><strong>Fecha:</strong> ${formatearFecha(p.fecha)}</p>
+        <p><strong>Fecha Vencimiento:</strong> ${formatearFecha(p.fecha_vencimiento)}</p>
+        <p><strong>Estado:</strong> 
+          <span class="estado ${estadoLower}">
+            ${p.estado}
+          </span>
+        </p>
+        <p><strong>Libros:</strong> ${p.libros || "Sin libros"}</p>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  // =============================
+  // GUARDAR DESCRIPCION
+  // =============================
+  document.getElementById("btnGuardarDescripcion").onclick = async () => {
+    await fetch(`${baseURL}/api/info/descripcion/${userId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ descripcion: txtDescripcion.value }),
+    });
+
+    alert("Descripción actualizada");
+  };
+
+  // =============================
+  // CAMBIAR FOTO
+  // =============================
+  document.getElementById("btnCambiarFoto").onclick = () =>
+    document.getElementById("inputFoto").click();
+
+  document.getElementById("inputFoto").onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("foto", file);
+
+    const resFoto = await fetch(`${baseURL}/api/info/foto/${userId}`, {
+      method: "PUT",
+      body: formData,
+    });
+
+    const respuesta = await resFoto.json();
+    userFoto.src = `${baseURL}${respuesta.ruta}?t=${Date.now()}`;
+  };
 });
